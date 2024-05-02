@@ -50,14 +50,27 @@
     let dialogDescription = document.getElementById("dialogDescription");
     const initializeMap = (
       startCoordinates = [44.9377, -93.1007],
-      zoomLevel = 13
+      zoomLevel = 13,
+      maxZoomLevel = 15,
+      minZoomLevel = 13,
+      zoomPosition = "bottomright"
     ) => {
       map = L.map("map").setView(startCoordinates, zoomLevel);
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
+        maxZoom: 15,
+        minZoom: 13,
+        zoomControl: false,
         attribution:
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }).addTo(map);
+      map.zoomControl.remove();
+      if (minZoomLevel !== maxZoomLevel) {
+        L.control
+          .zoom({
+            position: zoomPosition,
+          })
+          .addTo(map);
+      }
     };
     const initializePointsOfInterest = (points) => {
       points.map((point) => {
