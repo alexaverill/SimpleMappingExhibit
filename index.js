@@ -8,6 +8,7 @@ let isClicked = false;
 let startPos = null;
 let endPos = null;
 let rectangle = null;
+let pointsOfInterest = null;
 const initializeMap = (
   startCoordinates = [44.9377, -93.1007],
   zoomLevel = 13,
@@ -156,7 +157,7 @@ const setDialogContent = (id) => {
 const load = async () => {
   let data = await fetch("./data.json");
   let json = await data.json();
-  let pointsOfInterest = json.pointsOfInterest;
+  pointsOfInterest = json.pointsOfInterest;
   initializePointsOfInterest(pointsOfInterest);
 };
 initializeMap();
