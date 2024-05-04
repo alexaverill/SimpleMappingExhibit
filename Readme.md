@@ -11,3 +11,7 @@ Sample content is from wikipedia articles.
 ## Map Layer Previews:
 
 https://leaflet-extras.github.io/leaflet-providers/preview/
+
+## ToDos:
+
+Small screen/mobile styeing

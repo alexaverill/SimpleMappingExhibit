@@ -8,21 +8,19 @@
     />
     <link rel="stylesheet" href="./leaflet/leaflet.css" />
     <script src="./leaflet/leaflet.js"></script>
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="main.css" />
   </head>
   <div id="map"></div>
-  <dialog id="baseLayerSelection"></dialog>
-  <dialog id="boundsSelectionDialog"></dialog>
-  <div
-    id="dialogBackground"
-    class="dialogBackground"
-    onclick="handleBackgroundClick()"
-  ></div>
-  <div id="dialog" class="dialog hidden">
-    <button class="dialogClose" onClick="closeDialog()">
-      <img src="./assets/close.svg" />
-    </button>
-    <div class="dialogTitle" id="dialogTitle">A test title</div>
+    <div id="dialog" class="dialog editDialog hidden">
+      <div class="dialogbuttons">
+        <button onClick="closeDialog()"><img class="icon" src="./assets/save.png" /></button>
+        <button onClick="deletePoint()"><img class="icon" src="./assets/delete.png" /></button>
+    
+    </div>
+    <input type="hidden" value="null" id="id"/>
+    <div class="dialogInputTitle" id="dialogTitle">
+      <input id="title" type="text" class="title" placeholder="Title" />
+    </div>
     <div class="image" id="dialogImageContainer">
       <button id="previous" onClick="handlePreviousImage()" class="imageIcon">
         <img class="icon" src="./assets/arrow.png" />
@@ -32,7 +30,336 @@
         <img class="icon" src="./assets/arrow.png" />
       </button>
     </div>
-    <div class="description" id="dialogDescription"></div>
+    <div class="descriptionTextArea" id="dialogDescription"><textarea id="description"></textarea></textarea></div>
   </div>
-  <script type="text/javascript" src="./index.js"></script>
+  <div id="userInstructions" class="userInstructions hide">
+    <div id="instructions" class="title">Select the Center of your map</div>
+    <div id="subtitle" class="subtitle"></div>
+    <button onclick="finishStep()">Continue</button>
+  </div>
+  <button class="editButton" onclick="showIntro()">Start</button>
+  <dialog id="intro">
+    <div class="dialogContent">
+      <div class="title">Build a Map</div>
+      <div class="description">
+        This is a tool to help you build out a mapping interactive. Images that
+        you want to select and display will need to be placed in the images
+        folder, or hosted elsewhere online.
+      </div>
+      <div class="uploadPrompt">
+        If you have already started an exhibit and want to edit it please upload
+        it now. <input type="file" />Upload
+      </div>
+      <button onClick="advanceToMapCenter()">Continue</button>
+    </div>
+  </dialog>
+  <dialog id="baseLayerSelection"></dialog>
+  <dialog id="boundsSelectionDialog"></dialog>
+  <div
+    id="dialogBackground"
+    class="dialogBackground"
+    onclick="handleBackgroundClick()"
+  ></div>
+
+  <script>
+    const steps = {
+      Center: 1,
+      Points: 2,
+      Editing: 3,
+      ZoomLevel: 4,
+      Bounds: 5,
+    };
+    let currentStep = steps.Center;
+    let currentMapCenter = null;
+    let centerMarker = null;
+    let map;
+    let currentImage = 0;
+    let content = null;
+    let dialogTitle = document.getElementById("dialogTitle");
+    let dialogImage = document.getElementById("dialogImage");
+    let dialogDescription = document.getElementById("dialogDescription");
+    let isClicked = false;
+    let startPos = null;
+    let endPos = null;
+    let rectangle = null;
+    let pointsOfInterest = null;
+    let points = [];
+    let pointLatLng = null;
+    let newPointRef = null;
+    const showIntro = () => {
+      document.getElementById("intro").showModal();
+    };
+    const advanceToMapCenter = () => {
+      document.getElementById("intro").close();
+      document.getElementById("userInstructions").classList.remove("hide");
+      setInstructions(
+        "Select your maps center",
+        "This sets the maps default location."
+      );
+    };
+    const setInstructions = (title, subtitle) => {
+      document.getElementById("instructions").innerText = title;
+      document.getElementById("subtitle").innerText = subtitle;
+    };
+    const setCurrentLatLang = () => {
+      addCenterMarker();
+      map.setView(currentMapCenter);
+    };
+    const advanceToPoints = () => {
+      currentStep = steps.Points;
+      setInstructions("Click to select your points", "");
+    };
+    const pointClicked =(lat,lng)=>{
+      let point = points.find(point=>point.latitude ===lat && point.longitude ===lng);
+      console.log(point);
+      document.getElementById("id").value = point.id;
+      document.getElementById("title").value = point.title;
+      document.getElementById("description").value = point.description;
+      document.getElementById("dialog").classList.toggle("visible");
+    }
+    const addNewPoint = (latlng) => {
+      document.getElementById("id").value = 'null';
+      currentStep = steps.Editing;
+      pointLatLng = latlng;
+      console.log(pointLatLng);
+      let point = L.marker(latlng).addTo(map);
+      point.on("click",()=>{
+        pointClicked(pointLatLng.lat,pointLatLng.lng);
+      });
+      newPointRef = point;
+      document.getElementById("dialog").classList.toggle("visible");
+    };
+    const addCenterMarker = () => {
+      if (centerMarker && map) {
+        map.removeLayer(centerMarker);
+      }
+      var myIcon = L.icon({
+        iconUrl: "assets/flag.svg",
+        iconSize: [40, 40],
+        iconAnchor: [11, 30],
+        popupAnchor: [-3, -76],
+        shadowSize: [68, 95],
+        shadowAnchor: [22, 94],
+      });
+
+      centerMarker = L.marker(currentMapCenter, { icon: myIcon }).addTo(map);
+    };
+    const finishStep = () => {
+      switch (currentStep) {
+        case steps.Center:
+          advanceToPoints();
+          break;
+      }
+    };
+
+    const initializeMap = (
+      startCoordinates = [0, 0],
+      zoomLevel = 1,
+      maxZoomLevel = 15,
+      minZoomLevel = 1,
+      zoomPosition = "bottomright"
+    ) => {
+      map = L.map("map").setView(startCoordinates, zoomLevel);
+
+      map.zoomControl.remove();
+      if (minZoomLevel !== maxZoomLevel) {
+        L.control
+          .zoom({
+            position: zoomPosition,
+          })
+          .addTo(map);
+      }
+      let osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 15,
+        minZoom: 1,
+        zoomControl: false,
+        attribution:
+          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      });
+      let openTopo = L.tileLayer(
+        "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+        {
+          maxZoom: 17,
+          attribution:
+            'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+        }
+      );
+      let openSatellite = L.tileLayer(
+        "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}",
+        {
+          minZoom: 0,
+          maxZoom: 20,
+          attribution:
+            '&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          ext: "jpg",
+        }
+      );
+      osm.addTo(map);
+      var baseMaps = {
+        "Open Street Map": osm,
+        "Open Topography": openTopo,
+        Satellite: openSatellite,
+      };
+      var overlays = {};
+      L.control
+        .layers(baseMaps, overlays, { position: "bottomright" })
+        .addTo(map);
+      map.on("click", (e) => {
+        if (currentStep == steps.Center) {
+          currentMapCenter = e.latlng;
+          setCurrentLatLang();
+          return;
+        }
+        if (currentStep == steps.Points) {
+          addNewPoint(e.latlng);
+        }
+        console.log(`Clicked at ${e.latlng} Zoom Level:${map.getZoom()}`);
+        if (isClicked) {
+          console.log("Reset map bounds");
+        } else {
+          startPos = e.latlng;
+        }
+        isClicked = !isClicked;
+      });
+      map.on("mousemove", (e) => {
+        if (currentStep !== steps.Bounds) {
+          return;
+        }
+        if (isClicked) {
+          console.log(`Moved: ${e.latlng}`);
+          let bounds = L.latLngBounds(startPos, e.latlng);
+          endPos = e.latlng;
+          let previousRects = document.getElementsByClassName("zoomRect");
+          if (previousRects) {
+            for (let element of previousRects) {
+              console.log(element);
+              element.remove();
+            }
+          }
+          L.rectangle(bounds, {
+            color: "#FFFF00",
+            weight: 1,
+            className: "zoomRect",
+          }).addTo(map);
+        }
+      });
+    };
+    const initializePointsOfInterest = (points) => {
+      points.map((point) => {
+        var marker = L.marker([point.latitude, point.longitude]).addTo(map);
+        marker.on("click", () => {
+          poiClicked(point.id);
+        });
+      });
+    };
+    const handleBackgroundClick = () => {
+      closeDialog();
+    };
+    const handlePreviousImage = () => {
+      if (!content) {
+        return;
+      }
+      currentImage =
+        currentImage > 0 ? currentImage - 1 : content.images.length - 1;
+      console.log(content.images.length);
+      dialogImage.opacity = 0;
+      dialogImage.src = content.images[currentImage].image;
+      dialogImage.opacity = 1;
+    };
+    const handleNextImage = () => {
+      if (!content) {
+        return;
+      }
+      currentImage = (currentImage + 1) % content.images.length;
+      dialogImage.opacity = 0;
+      dialogImage.src = content.images[currentImage].image;
+      dialogImage.opacity = 1;
+    };
+    const deletePoint = ()=>{
+      let currentid = document.getElementById("id").value;
+      let index = points.findIndex(point =>point.id ==currentid);
+      map.removeLayer(points[index].pointRef);
+      points.splice(index,1);
+      document
+        .getElementById("dialogBackground")
+        .classList.remove("dialogBackgroundVisible");
+      document.getElementById("dialog").classList.remove("visible");
+      document.getElementById("title").value = '';
+      document.getElementById("description").value = '';
+      document.getElementById("id").valu='null';
+    }
+    const closeDialog = () => {
+      let currentid = document.getElementById("id").value;
+      let title = document.getElementById("title").value;
+      let description = document.getElementById("description").value;
+      console.log(currentid);
+      if(currentid === 'null'){
+        console.log("Add New Point");
+        let id=points.length;
+        let newPoint = {
+          title,
+          description,
+          id,
+          latitude:pointLatLng.lat,
+          longitude:pointLatLng.lng,
+          pointRef:newPointRef
+        }
+        console.log(newPoint);
+        points.push(newPoint);
+      }else{
+        console.log(points);
+        console.log(currentid);
+        let index = points.findIndex(point =>point.id ==currentid);
+        console.log(index);
+        points[index].title = title;
+        points[index].description = description;
+      }
+      document
+        .getElementById("dialogBackground")
+        .classList.remove("dialogBackgroundVisible");
+      document.getElementById("dialog").classList.remove("visible");
+      document.getElementById("title").value = '';
+      document.getElementById("description").value = '';
+      document.getElementById("id").value = 'null';
+      newPointRef = null;
+      currentStep =steps.Points;
+    };
+    const poiClicked = (id) => {
+      setDialogContent(id);
+      document
+        .getElementById("dialogBackground")
+        .classList.add("dialogBackgroundVisible");
+      document.getElementById("dialog").classList.toggle("visible");
+      console.log(`Clicked ${id}`);
+    };
+    const setDialogContent = (id) => {
+      currentImage = 0;
+      content = pointsOfInterest.find((element) => element.id === id);
+      let previousImgBtn = document.getElementById("previous");
+      let nextImgBtn = document.getElementById("next");
+      if (content.images.length <= 1) {
+        if (!previousImgBtn.classList.contains("hide")) {
+          previousImgBtn.classList.add("hide");
+        }
+        if (!nextImgBtn.classList.contains("hide")) {
+          nextImgBtn.classList.add("hide");
+        }
+      } else {
+        nextImgBtn.classList.remove("hide");
+        previousImgBtn.classList.remove("hide");
+      }
+      dialogTitle.innerText = content.name;
+      dialogDescription.innerText = content.description;
+      dialogImage.src = content.images[currentImage].image;
+    };
+    const load = async () => {
+      let data = await fetch("./data.json");
+      let json = await data.json();
+      pointsOfInterest = json.pointsOfInterest;
+      initializePointsOfInterest(pointsOfInterest);
+    };
+    initializeMap();
+
+    //document.getElementById("intro").showModal()
+  </script>
 </html>
