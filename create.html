@@ -29,6 +29,9 @@
       <button id="next" onClick="handleNextImage()" class="imageIcon">
         <img class="icon" src="./assets/arrow.png" />
       </button>
+      <button id="add" onClick="handleAddImage()" class="addButton">
+        <img class="icon" src="./assets/add.png"/>dialogContent
+      </button>
     </div>
     <div class="descriptionTextArea" id="dialogDescription"><textarea id="description"></textarea></textarea></div>
   </div>
@@ -51,6 +54,21 @@
         it now. <input type="file" />Upload
       </div>
       <button onClick="advanceToMapCenter()">Continue</button>
+    </div>
+  </dialog>
+    <dialog id="imageAdd" class="imageAddDialog">
+    <div class="dialogContent">
+      <div class="title">Add Images</div>
+      <div class="description">
+        <div id="imageList" class="imageList"></div>
+        <div class="imageAdd">Add a local image: <input id="imageInput" type="file" onchange="handlePrevewImageSelect()" accept="image/png, image/jpeg, image/jpg"/></div>
+        <div class="imageAdd">Link to an Image: <input type="text" id="imageLink" value="https://upload.wikimedia.org/wikipedia/commons/5/53/Ice_Skating-William_Frerichs-1869.jpg"><button onclick="addLinkedImage()">Add</button></button></div>
+      </div>
+      <div class="uploadPrompt">
+        If you have already started an exhibit and want to edit it please upload
+        it now. <input type="file" />Upload
+      </div>
+      <button onClick="handleImagesSelected()">Save</button>
     </div>
   </dialog>
   <dialog id="baseLayerSelection"></dialog>
@@ -86,6 +104,7 @@
     let points = [];
     let pointLatLng = null;
     let newPointRef = null;
+     let imageList = [];
     const showIntro = () => {
       document.getElementById("intro").showModal();
     };
@@ -97,6 +116,54 @@
         "This sets the maps default location."
       );
     };
+    const addLinkedImage = ()=>{
+      let link = document.getElementById("imageLink");
+      buildImagePreview(link.value);
+      link.value='';
+    }
+    const handlePrevewImageSelect =(e)=>{
+      let files = document.getElementById("imageInput").files;
+      console.log(files);
+      let path =  `./images/${files[0].name}`;
+      buildImagePreview(path);
+    }
+    const buildImagePreview = (imgPath)=>{
+      let parent = document.getElementById("imageList");
+      let imageContainer = document.createElement('div');
+      imageContainer.id = document.getElementsByClassName('previewImageContainer').length; //want to be able to delete it easily
+      imageContainer.className = "previewImageContainer"
+      imageContainer.setAttribute("image",imgPath);
+      let image = document.createElement('img');
+      image.src =imgPath;
+      let deleteBtn = document.createElement('button');
+      deleteBtn.onclick = ()=>{console.log(`Delete image: ${imageContainer.id}`); document.getElementById(imageContainer.id).remove()};
+      imageContainer.appendChild(image);
+      imageContainer.appendChild(deleteBtn);
+      parent.appendChild(imageContainer);
+
+    }
+    const handleAddImage = ()=>{
+      console.log(imageList);
+      if(imageList.length>0){
+        console.log("NEED to add images to dialog");
+        imageList.map((image)=>{
+          buildImagePreview(image.image);
+        })
+      }
+      document.getElementById("imageAdd").showModal(); 
+    }
+    const handleImagesSelected = ()=>{
+     
+      let images = document.getElementsByClassName("previewImageContainer");
+      for(let image of images){
+        let imageObj = {image:image.getAttribute("image")}
+        imageList.push(imageObj);
+      }
+      document.getElementById("imageLink").value='';
+      document.getElementById("imageList").innerHTML = '';
+      dialogImage.src = imageList[currentImage].image;
+      document.getElementById("imageAdd").close(); 
+    }
     const setInstructions = (title, subtitle) => {
       document.getElementById("instructions").innerText = title;
       document.getElementById("subtitle").innerText = subtitle;
@@ -109,14 +176,7 @@
       currentStep = steps.Points;
       setInstructions("Click to select your points", "");
     };
-    const pointClicked =(lat,lng)=>{
-      let point = points.find(point=>point.latitude ===lat && point.longitude ===lng);
-      console.log(point);
-      document.getElementById("id").value = point.id;
-      document.getElementById("title").value = point.title;
-      document.getElementById("description").value = point.description;
-      document.getElementById("dialog").classList.toggle("visible");
-    }
+
     const addNewPoint = (latlng) => {
       document.getElementById("id").value = 'null';
       currentStep = steps.Editing;
@@ -257,30 +317,27 @@
       closeDialog();
     };
     const handlePreviousImage = () => {
-      if (!content) {
-        return;
-      }
       currentImage =
-        currentImage > 0 ? currentImage - 1 : content.images.length - 1;
-      console.log(content.images.length);
+        currentImage > 0 ? currentImage - 1 : imageList.length - 1;
       dialogImage.opacity = 0;
-      dialogImage.src = content.images[currentImage].image;
+      dialogImage.src = imageList[currentImage].image;
       dialogImage.opacity = 1;
     };
     const handleNextImage = () => {
-      if (!content) {
-        return;
-      }
-      currentImage = (currentImage + 1) % content.images.length;
+      currentImage = (currentImage + 1) % imageList.length;
       dialogImage.opacity = 0;
-      dialogImage.src = content.images[currentImage].image;
+      dialogImage.src = imageList[currentImage].image;
       dialogImage.opacity = 1;
     };
     const deletePoint = ()=>{
       let currentid = document.getElementById("id").value;
-      let index = points.findIndex(point =>point.id ==currentid);
-      map.removeLayer(points[index].pointRef);
-      points.splice(index,1);
+      if(currentid ==='null'){
+        map.removeLayer(newPointRef);
+      }else{
+        let index = points.findIndex(point =>point.id ==currentid);
+        map.removeLayer(points[index].pointRef);
+        points.splice(index,1);
+      }
       document
         .getElementById("dialogBackground")
         .classList.remove("dialogBackgroundVisible");
@@ -288,6 +345,7 @@
       document.getElementById("title").value = '';
       document.getElementById("description").value = '';
       document.getElementById("id").valu='null';
+      currentStep = steps.Points;
     }
     const closeDialog = () => {
       let currentid = document.getElementById("id").value;
@@ -303,7 +361,8 @@
           id,
           latitude:pointLatLng.lat,
           longitude:pointLatLng.lng,
-          pointRef:newPointRef
+          pointRef:newPointRef,
+          images:imageList
         }
         console.log(newPoint);
         points.push(newPoint);
@@ -314,6 +373,7 @@
         console.log(index);
         points[index].title = title;
         points[index].description = description;
+        points[index].images = imageList;
       }
       document
         .getElementById("dialogBackground")
@@ -323,22 +383,26 @@
       document.getElementById("description").value = '';
       document.getElementById("id").value = 'null';
       newPointRef = null;
+      imageList = [];
+      dialogImage.src = '';
       currentStep =steps.Points;
     };
-    const poiClicked = (id) => {
-      setDialogContent(id);
-      document
-        .getElementById("dialogBackground")
-        .classList.add("dialogBackgroundVisible");
+    const pointClicked =(lat,lng)=>{
+      let point = points.find(point=>point.latitude ===lat && point.longitude ===lng);
+      setDialogContent(point);
       document.getElementById("dialog").classList.toggle("visible");
-      console.log(`Clicked ${id}`);
-    };
-    const setDialogContent = (id) => {
+    }
+    const setDialogImages = (imageList) =>{
+
+    }
+    const setDialogContent = (point) => {
       currentImage = 0;
-      content = pointsOfInterest.find((element) => element.id === id);
+      imageList = [];
+      content = point
       let previousImgBtn = document.getElementById("previous");
       let nextImgBtn = document.getElementById("next");
-      if (content.images.length <= 1) {
+      imageList = content.images;
+      if (imageList.length <= 1) {
         if (!previousImgBtn.classList.contains("hide")) {
           previousImgBtn.classList.add("hide");
         }
@@ -349,9 +413,12 @@
         nextImgBtn.classList.remove("hide");
         previousImgBtn.classList.remove("hide");
       }
-      dialogTitle.innerText = content.name;
-      dialogDescription.innerText = content.description;
-      dialogImage.src = content.images[currentImage].image;
+      document.getElementById("id").value = point.id;
+      document.getElementById("title").value = point.title;
+      document.getElementById("description").value = point.description;
+      if(imageList.length>0){
+        dialogImage.src = imageList[currentImage]?.image;
+      }
     };
     const load = async () => {
       let data = await fetch("./data.json");
