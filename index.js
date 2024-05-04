@@ -149,7 +149,7 @@ const setDialogContent = (id) => {
     nextImgBtn.classList.remove("hide");
     previousImgBtn.classList.remove("hide");
   }
-  dialogTitle.innerText = content.name;
+  dialogTitle.innerText = content.title;
   dialogDescription.innerText = content.description;
   dialogImage.src = content.images[currentImage].image;
   console.log(dialogImage.src);
