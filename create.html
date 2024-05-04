@@ -123,8 +123,9 @@
       pointLatLng = latlng;
       console.log(pointLatLng);
       let point = L.marker(latlng).addTo(map);
-      point.on("click",()=>{
-        pointClicked(pointLatLng.lat,pointLatLng.lng);
+      point.on("click",(e)=>{
+        console.log(e);
+        pointClicked(e.latlng.lat,e.latlng.lng);
       });
       newPointRef = point;
       document.getElementById("dialog").classList.toggle("visible");
