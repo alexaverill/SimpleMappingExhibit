@@ -30,28 +30,32 @@
         <img class="icon" src="./assets/arrow.png" />
       </button>
       <button id="add" onClick="handleAddImage()" class="addButton">
-        <img class="icon" src="./assets/add.png"/>dialogContent
+        <img class="icon" src="./assets/add.png"/>
       </button>
     </div>
-    <div class="descriptionTextArea" id="dialogDescription"><textarea id="description"></textarea></textarea></div>
+    <div class="descriptionTextArea" id="dialogDescription"><textarea id="description" placeholder="Description"></textarea></textarea></div>
   </div>
   <div id="userInstructions" class="userInstructions hide">
     <div id="instructions" class="title">Select the Center of your map</div>
     <div id="subtitle" class="subtitle"></div>
+    <div class="userInstructionButtons" id="userInstructionButtons">
     <button onclick="finishStep()">Continue</button>
+    </div>
   </div>
   <button class="editButton" onclick="showIntro()">Start</button>
   <dialog id="intro">
     <div class="dialogContent">
-      <div class="title">Build a Map</div>
+      <div class="title">Map Builder.</div>
       <div class="description">
-        This is a tool to help you build out a mapping interactive. Images that
-        you want to select and display will need to be placed in the images
-        folder, or hosted elsewhere online.
+        <div>This is a tool to help you build out a mapping interactive.</div>
+        <div>Before you get started make sure that you have:
+          <ol>
+            <li>Placed all your images are already hosted online somewhere, or in the images folder in the directory.</li>
+          </ol>
+        </div>
       </div>
       <div class="uploadPrompt">
-        If you have already started an exhibit and want to edit it please upload
-        it now. <input type="file" />Upload
+        If you have already have started an exhibit and want to edit it upload it now: <input type="file" />
       </div>
       <button onClick="advanceToMapCenter()">Continue</button>
     </div>
@@ -64,15 +68,49 @@
         <div class="imageAdd">Add a local image: <input id="imageInput" type="file" onchange="handlePrevewImageSelect()" accept="image/png, image/jpeg, image/jpg"/></div>
         <div class="imageAdd">Link to an Image: <input type="text" id="imageLink" value="https://upload.wikimedia.org/wikipedia/commons/5/53/Ice_Skating-William_Frerichs-1869.jpg"><button onclick="addLinkedImage()">Add</button></button></div>
       </div>
-      <div class="uploadPrompt">
-        If you have already started an exhibit and want to edit it please upload
-        it now. <input type="file" />Upload
+      <div class="buttonBar">
+      <button onClick="cancelImageSelect()">Cancel</button> <button onClick="handleImagesSelected()">Save</button>
       </div>
-      <button onClick="handleImagesSelected()">Save</button>
     </div>
   </dialog>
-  <dialog id="baseLayerSelection"></dialog>
-  <dialog id="boundsSelectionDialog"></dialog>
+  <dialog id="baseLayerSelection">
+    <div class="dialogContent">
+
+    </div>
+  </dialog>
+    <dialog id="zoomSelection">
+    <div class="dialogContent">
+      <div class="title">Define zoom levels</div>
+      <div class="description">
+        The minimum zoom level is how far out a person can zoom, this should be as close to the edges of your bounding box as possible. The maximum zoom level is how close people can zoom into the map. 
+      </div>
+      <div>
+        <button onclick="advanceToSelectZoom()">Continue</button>
+      </div>
+    </div>
+  </dialog>
+
+    <dialog id="boundsSelectionDialog">
+        <div class="dialogContent">
+      <div class="title">Select Map Bounds</div>
+      <div class="description">Select the outer limits that you want people to be able to drag the map to. Your bounding box should include some padding around your points to ensure that people can see all your points. When in doubt go larger. 
+      <div>
+        <button onClick="skipBounds()">Skip</button>
+        <button onClick="advanceToBounds()">Select Bounds</button>
+      </div>
+    </div>
+  </dialog>
+    <dialog id="completedMap">
+        <div class="dialogContent">
+      <div class="title">Map Complete!</div>
+      <div class="description">
+        You have completed your map, you can now download the data file and place it nex to the index.html file. Ensure all the images you selected are in a images folder that is next to the index.html file. 
+      <div>
+        <button onClick="closeComplete()">Close </button>
+        <a href="" id="downloadLink" class="download">Download</button>
+      </div>
+    </div>
+  </dialog>
   <div
     id="dialogBackground"
     class="dialogBackground"
@@ -84,8 +122,9 @@
       Center: 1,
       Points: 2,
       Editing: 3,
-      ZoomLevel: 4,
-      Bounds: 5,
+      Bounds: 4,
+            MinZoomLevel: 5,
+            MaxZoomLevel:6
     };
     let currentStep = steps.Center;
     let currentMapCenter = null;
@@ -105,17 +144,83 @@
     let pointLatLng = null;
     let newPointRef = null;
      let imageList = [];
+     let bounds;
+     let originalZoomlevel = null;
+     let boundsRect = null;
+     let maxZoomLevel = null;
+     let minZoomLevel = null;
     const showIntro = () => {
       document.getElementById("intro").showModal();
     };
+    const handleResetBounds = ()=>{
+      map.removeLayer(boundsRect);
+      isClicked =false;
+      map.setZoom(originalZoomlevel);
+    }
+    const advanceToBounds = () =>{
+      isClicked = false;
+      document.getElementById("boundsSelectionDialog").close();
+      let resetBtn = document.createElement('button');
+      resetBtn.onclick=handleResetBounds;
+      resetBtn.appendChild(document.createTextNode("Reset"));
+      document.getElementById("userInstructionButtons").prepend(resetBtn);
+      setInstructions("Click to start drawing a boundary box.", "");
+      currentStep = steps.Bounds;
+    }
     const advanceToMapCenter = () => {
       document.getElementById("intro").close();
       document.getElementById("userInstructions").classList.remove("hide");
       setInstructions(
-        "Select your maps center",
+        "Set the center of the map.",
         "This sets the maps default location."
       );
     };
+    const advanceToSelectZoom = ()=>{
+      currentStep = steps.MinZoomLevel;
+      document.getElementById("userInstructionButtons").innerHTML='';
+            document.getElementById("zoomSelection").close();
+      let resetBtn = document.createElement('button');
+      resetBtn.onclick=finishStep;
+      resetBtn.appendChild(document.createTextNode("Set and Continue"));
+      document.getElementById("userInstructionButtons").prepend(resetBtn);
+      setInstructions("How far out can users zoom?", "");
+    }
+    const advanceToSelectMaxZoom = ()=>{
+      console.log("Max Zoom!");
+      currentStep = steps.MaxZoomLevel;
+            document.getElementById("userInstructionButtons").innerHTML='';
+      let resetBtn = document.createElement('button');
+      resetBtn.onclick=finishStep;
+      resetBtn.appendChild(document.createTextNode("Set and Continue"));
+      document.getElementById("userInstructionButtons").prepend(resetBtn);
+      setInstructions("How far in can users zoom in?", "");
+    }
+    const handleComplete = ()=>{
+      console.log("COMPLETE");
+      let cleanedPoints = points.map(point =>{
+        return {
+          id:point.id,
+          title:point.title,
+          description:point.description,
+          latitude:point.latitude,
+          longitude:point.longitude,
+          images:point.image
+        }
+      })
+      let mapObject = {
+        mapCenter:currentMapCenter,
+        minZoom:minZoomLevel,
+        maxZoom:maxZoomLevel,
+        pointsOfInterest:cleanedPoints
+      }
+      let jsonString = JSON.stringify(mapObject);
+      var data = new Blob([jsonString], {type: 'application/json'});
+
+      let textFile = window.URL.createObjectURL(data);
+      document.getElementById("downloadLink").href=textFile;
+      console.log(jsonString);
+      document.getElementById("completedMap").showModal();
+    }
     const addLinkedImage = ()=>{
       let link = document.getElementById("imageLink");
       buildImagePreview(link.value);
@@ -136,6 +241,10 @@
       let image = document.createElement('img');
       image.src =imgPath;
       let deleteBtn = document.createElement('button');
+      deleteBtn.className="imageDeleteBtn";
+      let deleteBtnIcon = document.createElement('img')
+      deleteBtnIcon.src = "./assets/delete.png";
+      deleteBtn.appendChild(deleteBtnIcon);
       deleteBtn.onclick = ()=>{console.log(`Delete image: ${imageContainer.id}`); document.getElementById(imageContainer.id).remove()};
       imageContainer.appendChild(image);
       imageContainer.appendChild(deleteBtn);
@@ -151,6 +260,9 @@
         })
       }
       document.getElementById("imageAdd").showModal(); 
+    }
+    const cancelImageSelect = () =>{
+      document.getElementById("imageAdd").close(); 
     }
     const handleImagesSelected = ()=>{
      
@@ -174,7 +286,7 @@
     };
     const advanceToPoints = () => {
       currentStep = steps.Points;
-      setInstructions("Click to select your points", "");
+      setInstructions("Add points", "Click to create points");
     };
 
     const addNewPoint = (latlng) => {
@@ -206,18 +318,36 @@
       centerMarker = L.marker(currentMapCenter, { icon: myIcon }).addTo(map);
     };
     const finishStep = () => {
+      console.log(currentStep);
       switch (currentStep) {
         case steps.Center:
           advanceToPoints();
+          break;
+        case steps.Points:
+          currentStep = steps.Bounds;
+          document.getElementById("boundsSelectionDialog").showModal();
+          break;
+        case steps.Bounds:
+          currentStep = steps.MinZoomLevel;
+          document.getElementById("zoomSelection").showModal();
+          break;
+        case steps.MinZoomLevel:
+          minZoomLevel = map.getZoom();
+          currentStep = steps.MaxZoomLevel;
+          advanceToSelectMaxZoom();
+          break;
+        case steps.MaxZoomLevel:
+          maxZoomLevel = map.getZoom();
+          handleComplete();
           break;
       }
     };
 
     const initializeMap = (
       startCoordinates = [0, 0],
-      zoomLevel = 1,
+      zoomLevel = 3,
       maxZoomLevel = 15,
-      minZoomLevel = 1,
+      minZoomLevel = 3,
       zoomPosition = "bottomright"
     ) => {
       map = L.map("map").setView(startCoordinates, zoomLevel);
@@ -266,6 +396,7 @@
         .layers(baseMaps, overlays, { position: "bottomright" })
         .addTo(map);
       map.on("click", (e) => {
+        console.log(currentStep)
         if (currentStep == steps.Center) {
           currentMapCenter = e.latlng;
           setCurrentLatLang();
@@ -274,12 +405,18 @@
         if (currentStep == steps.Points) {
           addNewPoint(e.latlng);
         }
-        console.log(`Clicked at ${e.latlng} Zoom Level:${map.getZoom()}`);
-        if (isClicked) {
-          console.log("Reset map bounds");
-        } else {
-          startPos = e.latlng;
-        }
+        console.log(`Clicked at ${e.latlng} Zoom Level:${map.getZoom()} ${currentStep}`);
+        if(currentStep == steps.Bounds && !isClicked){
+          originalZoomlevel = map.getZoom();
+          startPos = e.latlng
+      }
+      if(currentStep == steps.Bounds && isClicked){
+            bounds = L.latLngBounds(startPos,e.latlng);
+            console.log(bounds);
+            map.setMaxBounds(bounds);
+            map.flyToBounds(bounds);
+      }  
+        
         isClicked = !isClicked;
       });
       map.on("mousemove", (e) => {
@@ -288,20 +425,23 @@
         }
         if (isClicked) {
           console.log(`Moved: ${e.latlng}`);
-          let bounds = L.latLngBounds(startPos, e.latlng);
+          bounds = L.latLngBounds(startPos, e.latlng);
           endPos = e.latlng;
           let previousRects = document.getElementsByClassName("zoomRect");
           if (previousRects) {
             for (let element of previousRects) {
               console.log(element);
+              setInstructions("Click to select other corner of your bounds", "");
               element.remove();
             }
           }
-          L.rectangle(bounds, {
+          boundsRect = L.rectangle(bounds, {
             color: "#FFFF00",
             weight: 1,
             className: "zoomRect",
           }).addTo(map);
+          
+          
         }
       });
     };
@@ -351,7 +491,6 @@
       let currentid = document.getElementById("id").value;
       let title = document.getElementById("title").value;
       let description = document.getElementById("description").value;
-      console.log(currentid);
       if(currentid === 'null'){
         console.log("Add New Point");
         let id=points.length;
