@@ -33,7 +33,7 @@ body {
   gap: 1.5rem;
   --animation-speed: 500ms;
   transition: all var(--animation-speed) ease-in;
-  transform: translateX(-100%);
+  transform: translateX(-110%);
 }
 .visible {
   transform: translateX(0%);
