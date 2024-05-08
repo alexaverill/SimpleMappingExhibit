@@ -208,9 +208,11 @@
      let boundsRect = null;
      let maxZoomLevel = null;
      let minZoomLevel = null;
+     //Intro Functionality
     const showIntro = () => {
       document.getElementById("intro").showModal();
     };
+    //Bounds Funtions
     const handleResetBounds = ()=>{
       map.removeLayer(boundsRect);
       isClicked =false;
@@ -226,6 +228,8 @@
       setInstructions("Click to start drawing a boundary box.", "");
       currentStep = steps.Bounds;
     }
+    
+    //Map Center Point
     const advanceToMapCenter = () => {
       currentStep = steps.Center
       advanceProgress("baseLayerProgress","mapCenterProgress")
@@ -235,6 +239,23 @@
         "Select the center of your map.",""
       );
     };
+    const addCenterMarker = () => {
+      if (centerMarker && map) {
+        map.removeLayer(centerMarker);
+      }
+      var myIcon = L.icon({
+        iconUrl: "assets/flag.svg",
+        iconSize: [40, 40],
+        iconAnchor: [11, 30],
+        popupAnchor: [-3, -76],
+        shadowSize: [68, 95],
+        shadowAnchor: [22, 94],
+      });
+
+      centerMarker = L.marker(currentMapCenter, { icon: myIcon }).addTo(map);
+    };
+    
+    //Zoom Levelts
     const advanceToSelectZoom = ()=>{
       currentStep = steps.MinZoomLevel;
       document.getElementById("userInstructionButtons").innerHTML='';
@@ -256,43 +277,35 @@
       map.setZoom(map.getMaxZoom());
       setInstructions("Suggested Maximum zoom level?", "Zoom in or out to modify");
     }
-    const handleComplete = ()=>{
-      advanceProgress("zoomProgress","")
-      let cleanedPoints = points.map(point =>{
-        return {
-          id:point.id,
-          title:point.title,
-          description:point.description,
-          latitude:point.latitude,
-          longitude:point.longitude,
-          images:point.image
-        }
-      })
-      let mapObject = {
-        mapCenter:currentMapCenter,
-        baseLayers:baseLayers,
-        minZoom:minZoomLevel,
-        maxZoom:maxZoomLevel,
-        pointsOfInterest:cleanedPoints
-      }
-      let jsonString = JSON.stringify(mapObject);
-      var data = new Blob([jsonString], {type: 'application/json'});
 
-      let textFile = window.URL.createObjectURL(data);
-      document.getElementById("downloadLink").href=textFile;
-      console.log(jsonString);
-      document.getElementById("completedMap").showModal();
+
+    //Base Layer functions
+        const advanceToBaseLayers = () =>{
+      currentStep = steps.BaseLayer;
+      document.getElementById("intro").close();
+      document.getElementById("baseLayerSelection").showModal();
+      for(let layer of baseLayers){
+        buildBaseLayerInput(layer.name,layer.tileUrl,layer.options.attribution,layer.options.minZoomLevel,layer.options.maxZoomLevel)
+      }
+      
     }
-    const addLinkedImage = ()=>{
-      let link = document.getElementById("imageLink");
-      buildImagePreview(link.value);
-      link.value='';
-    }
-    const handlePrevewImageSelect =(e)=>{
-      let files = document.getElementById("imageInput").files;
-      console.log(files);
-      let path =  `./images/${files[0].name}`;
-      buildImagePreview(path);
+    const setBaseLayers = ()=>{
+      map.eachLayer((layer)=>{
+        map.removeLayer(layer);
+      });
+      if(mapLayerControl){
+        map.removeControl(mapLayerControl);
+      }
+      let tileNames = {}
+      for(let layer of baseLayers){
+        console.log(layer);
+        let tileLayer = L.tileLayer(layer.tileUrl,layer.options);
+        tileLayer.addTo(map);
+        tileNames[layer.name] = tileLayer
+      }
+      mapLayerControl =L.control
+        .layers(tileNames, {}, { position: "bottomright" })
+        .addTo(map);
     }
     const addBaseLayerUI = ()=>{
       buildBaseLayerInput();
@@ -382,254 +395,20 @@
      inputLabel.innerText=label;
      return inputLabel;
     }
-    const buildImagePreview = (imgPath)=>{
-      let parent = document.getElementById("imageList");
-      let imageContainer = document.createElement('div');
-      imageContainer.id = document.getElementsByClassName('previewImageContainer').length; //want to be able to delete it easily
-      imageContainer.className = "previewImageContainer"
-      imageContainer.setAttribute("image",imgPath);
-      let image = document.createElement('img');
-      image.src =imgPath;
-      let deleteBtn = document.createElement('button');
-      deleteBtn.className="imageDeleteBtn";
-      let deleteBtnIcon = document.createElement('img')
-      deleteBtnIcon.src = "./assets/delete.png";
-      deleteBtn.appendChild(deleteBtnIcon);
-      deleteBtn.onclick = ()=>{console.log(`Delete image: ${imageContainer.id}`); document.getElementById(imageContainer.id).remove()};
-      imageContainer.appendChild(image);
-      imageContainer.appendChild(deleteBtn);
-      parent.appendChild(imageContainer);
-
+       
+    //Content Dialog Setup
+    const addLinkedImage = ()=>{
+      let link = document.getElementById("imageLink");
+      buildImagePreview(link.value);
+      link.value='';
     }
-    const handleAddImage = ()=>{
-      console.log(imageList);
-      if(imageList.length>0){
-        console.log("NEED to add images to dialog");
-        imageList.map((image)=>{
-          buildImagePreview(image.image);
-        })
-      }
-      document.getElementById("imageAdd").showModal(); 
+    const handlePrevewImageSelect =(e)=>{
+      let files = document.getElementById("imageInput").files;
+      console.log(files);
+      let path =  `./images/${files[0].name}`;
+      buildImagePreview(path);
     }
-    const cancelImageSelect = () =>{
-      document.getElementById("imageAdd").close(); 
-    }
-    const handleImagesSelected = ()=>{
-     
-      let images = document.getElementsByClassName("previewImageContainer");
-      for(let image of images){
-        let imageObj = {image:image.getAttribute("image")}
-        imageList.push(imageObj);
-      }
-      document.getElementById("imageLink").value='';
-      document.getElementById("imageList").innerHTML = '';
-      dialogImage.src = imageList[currentImage].image;
-      document.getElementById("imageAdd").close(); 
-    }
-    const setInstructions = (title, subtitle) => {
-      document.getElementById("instructions").innerText = title;
-      document.getElementById("subtitle").innerText = subtitle;
-    };
-    const setCurrentLatLang = () => {
-      addCenterMarker();
-      map.setView(currentMapCenter);
-    };
-    const advanceToPoints = () => {
-      currentStep = steps.Points;
-      advanceProgress("mapCenterProgress","pointsProgress")
-      setInstructions("Add points", "Click to create points");
-    };
-    const advanceToBaseLayers = () =>{
-      currentStep = steps.BaseLayer;
-      document.getElementById("intro").close();
-      document.getElementById("baseLayerSelection").showModal();
-      for(let layer of baseLayers){
-        buildBaseLayerInput(layer.name,layer.tileUrl,layer.options.attribution,layer.options.minZoomLevel,layer.options.maxZoomLevel)
-      }
-      
-    }
-    const setBaseLayers = ()=>{
-      map.eachLayer((layer)=>{
-        map.removeLayer(layer);
-      });
-      if(mapLayerControl){
-        map.removeControl(mapLayerControl);
-      }
-      let tileNames = {}
-      for(let layer of baseLayers){
-        console.log(layer);
-        let tileLayer = L.tileLayer(layer.tileUrl,layer.options);
-        tileLayer.addTo(map);
-        tileNames[layer.name] = tileLayer
-      }
-      mapLayerControl =L.control
-        .layers(tileNames, {}, { position: "bottomright" })
-        .addTo(map);
-    }
-    const advanceProgress = (previousId,nextId) =>{
-      document.getElementById(previousId).classList.remove("active");
-      document.getElementById(previousId).classList.add("completed");
-      if(nextId && nextId.length>0){
-      document.getElementById(nextId).classList.add("active");
-      }
-    }
-    const addNewPoint = (latlng) => {
-      document.getElementById("id").value = 'null';
-      currentStep = steps.Editing;
-      pointLatLng = latlng;
-      console.log(pointLatLng);
-      let point = L.marker(latlng).addTo(map);
-      point.on("click",(e)=>{
-        console.log(e);
-        pointClicked(e.latlng.lat,e.latlng.lng);
-      });
-      newPointRef = point;
-      document.getElementById("dialog").classList.toggle("visible");
-    };
-    const addCenterMarker = () => {
-      if (centerMarker && map) {
-        map.removeLayer(centerMarker);
-      }
-      var myIcon = L.icon({
-        iconUrl: "assets/flag.svg",
-        iconSize: [40, 40],
-        iconAnchor: [11, 30],
-        popupAnchor: [-3, -76],
-        shadowSize: [68, 95],
-        shadowAnchor: [22, 94],
-      });
-
-      centerMarker = L.marker(currentMapCenter, { icon: myIcon }).addTo(map);
-    };
-    const finishStep = () => {
-      console.log(currentStep);
-      switch (currentStep) {
-        case steps.Intro:
-          advanceToBaseLayers();
-          break;
-        case steps.BaseLayer:
-          setBaseLayers();
-          document.getElementById("baseLayerSelection").close();
-          advanceToMapCenter();
-          break;
-        case steps.Center:
-          advanceToPoints();
-          break;
-        case steps.Points:
-          currentStep = steps.Bounds;
-          advanceProgress("pointsProgress","boundsProgress");
-          document.getElementById("boundsSelectionDialog").showModal();
-          break;
-        case steps.Bounds:
-          currentStep = steps.MinZoomLevel;
-          document.getElementById("zoomSelection").showModal();
-          break;
-        case steps.MinZoomLevel:
-          minZoomLevel = map.getZoom();
-          currentStep = steps.MaxZoomLevel;
-          advanceProgress("boundsProgress","zoomProgress");
-          advanceToSelectMaxZoom();
-          break;
-        case steps.MaxZoomLevel:
-          maxZoomLevel = map.getZoom();
-          handleComplete();
-          break;
-      }
-    };
-
-    const initializeMap = (
-      startCoordinates = [0, 0],
-      zoomLevel = 3,
-      maxZoomLevel = 15,
-      minZoomLevel = 3,
-      zoomPosition = "bottomright"
-    ) => {
-      map = L.map("map").setView(startCoordinates, zoomLevel);
-
-      map.zoomControl.remove();
-      if (minZoomLevel !== maxZoomLevel) {
-        L.control
-          .zoom({
-            position: zoomPosition,
-          })
-          .addTo(map);
-      }
-      setBaseLayers();
-      map.on("click", (e) => {
-        console.log(currentStep)
-        if (currentStep == steps.Center) {
-          currentMapCenter = e.latlng;
-          setCurrentLatLang();
-          return;
-        }
-        if (currentStep == steps.Points) {
-          addNewPoint(e.latlng);
-        }
-        if(currentStep == steps.Bounds && !isClicked){
-          originalZoomlevel = map.getZoom();
-          startPos = e.latlng
-      }
-      if(currentStep == steps.Bounds && isClicked){
-            bounds = L.latLngBounds(startPos,e.latlng);
-            console.log(bounds);
-            map.setMaxBounds(bounds);
-            map.fitBounds(bounds);
-            setInstructions("Your current map bounds","")
-      }  
-        
-        isClicked = !isClicked;
-      });
-      map.on("mousemove", (e) => {
-        if (currentStep !== steps.Bounds) {
-          return;
-        }
-        if (isClicked) {
-          console.log(`Moved: ${e.latlng}`);
-          bounds = L.latLngBounds(startPos, e.latlng);
-          endPos = e.latlng;
-          let previousRects = document.getElementsByClassName("zoomRect");
-          if (previousRects) {
-            for (let element of previousRects) {
-              console.log(element);
-              setInstructions("Click to select other corner of your bounds", "");
-              element.remove();
-            }
-          }
-          boundsRect = L.rectangle(bounds, {
-            color: "#FFFF00",
-            weight: 1,
-            className: "zoomRect",
-          }).addTo(map);
-          
-          
-        }
-      });
-    };
-    const initializePointsOfInterest = (points) => {
-      points.map((point) => {
-        var marker = L.marker([point.latitude, point.longitude]).addTo(map);
-        marker.on("click", () => {
-          poiClicked(point.id);
-        });
-      });
-    };
-    const handleBackgroundClick = () => {
-      closeDialog();
-    };
-    const handlePreviousImage = () => {
-      currentImage =
-        currentImage > 0 ? currentImage - 1 : imageList.length - 1;
-      dialogImage.opacity = 0;
-      dialogImage.src = imageList[currentImage].image;
-      dialogImage.opacity = 1;
-    };
-    const handleNextImage = () => {
-      currentImage = (currentImage + 1) % imageList.length;
-      dialogImage.opacity = 0;
-      dialogImage.src = imageList[currentImage].image;
-      dialogImage.opacity = 1;
-    };
-    const deletePoint = ()=>{
+        const deletePoint = ()=>{
       let currentid = document.getElementById("id").value;
       if(currentid ==='null'){
         map.removeLayer(newPointRef);
@@ -719,6 +498,253 @@
         dialogImage.src = imageList[currentImage]?.image;
       }
     };
+        const handleBackgroundClick = () => {
+      closeDialog();
+    };
+    const handlePreviousImage = () => {
+      currentImage =
+        currentImage > 0 ? currentImage - 1 : imageList.length - 1;
+      dialogImage.opacity = 0;
+      dialogImage.src = imageList[currentImage].image;
+      dialogImage.opacity = 1;
+    };
+    const handleNextImage = () => {
+      currentImage = (currentImage + 1) % imageList.length;
+      dialogImage.opacity = 0;
+      dialogImage.src = imageList[currentImage].image;
+      dialogImage.opacity = 1;
+    };
+    const buildImagePreview = (imgPath)=>{
+      let parent = document.getElementById("imageList");
+      let imageContainer = document.createElement('div');
+      imageContainer.id = document.getElementsByClassName('previewImageContainer').length; //want to be able to delete it easily
+      imageContainer.className = "previewImageContainer"
+      imageContainer.setAttribute("image",imgPath);
+      let image = document.createElement('img');
+      image.src =imgPath;
+      let deleteBtn = document.createElement('button');
+      deleteBtn.className="imageDeleteBtn";
+      let deleteBtnIcon = document.createElement('img')
+      deleteBtnIcon.src = "./assets/delete.png";
+      deleteBtn.appendChild(deleteBtnIcon);
+      deleteBtn.onclick = ()=>{console.log(`Delete image: ${imageContainer.id}`); document.getElementById(imageContainer.id).remove()};
+      imageContainer.appendChild(image);
+      imageContainer.appendChild(deleteBtn);
+      parent.appendChild(imageContainer);
+
+    }
+    const handleAddImage = ()=>{
+      console.log(imageList);
+      if(imageList.length>0){
+        console.log("NEED to add images to dialog");
+        imageList.map((image)=>{
+          buildImagePreview(image.image);
+        })
+      }
+      document.getElementById("imageAdd").showModal(); 
+    }
+    const cancelImageSelect = () =>{
+      document.getElementById("imageAdd").close(); 
+    }
+    const handleImagesSelected = ()=>{
+     
+      let images = document.getElementsByClassName("previewImageContainer");
+      for(let image of images){
+        let imageObj = {image:image.getAttribute("image")}
+        imageList.push(imageObj);
+      }
+      document.getElementById("imageLink").value='';
+      document.getElementById("imageList").innerHTML = '';
+      dialogImage.src = imageList[currentImage].image;
+      document.getElementById("imageAdd").close(); 
+    }
+    
+    
+
+    const setCurrentLatLang = () => {
+      addCenterMarker();
+      map.setView(currentMapCenter);
+    };
+    const advanceToPoints = () => {
+      currentStep = steps.Points;
+      advanceProgress("mapCenterProgress","pointsProgress")
+      setInstructions("Add points", "Click to create points");
+    };
+    
+    
+
+
+    const addNewPoint = (latlng) => {
+      document.getElementById("id").value = 'null';
+      currentStep = steps.Editing;
+      pointLatLng = latlng;
+      console.log(pointLatLng);
+      let point = L.marker(latlng).addTo(map);
+      point.on("click",(e)=>{
+        console.log(e);
+        pointClicked(e.latlng.lat,e.latlng.lng);
+      });
+      newPointRef = point;
+      document.getElementById("dialog").classList.toggle("visible");
+    };
+
+    
+    //State Management
+        const advanceProgress = (previousId,nextId) =>{
+      document.getElementById(previousId).classList.remove("active");
+      document.getElementById(previousId).classList.add("completed");
+      if(nextId && nextId.length>0){
+      document.getElementById(nextId).classList.add("active");
+      }
+    }
+        const setInstructions = (title, subtitle) => {
+      document.getElementById("instructions").innerText = title;
+      document.getElementById("subtitle").innerText = subtitle;
+    };
+    const finishStep = () => {
+      console.log(currentStep);
+      switch (currentStep) {
+        case steps.Intro:
+          advanceToBaseLayers();
+          break;
+        case steps.BaseLayer:
+          setBaseLayers();
+          document.getElementById("baseLayerSelection").close();
+          advanceToMapCenter();
+          break;
+        case steps.Center:
+          advanceToPoints();
+          break;
+        case steps.Points:
+          currentStep = steps.Bounds;
+          advanceProgress("pointsProgress","boundsProgress");
+          document.getElementById("boundsSelectionDialog").showModal();
+          break;
+        case steps.Bounds:
+          currentStep = steps.MinZoomLevel;
+          document.getElementById("zoomSelection").showModal();
+          break;
+        case steps.MinZoomLevel:
+          minZoomLevel = map.getZoom();
+          currentStep = steps.MaxZoomLevel;
+          advanceProgress("boundsProgress","zoomProgress");
+          advanceToSelectMaxZoom();
+          break;
+        case steps.MaxZoomLevel:
+          maxZoomLevel = map.getZoom();
+          handleComplete();
+          break;
+      }
+    };
+    const handleComplete = ()=>{
+      advanceProgress("zoomProgress","")
+      let cleanedPoints = points.map(point =>{
+        console.log(point);
+        return {
+          id:point.id,
+          title:point.title,
+          description:point.description,
+          latitude:point.latitude,
+          longitude:point.longitude,
+          images:point.images
+        }
+      })
+      let mapObject = {
+        mapCenter:currentMapCenter,
+        baseLayers:baseLayers,
+        minZoom:minZoomLevel,
+        maxZoom:maxZoomLevel,
+        mapBounds:boundsRect.getBounds(),
+        pointsOfInterest:cleanedPoints
+      }
+      console.log(mapObject);
+      let jsonString = JSON.stringify(mapObject);
+      var data = new Blob([jsonString], {type: 'application/json'});
+
+      let textFile = window.URL.createObjectURL(data);
+      document.getElementById("downloadLink").href=textFile;
+      console.log(jsonString);
+      document.getElementById("completedMap").showModal();
+    }
+    const initializeMap = (
+      startCoordinates = [0, 0],
+      zoomLevel = 3,
+      maxZoomLevel = 15,
+      minZoomLevel = 3,
+      zoomPosition = "bottomright"
+    ) => {
+      map = L.map("map").setView(startCoordinates, zoomLevel);
+
+      map.zoomControl.remove();
+      if (minZoomLevel !== maxZoomLevel) {
+        L.control
+          .zoom({
+            position: zoomPosition,
+          })
+          .addTo(map);
+      }
+      setBaseLayers();
+      map.on("click", (e) => {
+        console.log(currentStep)
+        if (currentStep == steps.Center) {
+          currentMapCenter = e.latlng;
+          setCurrentLatLang();
+          return;
+        }
+        if (currentStep == steps.Points) {
+          addNewPoint(e.latlng);
+        }
+        if(currentStep == steps.Bounds && !isClicked){
+          originalZoomlevel = map.getZoom();
+          startPos = e.latlng
+      }
+      if(currentStep == steps.Bounds && isClicked){
+            bounds = L.latLngBounds(startPos,e.latlng);
+            console.log(bounds);
+            map.setMaxBounds(bounds);
+            map.fitBounds(bounds);
+            setInstructions("Your current map bounds","")
+      }  
+        
+        isClicked = !isClicked;
+      });
+      map.on("mousemove", (e) => {
+        if (currentStep !== steps.Bounds) {
+          return;
+        }
+        if (isClicked) {
+          console.log(`Moved: ${e.latlng}`);
+          bounds = L.latLngBounds(startPos, e.latlng);
+          endPos = e.latlng;
+          let previousRects = document.getElementsByClassName("zoomRect");
+          if (previousRects) {
+            for (let element of previousRects) {
+              console.log(element);
+              setInstructions("Click to select other corner of your bounds", "");
+              element.remove();
+            }
+          }
+          boundsRect = L.rectangle(bounds, {
+            color: "#FFFF00",
+            weight: 1,
+            className: "zoomRect",
+          }).addTo(map);
+          
+          
+        }
+      });
+    };
+    const initializePointsOfInterest = (points) => {
+      points.map((point) => {
+        var marker = L.marker([point.latitude, point.longitude]).addTo(map);
+        marker.on("click", () => {
+          poiClicked(point.id);
+        });
+      });
+    };
+
+
+    
     const load = async () => {
       let data = await fetch("./data.json");
       let json = await data.json();

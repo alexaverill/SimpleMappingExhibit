@@ -9,14 +9,34 @@ let startPos = null;
 let endPos = null;
 let rectangle = null;
 let pointsOfInterest = null;
+let mapLayerControl;
+const setBaseLayers = (baseLayers) => {
+  map.eachLayer((layer) => {
+    map.removeLayer(layer);
+  });
+  if (mapLayerControl) {
+    map.removeControl(mapLayerControl);
+  }
+  let tileNames = {};
+  for (let layer of baseLayers) {
+    console.log(layer);
+    let tileLayer = L.tileLayer(layer.tileUrl, layer.options);
+    tileLayer.addTo(map);
+    tileNames[layer.name] = tileLayer;
+  }
+  mapLayerControl = L.control
+    .layers(tileNames, {}, { position: "bottomright" })
+    .addTo(map);
+};
 const initializeMap = (
+  baseLayers = [],
   startCoordinates = [44.9377, -93.1007],
-  zoomLevel = 13,
   maxZoomLevel = 15,
   minZoomLevel = 13,
+  mapBounds = null,
   zoomPosition = "bottomright"
 ) => {
-  map = L.map("map").setView(startCoordinates, zoomLevel);
+  map = L.map("map").setView(startCoordinates, minZoomLevel);
 
   map.zoomControl.remove();
   if (minZoomLevel !== maxZoomLevel) {
@@ -26,39 +46,17 @@ const initializeMap = (
       })
       .addTo(map);
   }
-  let osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 15,
-    minZoom: 1,
-    zoomControl: false,
-    attribution:
-      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  });
-  let openTopo = L.tileLayer(
-    "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-    {
-      maxZoom: 17,
-      attribution:
-        'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
-    }
-  );
-  let openSatellite = L.tileLayer(
-    "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}",
-    {
-      minZoom: 0,
-      maxZoom: 20,
-      attribution:
-        '&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      ext: "jpg",
-    }
-  );
-  osm.addTo(map);
-  var baseMaps = {
-    "Open Street Map": osm,
-    "Open Topography": openTopo,
-    Satellite: openSatellite,
-  };
-  var overlays = {};
-  L.control.layers(baseMaps, overlays, { position: "bottomright" }).addTo(map);
+  map.setZoom(minZoomLevel);
+  map.setMinZoom(minZoomLevel);
+  map.setMaxBounds(maxZoomLevel);
+  console.log(mapBounds);
+  if (mapBounds) {
+    let bounds = L.latLngBounds(mapBounds._northEast, mapBounds._southWest);
+    console.log(bounds);
+    map.setMaxBounds(bounds);
+    map.fitBounds(bounds);
+  }
+  setBaseLayers(baseLayers);
   map.on("click", (e) => {
     console.log(`Clicked at ${e.latlng}`);
     if (isClicked) {
@@ -67,25 +65,6 @@ const initializeMap = (
       startPos = e.latlng;
     }
     isClicked = !isClicked;
-  });
-  map.on("mousemove", (e) => {
-    if (isClicked) {
-      console.log(`Moved: ${e.latlng}`);
-      let bounds = L.latLngBounds(startPos, e.latlng);
-      endPos = e.latlng;
-      let previousRects = document.getElementsByClassName("zoomRect");
-      if (previousRects) {
-        for (let element of previousRects) {
-          console.log(element);
-          element.remove();
-        }
-      }
-      L.rectangle(bounds, {
-        color: "#FFFF00",
-        weight: 1,
-        className: "zoomRect",
-      }).addTo(map);
-    }
   });
 };
 const initializePointsOfInterest = (points) => {
@@ -158,7 +137,14 @@ const load = async () => {
   let data = await fetch("./data.json");
   let json = await data.json();
   pointsOfInterest = json.pointsOfInterest;
+  console.log(json);
+  initializeMap(
+    json.baseLayers,
+    json.mapCenter,
+    json.maxZoom,
+    json.minZoom,
+    json.mapBounds
+  );
   initializePointsOfInterest(pointsOfInterest);
 };
-initializeMap();
 load();

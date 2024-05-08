@@ -1,117 +1,84 @@
 {
-  "baseLayers": [],
-  "mapCenter": [],
-  "minZoom": 1,
-  "maxZoom": 100,
+  "mapCenter": { "lat": 44.93880014185138, "lng": -93.08827400207521 },
+  "baseLayers": [
+    {
+      "name": "Satellite",
+      "tileUrl": "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}",
+      "options": {
+        "minZoomLevel": 1,
+        "maxZoomLevel": 20,
+        "attribution": "Tiles courtesy of the <a href=\"https://usgs.gov/\">U.S. Geological Survey</a>"
+      }
+    },
+    {
+      "name": "Street Map",
+      "tileUrl": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "options": {
+        "minZoomLevel": 1,
+        "maxZoomLevel": 15,
+        "attribution": "&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>"
+      }
+    }
+  ],
+  "minZoom": 14,
+  "maxZoom": 18,
+  "mapBounds": {
+    "_southWest": { "lat": 44.9218466448167, "lng": -93.11582565307619 },
+    "_northEast": { "lat": 44.95477681331262, "lng": -93.05007934570314 }
+  },
   "pointsOfInterest": [
     {
-      "id": 1234,
-      "latitude": 44.9333,
-      "longitude": -93.0607,
+      "id": 0,
+      "title": "Cathedral of Saint Paul",
+      "description": "The Cathedral of Saint Paul, located in Saint Paul, Minnesota, is a magnificent example of Beaux-Arts architecture and a prominent landmark in the city. Completed in 1915, the cathedral's stunning design features a classical exterior adorned with intricate carvings and statues, while its interior boasts soaring arches, intricate stained glass windows, and a breathtaking dome. As the co-cathedral of the Archdiocese of Saint Paul and Minneapolis, it serves as a center for Catholic worship and community gatherings. Its grandeur and historical significance make it a cherished symbol of faith and architectural achievement in the region.",
+      "latitude": 44.946697911653835,
+      "longitude": -93.10904502868654,
+      "images": [
+        { "image": "./images/St_Paul_Cathedral_2012.jpg" },
+        { "image": "./images/inner_cathedral.jpg" },
+        { "image": "./images/winter_evening.JPG" }
+      ]
+    },
+    {
+      "id": 1,
       "title": "Holman Field",
-      "description": "Holman Field, also known as St. Paul Downtown Airport, is a small airfield just south of downtown of Saint Paul. Its title comes from Charles W. \"Speed\" Holman, a barnstormer and stunt pilot in the 1920's and 30's. During World War II the airfield was used as a site for modifying B-24 liberators on their way to Europe. Holman Field also contains the Holman Field Admisitration Building, a WPA project from 1930 with iconic architecture. North East across the river from the airport in Indian Mounds Regional Park you can find one of the last remaining Airway beacon in the country.",
+      "description": "Holman Field, nestled in Saint Paul, Minnesota, is an iconic aviation hub steeped in history. Originally established in 1929, it has served as a vital center for aviation activities, ranging from military operations to commercial flights and general aviation. The field's legacy traces back to its role as a training base during World War II, where it contributed significantly to the war effort.\n\nAdjacent to Holman Field stands a historic airway beacon, a tangible relic of early aviation navigation. These beacons played a crucial role in guiding pilots during the dawn of air travel, serving as visual markers along established air routes. While advancements in technology have rendered them obsolete, they remain as poignant reminders of aviation's pioneering days.\n\nTogether, Holman Field and its neighboring airway beacon encapsulate the evolution of aviation and its profound impact on transportation and society, making them invaluable pieces of Saint Paul's heritage.",
+      "latitude": 44.93430400302379,
+      "longitude": -93.06132316589357,
       "images": [
-        {
-          "image": "images/holman/Holman_Field_Administration_Building_N.jpg",
-          "credit": "Wikipedia",
-          "caption": "Holman Field Administration Building"
-        },
-        {
-          "image": "images/holman/airway_beacon.jpg",
-          "credit": "Wikipedia",
-          "caption": "Indian Mounds Airway Beacon"
-        }
+        { "image": "./images/Holman_Field_Administration_Building_N.jpg" },
+        { "image": "./images/airway_beacon.jpg" }
       ]
     },
     {
-      "id": 1543,
-      "latitude": 44.94562,
-      "longitude": -93.09713,
+      "id": 2,
+      "title": "Saint Paul City Hall",
+      "description": "Saint Paul City Hall, a stately architectural gem located in the heart of the downtown. It stands as a testament to the city's rich history and enduring civic pride. Completed in 1936, this majestic structure embodies the Art Deco style, characterized by its geometric shapes, ornate detailing, and elegant symmetry.\n\nDesigned by renowned architects Thomas Ellerbe & Company of Saint Paul and Holabird & Root of Chicago.  Saint Paul City Hall features a grand facade adorned with intricate carvings, that punctuates the city skyline. Its interior is equally impressive, boasting a spacious rotunda featuring a 60 ton statue named Vision of Peace  by Carl Milles\n\nBeyond its architectural grandeur, Saint Paul City Hall serves as a hub of municipal governance, housing various administrative offices and serving as a venue for public meetings and civic events. ",
+      "latitude": 44.94421478767228,
+      "longitude": -93.09388518333436,
+      "images": [
+        { "image": "./images/court_exterior.jpg" },
+        { "image": "./images/court_statue.jpg" }
+      ]
+    },
+    {
+      "id": 3,
       "title": "Landmark Center",
-      "description": "The Landmark Center has a long and expansive history. Build in 1902 as a Post office, Courthouse and Custom House for the state of Minnesota is has changed and adapted over the last hundred and twenty plus years. In 1930s the building was home to a variety of gangster based trials.  Most notorious was Mary Frechette an accomplice of John Dillinger was tried and found guilty of harboring Dillinger. Over the years the Landmark Center was not well preserved and in the early 1970s the building was in disrepair. In 1972 Saint Paul purchase dthe building and lead restoration efforts over the next decade, culminating in a cultural center in downtown Saint Paul that hosts multiple museums, the Ramsey County Historical Association, and educational events ",
+      "description": "Landmark Center is a cherished architectural treasure that serves as a focal point for culture, history, and community engagement. Originally built in 1902 as the Federal Courts Building and Post Office, this majestic structure underwent a meticulous restoration in the 1970s and was reborn as Landmark Center, a vibrant cultural center.\n\nFeaturing a stunnin Romanesque-style facade, Landmark Center boasts intricate stonework, towering arches, and a central clock tower that commands attention. Its interior is equally captivating, with ornate marble corridors, soaring ceilings, and beautiful stained glass windows.\n\nToday, Landmark Center serves as a hub for arts, education, and civic events, housing galleries, theaters, and event spaces that host a diverse array of performances, exhibitions, and programs. As a designated National Historic Landmark, it stands as a testament to Saint Paul's rich heritage and enduring commitment to preserving its architectural legacy for future generations to enjoy.",
+      "latitude": 44.94552090908932,
+      "longitude": -93.0971682071686,
       "images": [
-        {
-          "image": "images/landmark/landmark_Center.jpg",
-          "credit": "Wikipedia",
-          "caption": "Exterior"
-        },
-        {
-          "image": "images/landmark/landmark_center_interior.jpg",
-          "credit": "Wikipedia",
-          "caption": "Interior"
-        }
+        { "image": "./images/landmark_Center.jpg" },
+        { "image": "./images/landmark_center_interior.JPG" }
       ]
     },
     {
-      "id": 432,
-      "latitude": 44.94428,
-      "longitude": -93.09395,
-      "title": "Ramsey County Court",
-      "description": "The Ramsey County Courthouse started construction in 1923 and was completed in 1932, and embodies the Art Deco style of that era. It was designed by Thomas Ellerby a Saint Paul Architect. Its exterior consists of smooth Indiana Limestone giving it a distinctive appearance.  Each of the entrances is highlighed by a exterior relief created by Lee Lawrie. The main lobby ends in a massive 60 ton 38ft statue called the Vision of Peace by Swedish sculpter Carl Milles. Currently the building acts as the Saint Paul City Hall, Ramsey County Courthouse, and a variety of other city, state, and county functions. ",
-      "images": [
-        {
-          "image": "images/ramsey_court/court_statue.jpg",
-          "credit": "Wikipedia",
-          "caption": "Courthouse Interior"
-        },
-        {
-          "image": "images/ramsey_court/court_exterior.jpg",
-          "credit": "Wikipedia",
-          "caption": "Courthouse Interior"
-        }
-      ]
-    },
-    {
-      "id": 43,
-      "latitude": 44.94696,
-      "longitude": -93.10924,
-      "title": "Saint Paul Cathedral",
-      "description": "Opening in 1915 the Cathedral of Saint Paul is an iconic building, and  is the third largest Catholic cathedral in the United States. The Cathedral is the co-cathedral of the Archdiocese of Saint Paul and Minneapolis, and is considered one of the most distinctive cathedrals in the United States. The Cathedral was started in 1904 as a replacement for a previous smaller cathedral. It was designed by Emmanuel Luis Masqueray, known for his work on the 1904 world fair. In 2009 The cathedral was designated as the only National Shrine in Minnesota, and the only in the United States dedicated to the Apostle Paul.",
-      "images": [
-        {
-          "image": "images/cathedral/inner_cathedral.jpg",
-          "credit": "Wikipedia",
-          "caption": "Inside the Cathedral"
-        },
-        {
-          "image": "images/cathedral/St_Paul_Cathedral_2012.jpg",
-          "credit": "Wikipedia",
-          "caption": "Outsie the Cathedral"
-        },
-        {
-          "image": "images/cathedral/winter_evening.jpg",
-          "credit": "Wikipedia",
-          "caption": "Cathedral in winter"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "latitude": 44.94175,
-      "longitude": -93.10861,
-      "title": "Anthony Walman 'House'",
-      "description": "This limestone building, is believed to be the oldest commercial structure in Saint Paul. Originally built 1849 it has been a Saloon, a store, and a residence. ",
-      "images": [
-        {
-          "image": "images/waldman/Anthony_Waldman_House.jpg",
-          "credit": "Wikipedia",
-          "caption": "Cathedral in winter"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "latitude": 44.9357405,
-      "longitude": -93.0869711,
+      "id": 4,
       "title": "Wabasha Street Caves",
-      "description": "The Wabasha Street Caves are man-made caves dating back to the 1840's carved out of sandstone that have been home to a variety of uses throughout history. In the 1920's these caves were used as speakeasies.Mostly however these caves have been used for growing mushrooms, storage, music and dancing. Currently they host swing dancing, ghost tours, and a variety of other events",
-      "images": [
-        {
-          "image": "images/wabash/WabashaStreetCaves.jpg",
-          "credit": "Wikipedia",
-          "caption": "Cathedral in winter"
-        }
-      ]
+      "description": "The Wabasha Street Caves, located in Saint Paul, Minnesota, are a captivating and historic underground network of sandstone caves that have played a fascinating role in the city's history. Carved out of the natural limestone formations, these caves have served a multitude of purposes over the years.\n\nOriginally used as storage spaces for the brewing and warehousing industries in the 19th century, the Wabasha Street Caves later gained notoriety during the Prohibition era of the 1920s. They became secret speakeasies, offering a clandestine venue for illegal drinking and entertainment during the nationwide ban on alcohol.\n\nToday, the Wabasha Street Caves stand as a unique tourist attraction, offering guided tours that provide insight into their rich history and the colorful characters who once frequented them. Visitors can explore the dimly lit passages, marvel at the natural formations, and learn about the fascinating stories that have unfolded within these underground chambers, making them a captivating destination for history enthusiasts and curious explorers alike.\n",
+      "latitude": 44.93564072971839,
+      "longitude": -93.08698654174805,
+      "images": [{ "image": "./images/WabashaStreetCaves.jpg" }]
     }
   ]
 }

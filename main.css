@@ -96,13 +96,20 @@ button:active {
   top: 5px;
   background: none;
   border: none;
+  img {
+    height: 32px;
+    margin-left: -10px;
+    margin-top: -3px;
+  }
 }
 .description {
   font-size: 1.2rem;
   font-family: "Open Sans", sans-serif;
-  margin-right: 3rem;
+  margin-right: 4rem;
   overflow: auto;
   line-height: 1.75;
+  margin-bottom: 1rem;
+  padding-right: 1rem;
 }
 .dialogImageContainer {
   position: relative;
