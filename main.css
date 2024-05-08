@@ -1,7 +1,48 @@
 body {
   margin: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
-
+dialog {
+  width: 50vw;
+  height: 50vh;
+  border: 1 px solid grey;
+  border: 2px solid;
+  border-radius: 5px;
+}
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+button {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+button {
+  display: inline-block;
+  outline: 0;
+  border: 0;
+  cursor: pointer;
+  background-color: #4299e1;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  line-height: 26px;
+}
+button:disabled {
+  background-color: gray;
+  pointer-events: none;
+}
+button:hover {
+  background-color: #3a85c4;
+}
+button:active {
+  background-color: #2f6a9b;
+}
 #map {
   height: 100vh;
   width: 100vw;
@@ -128,22 +169,7 @@ body {
     pointer-events: all;
   }
 }
-dialog {
-  width: 50vw;
-  height: 50vh;
-  border: 1 px solid grey;
-  border: 2px solid;
-  border-radius: 5px;
-}
-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.4);
-}
-button {
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
+
 .editDialog {
   z-index: 50000;
 }
@@ -155,13 +181,23 @@ button {
   margin-top: 0.75rem;
   flex-direction: column;
   button {
-    height: 32px;
-    background: none;
-    border: none;
     img {
       height: 32px;
+      margin-left: -10px;
+      margin-top: -3px;
     }
   }
+}
+.dialogActionButton {
+  background: none;
+  width: 45px;
+  height: 45px;
+}
+.dialogActionButton:hover {
+  background: lightgray;
+}
+.dialogActionButton:active {
+  background: gray;
 }
 .descriptionTextArea {
   height: 100%;
@@ -179,16 +215,89 @@ button {
     width: 90%;
   }
 }
+#intro {
+  .dialogContent {
+    justify-content: space-evenly;
+    align-items: center;
+  }
+}
+#progress {
+  display: flex;
+  flex-direction: row;
+  z-index: 10000;
+  justify-content: center;
+}
+.progressBar {
+  position: relative;
+  display: flex;
+  gap: 3rem;
+  font-size: 16px;
+  font-family: "Inter";
+  background: white;
+  padding: 0.5rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  border-radius: 4rem;
+  border: 1px solid black;
+}
+
+.progressIndicator {
+  display: flex;
+  background-color: white;
+  z-index: 1111;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.progressIndicator::before {
+  content: "";
+  display: flex;
+  align-items: center;
+  /* background-color: red; */
+  background-image: url("./assets/empty-circle.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 16px;
+  border-radius: 2rem;
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+.active.progressIndicator::before {
+  border: 3px solid gold;
+}
+.completed.progressIndicator::before {
+  background-image: url("./assets/checked-circle.png");
+  background-repeat: no-repeat;
+}
+.bar {
+  position: absolute;
+  top: 35%;
+  left: 4%;
+  width: 90%;
+  height: 10px;
+  background-color: rgba(106, 132, 102, 0.3);
+}
 .dialogContent {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   height: 100%;
-  justify-content: space-evenly;
+  align-items: center;
 }
 .imageAddDialog {
   width: 90%;
   height: 90%;
+  .dialogContent {
+    justify-content: flex-start;
+  }
+}
+.imageAdd {
+  input {
+    padding-top: 0.75rem;
+    padding-bottom: 0.6rem;
+  }
 }
 .previewImageContainer {
   display: flex;
@@ -197,8 +306,7 @@ button {
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  min-width: 10rem;
-  max-width: 10rem;
+  width: 18rem;
   border: 1px sold black;
   border: 1px solid black;
   position: relative;
@@ -209,14 +317,25 @@ button {
 }
 .addButton {
   position: absolute;
-  right: 0;
-  top: 0;
-  width: 8rem;
+  right: 5;
+  top: 5;
+  width: 3rem;
+  background-color: white;
+  padding: 0;
+  height: 3rem;
+  border-radius: 3rem;
   img {
-    width: 20%;
-    height: 20%;
+    width: 100%;
+    height: 100%;
   }
 }
+.addButton:hover {
+  background: lightgrey;
+}
+.addButton:active {
+  background: grey;
+}
+
 .imageDeleteBtn {
   width: 3rem;
   height: 3rem;
@@ -241,11 +360,13 @@ button {
   gap: 1rem;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 .buttonBar {
   display: flex;
   gap: 1rem;
   justify-content: center;
+  margin-top: auto;
 }
 textarea {
   font-size: 1.2rem;
@@ -253,4 +374,53 @@ textarea {
   margin-right: 3rem;
   overflow: auto;
   line-height: 1.75;
+}
+.inputRow {
+  display: flex;
+  gap: 0.5rem;
+  textarea {
+    font-size: 1rem;
+  }
+}
+#baseLayerSelection {
+  height: 80vh;
+  font-family: "Inter";
+  .description {
+    width: 80%;
+  }
+}
+.baseLayerInputRow {
+  position: relative;
+  border-bottom: 1px solid black;
+  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.inputLabel {
+  width: 21%;
+  display: inline-block;
+}
+.baseLayerList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 50%;
+  overflow: auto;
+  width: 80%;
+}
+.baseLayerInput {
+  font-family: "Open Sans";
+  width: 60%;
+}
+.deleteRow {
+  position: absolute;
+  right: 0;
+  width: 45px;
+  height: 45px;
+  img {
+    height: 32px;
+    margin-left: -10px;
+    margin-top: -3px;
+  }
 }

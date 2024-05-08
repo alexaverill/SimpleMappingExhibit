@@ -11,10 +11,11 @@
     <link rel="stylesheet" href="main.css" />
   </head>
   <div id="map"></div>
+
     <div id="dialog" class="dialog editDialog hidden">
       <div class="dialogbuttons">
-        <button onClick="closeDialog()"><img class="icon" src="./assets/save.png" /></button>
-        <button onClick="deletePoint()"><img class="icon" src="./assets/delete.png" /></button>
+        <button onClick="closeDialog()" class="dialogActionButton"><img class="icon" src="./assets/save.png" /></button>
+        <button onClick="deletePoint()" class="dialogActionButton"><img class="icon" src="./assets/delete.png" /></button>
     
     </div>
     <input type="hidden" value="null" id="id"/>
@@ -22,11 +23,11 @@
       <input id="title" type="text" class="title" placeholder="Title" />
     </div>
     <div class="image" id="dialogImageContainer">
-      <button id="previous" onClick="handlePreviousImage()" class="imageIcon">
+      <button id="previous" onClick="handlePreviousImage()" class="imageIcon hide">
         <img class="icon" src="./assets/arrow.png" />
       </button>
       <img id="dialogImage" src="" alt="" />
-      <button id="next" onClick="handleNextImage()" class="imageIcon">
+      <button id="next" onClick="handleNextImage()" class="imageIcon hide">
         <img class="icon" src="./assets/arrow.png" />
       </button>
       <button id="add" onClick="handleAddImage()" class="addButton">
@@ -36,6 +37,17 @@
     <div class="descriptionTextArea" id="dialogDescription"><textarea id="description" placeholder="Description"></textarea></textarea></div>
   </div>
   <div id="userInstructions" class="userInstructions hide">
+      <div id="progress">
+    <div class="progressBar">
+      <div class="bar"></div>
+      <div class="progressIndicator active" id="baseLayerProgress">Base Layers</div>
+    <div class="progressIndicator" id="mapCenterProgress">Map Center</div>
+    <div class="progressIndicator" id="pointsProgress">Points</div>
+    <div class="progressIndicator" id="boundsProgress">Bounds</div>
+    <div class="progressIndicator" id="zoomProgress">Zoom Levels</div>
+    
+    </div>
+  </div>
     <div id="instructions" class="title">Select the Center of your map</div>
     <div id="subtitle" class="subtitle"></div>
     <div class="userInstructionButtons" id="userInstructionButtons">
@@ -45,7 +57,7 @@
   <button class="editButton" onclick="showIntro()">Start</button>
   <dialog id="intro">
     <div class="dialogContent">
-      <div class="title">Map Builder.</div>
+      <div class="title">Map Builder</div>
       <div class="description">
         <div>This is a tool to help you build out a mapping interactive.</div>
         <div>Before you get started make sure that you have:
@@ -57,7 +69,7 @@
       <div class="uploadPrompt">
         If you have already have started an exhibit and want to edit it upload it now: <input type="file" />
       </div>
-      <button onClick="advanceToMapCenter()">Continue</button>
+      <button onClick="finishStep()">Continue</button>
     </div>
   </dialog>
     <dialog id="imageAdd" class="imageAddDialog">
@@ -75,26 +87,47 @@
   </dialog>
   <dialog id="baseLayerSelection">
     <div class="dialogContent">
+      <div class="title">Base Maps</div>
+      <div class="description">
+        <div>Base layers control the appearance of the base map.</div> 
+        <div><a href="https://leaflet-extras.github.io/leaflet-providers/preview/" target="_blank">A full list of possible base maps. </a></div>
+        <div>Generally you don't need more then one or two base maps.</div>
+      </div>
+        <div class="subtitle">Current Base Layers:</div>
+        <div class="baseLayerList" id="baseLayers">
 
+        </div>
+        <div class="addBaseLayer">
+          <button onclick="addBaseLayerUI()">Add Layer</button>
+        </div>
+        <div class="buttonBar">
+          <button onclick="finishStep()">Continue</button>
+        </div>
+      
+      
     </div>
   </dialog>
     <dialog id="zoomSelection">
     <div class="dialogContent">
       <div class="title">Define zoom levels</div>
       <div class="description">
-        The minimum zoom level is how far out a person can zoom, this should be as close to the edges of your bounding box as possible. The maximum zoom level is how close people can zoom into the map. 
+        <div>The minimum zoom level is how far out a user can zoom the map this should be as close to the edges of your bounding box</div>
+        <div>The maximum zoom level is how close people can zoom into the map. The default is the maximum zoom possible for the map  and baselayers</div> 
       </div>
-      <div>
+      <div class="buttonBar">
         <button onclick="advanceToSelectZoom()">Continue</button>
       </div>
     </div>
   </dialog>
 
     <dialog id="boundsSelectionDialog">
-        <div class="dialogContent">
+      <div class="dialogContent">
       <div class="title">Select Map Bounds</div>
-      <div class="description">Select the outer limits that you want people to be able to drag the map to. Your bounding box should include some padding around your points to ensure that people can see all your points. When in doubt go larger. 
-      <div>
+      <div class="description">
+        <div>Select the outer limits that you want people to be able to drag the map to. </div>
+        <div>Your bounding box should include some padding around your points to ensure that people can see all your points. When in doubt go larger. </div>
+      </div>
+        <div class="buttonBar">
         <button onClick="skipBounds()">Skip</button>
         <button onClick="advanceToBounds()">Select Bounds</button>
       </div>
@@ -105,9 +138,9 @@
       <div class="title">Map Complete!</div>
       <div class="description">
         You have completed your map, you can now download the data file and place it nex to the index.html file. Ensure all the images you selected are in a images folder that is next to the index.html file. 
-      <div>
+      <div div class="buttonBar">
         <button onClick="closeComplete()">Close </button>
-        <a href="" id="downloadLink" class="download">Download</button>
+        <a href="" type="download" id="downloadLink" class="download">Download</button>
       </div>
     </div>
   </dialog>
@@ -119,17 +152,43 @@
 
   <script>
     const steps = {
-      Center: 1,
-      Points: 2,
-      Editing: 3,
-      Bounds: 4,
-            MinZoomLevel: 5,
-            MaxZoomLevel:6
+      Intro:0,
+      BaseLayer:1,
+      Center: 2,
+      Points: 3,
+      Editing: 4,
+      Bounds: 5,
+            MinZoomLevel: 6,
+            MaxZoomLevel:7
     };
-    let currentStep = steps.Center;
+    let baseLayers = [
+    {
+    name:'Satellite',
+    tileUrl:"https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}",
+    options:{
+      minZoomLevel:1,
+      maxZoomLevel:20,
+      attribution:'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>'
+
+    }
+  },
+    {
+    name:'Street Map',
+    tileUrl:"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    options:{
+      minZoomLevel:1,
+      maxZoomLevel:15,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+
+    }
+  }
+  
+    ];
+    let currentStep = steps.Intro;
     let currentMapCenter = null;
     let centerMarker = null;
     let map;
+    let mapLayerControl;
     let currentImage = 0;
     let content = null;
     let dialogTitle = document.getElementById("dialogTitle");
@@ -168,11 +227,12 @@
       currentStep = steps.Bounds;
     }
     const advanceToMapCenter = () => {
+      currentStep = steps.Center
+      advanceProgress("baseLayerProgress","mapCenterProgress")
       document.getElementById("intro").close();
       document.getElementById("userInstructions").classList.remove("hide");
       setInstructions(
-        "Set the center of the map.",
-        "This sets the maps default location."
+        "Select the center of your map.",""
       );
     };
     const advanceToSelectZoom = ()=>{
@@ -183,7 +243,7 @@
       resetBtn.onclick=finishStep;
       resetBtn.appendChild(document.createTextNode("Set and Continue"));
       document.getElementById("userInstructionButtons").prepend(resetBtn);
-      setInstructions("How far out can users zoom?", "");
+      setInstructions("Suggested minimum zoom level.","Zoom in or out to modify.", "");
     }
     const advanceToSelectMaxZoom = ()=>{
       console.log("Max Zoom!");
@@ -193,10 +253,11 @@
       resetBtn.onclick=finishStep;
       resetBtn.appendChild(document.createTextNode("Set and Continue"));
       document.getElementById("userInstructionButtons").prepend(resetBtn);
-      setInstructions("How far in can users zoom in?", "");
+      map.setZoom(map.getMaxZoom());
+      setInstructions("Suggested Maximum zoom level?", "Zoom in or out to modify");
     }
     const handleComplete = ()=>{
-      console.log("COMPLETE");
+      advanceProgress("zoomProgress","")
       let cleanedPoints = points.map(point =>{
         return {
           id:point.id,
@@ -209,6 +270,7 @@
       })
       let mapObject = {
         mapCenter:currentMapCenter,
+        baseLayers:baseLayers,
         minZoom:minZoomLevel,
         maxZoom:maxZoomLevel,
         pointsOfInterest:cleanedPoints
@@ -231,6 +293,94 @@
       console.log(files);
       let path =  `./images/${files[0].name}`;
       buildImagePreview(path);
+    }
+    const addBaseLayerUI = ()=>{
+      buildBaseLayerInput();
+      setDeleteButtonDisabled(false);
+    }
+    const setDeleteButtonDisabled = (state)=>{
+      let baseLayerList = document.getElementById("baseLayers").children;
+      console.log(baseLayerList);
+      for(let layer of baseLayerList){
+        let deleteButton = layer.querySelector(".deleteRow");
+        deleteButton.disabled = state;
+      }
+    }
+    const removeBaseLayer = (parent,container,layerName)=>{
+      
+        parent.removeChild(container)
+        let removeIndex = baseLayers.findIndex((layer)=>layer.name == layerName);
+        baseLayers.splice(removeIndex,1);
+        let currentLength = document.getElementById("baseLayers").children.length;
+        if(currentLength <=1){
+          setDeleteButtonDisabled(true);
+        }
+    }
+    const buildBaseLayerInput = (layerName='',layerTile='',layerAttribution='',layerMinZoom=1,layerMaxZoom=20)=>{
+      let parent = document.getElementById("baseLayers");
+      let container  = document.createElement('div');
+      container.className='baseLayerInputRow';
+      let deleteBtn = document.createElement('button');
+      deleteBtn.className='deleteRow dialogActionButton'
+      deleteBtn.onclick = ()=>removeBaseLayer(parent,container,layerName);
+      deleteBtn.innerHTML = '<img src="./assets/delete.png">';
+      let name = createInputElements('name','Name:',layerName);
+      let tilesUrl = createLongInputElemeent('tiles','Tiles Url:',layerTile);
+      let attribution = createLongInputElemeent('attribution','Attribution:',layerAttribution);
+      let minZoom = createZoomInput('minZoom','Min Zoom: ',layerMinZoom)
+      let maxZoom = createZoomInput('maxZoom','Max Zoom: ',layerMaxZoom)
+      container.appendChild(deleteBtn);
+      container.appendChild(name);
+      container.appendChild(tilesUrl);
+      container.appendChild(attribution);
+      container.appendChild(minZoom);
+      container.appendChild(maxZoom);
+      parent.appendChild(container);
+    }
+    const createLongInputElemeent = (id,label,value) =>{
+      let div = document.createElement('div');
+      div.className ='inputRow';
+      let input = document.createElement('textarea');
+      input.className = 'baseLayerInput';
+      input.id=id;
+      input.value=value;
+     let inputLabel = createLabel(id,label);
+     div.appendChild(inputLabel);
+     div.appendChild(input);
+     return div;
+    }
+    const createInputElements = (id,label,value)=>{
+      let div = document.createElement('div');
+      div.className ='inputRow';
+      let input = document.createElement('input');
+      input.className = 'baseLayerInput';
+      input.type = 'text';
+      input.id=id;
+      input.value=value;
+     let inputLabel = createLabel(id,label);
+     div.appendChild(inputLabel);
+     div.appendChild(input);
+     return div;
+    }
+    const createZoomInput = (id,label,value)=>{
+      let div = document.createElement('div');
+      div.className = 'inputRow';
+      let input = document.createElement('input');
+      input.className = 'baseLayerInput';
+      input.type = 'number';
+      input.id=id;
+      input.value=value;
+      let inputLabel = createLabel(id,label);
+     div.appendChild(inputLabel);
+     div.appendChild(input);
+     return div;
+    }
+    const createLabel = (id,label) =>{
+    let inputLabel = document.createElement('label');
+     inputLabel.className='inputLabel';
+     inputLabel.htmlFor=id;
+     inputLabel.innerText=label;
+     return inputLabel;
     }
     const buildImagePreview = (imgPath)=>{
       let parent = document.getElementById("imageList");
@@ -286,9 +436,43 @@
     };
     const advanceToPoints = () => {
       currentStep = steps.Points;
+      advanceProgress("mapCenterProgress","pointsProgress")
       setInstructions("Add points", "Click to create points");
     };
-
+    const advanceToBaseLayers = () =>{
+      currentStep = steps.BaseLayer;
+      document.getElementById("intro").close();
+      document.getElementById("baseLayerSelection").showModal();
+      for(let layer of baseLayers){
+        buildBaseLayerInput(layer.name,layer.tileUrl,layer.options.attribution,layer.options.minZoomLevel,layer.options.maxZoomLevel)
+      }
+      
+    }
+    const setBaseLayers = ()=>{
+      map.eachLayer((layer)=>{
+        map.removeLayer(layer);
+      });
+      if(mapLayerControl){
+        map.removeControl(mapLayerControl);
+      }
+      let tileNames = {}
+      for(let layer of baseLayers){
+        console.log(layer);
+        let tileLayer = L.tileLayer(layer.tileUrl,layer.options);
+        tileLayer.addTo(map);
+        tileNames[layer.name] = tileLayer
+      }
+      mapLayerControl =L.control
+        .layers(tileNames, {}, { position: "bottomright" })
+        .addTo(map);
+    }
+    const advanceProgress = (previousId,nextId) =>{
+      document.getElementById(previousId).classList.remove("active");
+      document.getElementById(previousId).classList.add("completed");
+      if(nextId && nextId.length>0){
+      document.getElementById(nextId).classList.add("active");
+      }
+    }
     const addNewPoint = (latlng) => {
       document.getElementById("id").value = 'null';
       currentStep = steps.Editing;
@@ -320,11 +504,20 @@
     const finishStep = () => {
       console.log(currentStep);
       switch (currentStep) {
+        case steps.Intro:
+          advanceToBaseLayers();
+          break;
+        case steps.BaseLayer:
+          setBaseLayers();
+          document.getElementById("baseLayerSelection").close();
+          advanceToMapCenter();
+          break;
         case steps.Center:
           advanceToPoints();
           break;
         case steps.Points:
           currentStep = steps.Bounds;
+          advanceProgress("pointsProgress","boundsProgress");
           document.getElementById("boundsSelectionDialog").showModal();
           break;
         case steps.Bounds:
@@ -334,6 +527,7 @@
         case steps.MinZoomLevel:
           minZoomLevel = map.getZoom();
           currentStep = steps.MaxZoomLevel;
+          advanceProgress("boundsProgress","zoomProgress");
           advanceToSelectMaxZoom();
           break;
         case steps.MaxZoomLevel:
@@ -360,41 +554,7 @@
           })
           .addTo(map);
       }
-      let osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 15,
-        minZoom: 1,
-        zoomControl: false,
-        attribution:
-          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      });
-      let openTopo = L.tileLayer(
-        "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-        {
-          maxZoom: 17,
-          attribution:
-            'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
-        }
-      );
-      let openSatellite = L.tileLayer(
-        "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}",
-        {
-          minZoom: 0,
-          maxZoom: 20,
-          attribution:
-            '&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          ext: "jpg",
-        }
-      );
-      osm.addTo(map);
-      var baseMaps = {
-        "Open Street Map": osm,
-        "Open Topography": openTopo,
-        Satellite: openSatellite,
-      };
-      var overlays = {};
-      L.control
-        .layers(baseMaps, overlays, { position: "bottomright" })
-        .addTo(map);
+      setBaseLayers();
       map.on("click", (e) => {
         console.log(currentStep)
         if (currentStep == steps.Center) {
@@ -405,7 +565,6 @@
         if (currentStep == steps.Points) {
           addNewPoint(e.latlng);
         }
-        console.log(`Clicked at ${e.latlng} Zoom Level:${map.getZoom()} ${currentStep}`);
         if(currentStep == steps.Bounds && !isClicked){
           originalZoomlevel = map.getZoom();
           startPos = e.latlng
@@ -414,7 +573,8 @@
             bounds = L.latLngBounds(startPos,e.latlng);
             console.log(bounds);
             map.setMaxBounds(bounds);
-            map.flyToBounds(bounds);
+            map.fitBounds(bounds);
+            setInstructions("Your current map bounds","")
       }  
         
         isClicked = !isClicked;
