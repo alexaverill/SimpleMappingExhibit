@@ -98,8 +98,8 @@ button:active {
   border: none;
   img {
     height: 32px;
-    margin-left: -10px;
-    margin-top: -3px;
+    margin-left: -9px;
+    margin-top: 0px;
   }
 }
 .description {
@@ -223,6 +223,7 @@ button:active {
   }
 }
 #intro {
+  overflow: hidden;
   .dialogContent {
     justify-content: space-evenly;
     align-items: center;
@@ -392,8 +393,20 @@ textarea {
 #baseLayerSelection {
   height: 80vh;
   font-family: "Inter";
+  overflow: hidden;
   .description {
     width: 80%;
+    margin-bottom: 0;
+    font-size: 1rem;
+  }
+  .dialogContent {
+    align-items: flex-start;
+    .title {
+      align-self: center;
+    }
+    .buttonBar {
+      align-self: center;
+    }
   }
 }
 .baseLayerInputRow {
@@ -414,7 +427,19 @@ textarea {
   gap: 1.5rem;
   height: 50%;
   overflow: auto;
-  width: 80%;
+  width: 100%;
+}
+.titleLine {
+  width: 110%;
+  margin: 0;
+  padding: 0;
+  margin-left: -1rem;
+  margin-top: -0.5rem;
+  border-bottom: 0.75px solid black;
+}
+.bottomLine {
+  margin-top: 0;
+  margin-bottom: -0.5rem;
 }
 .baseLayerInput {
   font-family: "Open Sans";

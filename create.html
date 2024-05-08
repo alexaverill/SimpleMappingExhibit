@@ -58,6 +58,7 @@
   <dialog id="intro">
     <div class="dialogContent">
       <div class="title">Map Builder</div>
+<div class="titleLine"></div>
       <div class="description">
         <div>This is a tool to help you build out a mapping interactive.</div>
         <div>Before you get started make sure that you have:
@@ -67,8 +68,9 @@
         </div>
       </div>
       <div class="uploadPrompt">
-        If you have already have started an exhibit and want to edit it upload it now: <input type="file" />
+        Upload a JSON file to edit: <input type="file" />
       </div>
+      <div class="titleLine bottomLine"></div>
       <button onClick="finishStep()">Continue</button>
     </div>
   </dialog>
@@ -88,6 +90,7 @@
   <dialog id="baseLayerSelection">
     <div class="dialogContent">
       <div class="title">Base Maps</div>
+            <div class="titleLine"></div>
       <div class="description">
         <div>Base layers control the appearance of the base map.</div> 
         <div><a href="https://leaflet-extras.github.io/leaflet-providers/preview/" target="_blank">A full list of possible base maps. </a></div>
@@ -100,6 +103,7 @@
         <div class="addBaseLayer">
           <button onclick="addBaseLayerUI()">Add Layer</button>
         </div>
+        <div class="titleLine bottomLine"></div>
         <div class="buttonBar">
           <button onclick="finishStep()">Continue</button>
         </div>
