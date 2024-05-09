@@ -48,7 +48,7 @@ const initializeMap = (
   }
   map.setZoom(minZoomLevel);
   map.setMinZoom(minZoomLevel);
-  map.setMaxBounds(maxZoomLevel);
+  map.setMaxZoom(maxZoomLevel);
   console.log(mapBounds);
   if (mapBounds) {
     let bounds = L.latLngBounds(mapBounds._northEast, mapBounds._southWest);

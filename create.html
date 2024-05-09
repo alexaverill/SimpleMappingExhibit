@@ -55,7 +55,7 @@
     </div>
   </div>
   <button class="editButton" onclick="showIntro()">Start</button>
-  <dialog id="intro">
+  <dialog id="intro" class="createDialog">
     <div class="dialogContent">
       <div class="title">Map Builder</div>
 <div class="titleLine"></div>
@@ -74,26 +74,28 @@
       <button onClick="finishStep()">Continue</button>
     </div>
   </dialog>
-    <dialog id="imageAdd" class="imageAddDialog">
+    <dialog id="imageAdd" class="imageAddDialog" class="createDialog" >
     <div class="dialogContent">
       <div class="title">Add Images</div>
+      <div class="titleLine"></div>
       <div class="description">
         <div id="imageList" class="imageList"></div>
         <div class="imageAdd">Add a local image: <input id="imageInput" type="file" onchange="handlePrevewImageSelect()" accept="image/png, image/jpeg, image/jpg"/></div>
         <div class="imageAdd">Link to an Image: <input type="text" id="imageLink" value="https://upload.wikimedia.org/wikipedia/commons/5/53/Ice_Skating-William_Frerichs-1869.jpg"><button onclick="addLinkedImage()">Add</button></button></div>
       </div>
+      <div class="titleLine bottomLine"></div>
       <div class="buttonBar">
       <button onClick="cancelImageSelect()">Cancel</button> <button onClick="handleImagesSelected()">Save</button>
       </div>
     </div>
   </dialog>
-  <dialog id="baseLayerSelection">
+  <dialog id="baseLayerSelection" class="createDialog">
     <div class="dialogContent">
       <div class="title">Base Maps</div>
             <div class="titleLine"></div>
       <div class="description">
         <div>Base layers control the appearance of the base map.</div> 
-        <div><a href="https://leaflet-extras.github.io/leaflet-providers/preview/" target="_blank">A full list of possible base maps. </a></div>
+        <div><a href="https://leaflet-extras.github.io/leaflet-providers/preview/" target="_blank">View a list of some possible base maps. </a></div>
         <div>Generally you don't need more then one or two base maps.</div>
       </div>
         <div class="subtitle">Current Base Layers:</div>
@@ -111,40 +113,48 @@
       
     </div>
   </dialog>
-    <dialog id="zoomSelection">
+    <dialog id="zoomSelection" class="createDialog shortCreateDialog">
     <div class="dialogContent">
       <div class="title">Define zoom levels</div>
+      <div class="titleLine"></div>
       <div class="description">
         <div>The minimum zoom level is how far out a user can zoom the map this should be as close to the edges of your bounding box</div>
         <div>The maximum zoom level is how close people can zoom into the map. The default is the maximum zoom possible for the map  and baselayers</div> 
       </div>
+      <div class="titleLine bottomLine"></div>
       <div class="buttonBar">
         <button onclick="advanceToSelectZoom()">Continue</button>
       </div>
     </div>
   </dialog>
 
-    <dialog id="boundsSelectionDialog">
+    <dialog id="boundsSelectionDialog" class="createDialog shortCreateDialog">
       <div class="dialogContent">
+        
       <div class="title">Select Map Bounds</div>
+      <div class="titleLine"></div>
       <div class="description">
         <div>Select the outer limits that you want people to be able to drag the map to. </div>
         <div>Your bounding box should include some padding around your points to ensure that people can see all your points. When in doubt go larger. </div>
       </div>
+      <div class="titleLine bottomLine"></div>
         <div class="buttonBar">
-        <button onClick="skipBounds()">Skip</button>
+        <!-- <button onClick="skipBounds()">Skip</button> -->
         <button onClick="advanceToBounds()">Select Bounds</button>
       </div>
     </div>
   </dialog>
-    <dialog id="completedMap">
+    <dialog id="completedMap" class="createDialog shortCreateDialog">
         <div class="dialogContent">
       <div class="title">Map Complete!</div>
+      <div class="titleLine"></div>
       <div class="description">
         You have completed your map, you can now download the data file and place it nex to the index.html file. Ensure all the images you selected are in a images folder that is next to the index.html file. 
-      <div div class="buttonBar">
-        <button onClick="closeComplete()">Close </button>
-        <a href="" type="download" id="downloadLink" class="download">Download</button>
+     </div>
+     <div class="titleLine bottomLine"></div>
+     
+        <div class="buttonBar" id="completeBtnBar">
+        
       </div>
     </div>
   </dialog>
@@ -163,7 +173,8 @@
       Editing: 4,
       Bounds: 5,
             MinZoomLevel: 6,
-            MaxZoomLevel:7
+            MaxZoomLevel:7,
+      Complete:8
     };
     let baseLayers = [
     {
@@ -284,7 +295,7 @@
 
 
     //Base Layer functions
-        const advanceToBaseLayers = () =>{
+    const advanceToBaseLayers = () =>{
       currentStep = steps.BaseLayer;
       document.getElementById("intro").close();
       document.getElementById("baseLayerSelection").showModal();
@@ -313,6 +324,8 @@
     }
     const addBaseLayerUI = ()=>{
       buildBaseLayerInput();
+      let lastChild  = document.getElementById("baseLayers").lastChild;
+      lastChild.scrollIntoView({ block: "end",behavior:"smooth" });
       setDeleteButtonDisabled(false);
     }
     const setDeleteButtonDisabled = (state)=>{
@@ -341,17 +354,20 @@
       deleteBtn.className='deleteRow dialogActionButton'
       deleteBtn.onclick = ()=>removeBaseLayer(parent,container,layerName);
       deleteBtn.innerHTML = '<img src="./assets/delete.png">';
-      let name = createInputElements('name','Name:',layerName);
-      let tilesUrl = createLongInputElemeent('tiles','Tiles Url:',layerTile);
+      let name = createInputElements('name','Name',layerName);
+      let tilesUrl = createLongInputElemeent('tiles','Tiles Url',layerTile);
       let attribution = createLongInputElemeent('attribution','Attribution:',layerAttribution);
-      let minZoom = createZoomInput('minZoom','Min Zoom: ',layerMinZoom)
-      let maxZoom = createZoomInput('maxZoom','Max Zoom: ',layerMaxZoom)
+      let zoomDiv = document.createElement('div');
+      zoomDiv.className='zoomInputs';
+      let minZoom = createZoomInput('minZoom','Min Zoom ',layerMinZoom)
+      let maxZoom = createZoomInput('maxZoom','Max Zoom ',layerMaxZoom)
+      zoomDiv.appendChild(minZoom);
+      zoomDiv.appendChild(maxZoom);
       container.appendChild(deleteBtn);
       container.appendChild(name);
       container.appendChild(tilesUrl);
       container.appendChild(attribution);
-      container.appendChild(minZoom);
-      container.appendChild(maxZoom);
+      container.appendChild(zoomDiv);
       parent.appendChild(container);
     }
     const createLongInputElemeent = (id,label,value) =>{
@@ -370,7 +386,7 @@
       let div = document.createElement('div');
       div.className ='inputRow';
       let input = document.createElement('input');
-      input.className = 'baseLayerInput';
+      input.className = `baseLayerInput ${id}`;
       input.type = 'text';
       input.id=id;
       input.value=value;
@@ -470,9 +486,11 @@
       currentStep =steps.Points;
     };
     const pointClicked =(lat,lng)=>{
+      if(currentStep == steps.Points){
       let point = points.find(point=>point.latitude ===lat && point.longitude ===lng);
       setDialogContent(point);
       document.getElementById("dialog").classList.toggle("visible");
+      }
     }
     const setDialogImages = (imageList) =>{
 
@@ -625,6 +643,7 @@
           document.getElementById("boundsSelectionDialog").showModal();
           break;
         case steps.Bounds:
+          map.setMaxBounds(boundsRect);
           currentStep = steps.MinZoomLevel;
           document.getElementById("zoomSelection").showModal();
           break;
@@ -636,10 +655,17 @@
           break;
         case steps.MaxZoomLevel:
           maxZoomLevel = map.getZoom();
+            map.setMinZoom(minZoomLevel);
+            map.setMaxZoom(maxZoomLevel);
           handleComplete();
           break;
       }
     };
+    const closeComplete =()=>{
+      setInstructions("Explore Your Map!","You can return to previous steps.");
+      map.setZoom(maxZoomLevel);
+      document.getElementById("completedMap").close();
+    }
     const handleComplete = ()=>{
       advanceProgress("zoomProgress","")
       let cleanedPoints = points.map(point =>{
@@ -666,8 +692,13 @@
       var data = new Blob([jsonString], {type: 'application/json'});
 
       let textFile = window.URL.createObjectURL(data);
-      document.getElementById("downloadLink").href=textFile;
+      console.log(textFile);
+      //document.getElementById("downloadLink").href=textFile;
       console.log(jsonString);
+      //for some reason it was adding 3 links the normal way to deal with this
+      let innerHtml =`<button onClick="closeComplete()">Explore Your Map</button>
+        <a href="${textFile}" download="data.json" id="downloadLink" class="download" target="_blank"><img src="./assets/download.png"/>Download Data</button>`
+     document.getElementById("completeBtnBar").innerHTML=innerHtml;
       document.getElementById("completedMap").showModal();
     }
     const initializeMap = (
