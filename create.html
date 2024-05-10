@@ -40,11 +40,11 @@
       <div id="progress">
     <div class="progressBar">
       <div class="bar"></div>
-      <div class="progressIndicator active" id="baseLayerProgress">Base Layers</div>
-    <div class="progressIndicator" id="mapCenterProgress">Map Center</div>
-    <div class="progressIndicator" id="pointsProgress">Points</div>
-    <div class="progressIndicator" id="boundsProgress">Bounds</div>
-    <div class="progressIndicator" id="zoomProgress">Zoom Levels</div>
+      <div class="progressIndicator active" id="baseLayerProgress" onclick="handleProgressClick('baselayer')">Base Layers</div>
+    <div class="progressIndicator" id="mapCenterProgress" onclick="handleProgressClick('center')">Map Center</div>
+    <div class="progressIndicator" id="pointsProgress" onclick="handleProgressClick('points')">Points</div>
+    <div class="progressIndicator" id="boundsProgress" onclick="handleProgressClick('bounds')"">Bounds</div>
+    <div class="progressIndicator" id="zoomProgress" onclick="handleProgressClick('zoom')">Zoom Levels</div>
     
     </div>
   </div>
@@ -200,6 +200,7 @@
   
     ];
     let currentStep = steps.Intro;
+    let previousStep = null;
     let currentMapCenter = null;
     let centerMarker = null;
     let map;
@@ -223,6 +224,13 @@
      let boundsRect = null;
      let maxZoomLevel = null;
      let minZoomLevel = null;
+
+     const getInstructionContinue =(text="Continue")=>{
+       let button = document.createElement("button");
+        button.onclick=finishStep;
+        button.appendChild(document.createTextNode(text));
+        return button
+     }
      //Intro Functionality
     const showIntro = () => {
       document.getElementById("intro").showModal();
@@ -239,7 +247,9 @@
       let resetBtn = document.createElement('button');
       resetBtn.onclick=handleResetBounds;
       resetBtn.appendChild(document.createTextNode("Reset"));
-      document.getElementById("userInstructionButtons").prepend(resetBtn);
+      document.getElementById("userInstructionButtons").innerHTML='';
+      document.getElementById("userInstructionButtons").appendChild(resetBtn);
+      document.getElementById("userInstructionButtons").appendChild(getInstructionContinue());
       setInstructions("Click to start drawing a boundary box.", "");
       currentStep = steps.Bounds;
     }
@@ -299,6 +309,7 @@
       currentStep = steps.BaseLayer;
       document.getElementById("intro").close();
       document.getElementById("baseLayerSelection").showModal();
+      document.getElementById("baseLayers").innerHTML='';
       for(let layer of baseLayers){
         buildBaseLayerInput(layer.name,layer.tileUrl,layer.options.attribution,layer.options.minZoomLevel,layer.options.maxZoomLevel)
       }
@@ -623,8 +634,58 @@
       document.getElementById("instructions").innerText = title;
       document.getElementById("subtitle").innerText = subtitle;
     };
-    const finishStep = () => {
+    const handleProgressClick = (state)=>{
       console.log(currentStep);
+      if(currentStep!=steps.Complete && previousStep !== steps.Complete){
+        return;
+      }
+      previousStep = steps.Complete;
+      switch(state){
+        case 'baselayer':
+          console.log("open base layers");
+          advanceToBaseLayers();
+          break;
+        case 'center':
+          advanceToMapCenter();
+          break;
+        case 'points':
+          advanceToPoints();
+          break;
+        case 'bounds':
+          advanceToBounds();
+          break;
+      }
+    }
+    const finishStep = () => {
+      if(previousStep && previousStep == steps.Complete){
+        switch(currentStep){
+          case steps.BaseLayer:
+            document.getElementById("baseLayerSelection").close();
+            currentStep = steps.Complete;
+            break;
+          case steps.Center:
+            advanceToPoints();
+            break;
+          case steps.Points:
+            advanceToBounds();
+            break;
+          case steps.Bounds:
+            map.setMaxBounds(boundsRect);
+            currentStep = steps.MinZoomLevel;
+            break;
+          case steps.MinZoomLevel:
+            minZoomLevel = map.getZoom();
+            advanceToSelectMaxZoom();
+            break;
+          case steps.MaxZoomLevel:
+            maxZoomLevel = map.getZoom();
+            map.setMinZoom(minZoomLevel);
+            map.setMaxZoom(maxZoomLevel);
+            currentStep = steps.Complete;
+            break;
+        }
+        return;
+      }
       switch (currentStep) {
         case steps.Intro:
           advanceToBaseLayers();
@@ -663,10 +724,11 @@
     };
     const closeComplete =()=>{
       setInstructions("Explore Your Map!","You can return to previous steps.");
-      map.setZoom(maxZoomLevel);
+      map.setZoom(minZoomLevel);
       document.getElementById("completedMap").close();
     }
     const handleComplete = ()=>{
+      currentStep = steps.Complete;
       advanceProgress("zoomProgress","")
       let cleanedPoints = points.map(point =>{
         console.log(point);
