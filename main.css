@@ -281,6 +281,10 @@ button:active {
   padding-left: 10px;
   padding-right: 10px;
 }
+.progressIndicator:hover {
+  cursor: pointer;
+  background-color: lightgray;
+}
 .progressIndicator::before {
   content: "";
   display: flex;

@@ -57,9 +57,15 @@ let originalZoomlevel = null;
 let boundsRect = null;
 let maxZoomLevel = null;
 let minZoomLevel = null;
-
+const disableInstructionContinue = () => {
+  document.getElementById("continueBtn").disabled = true;
+};
+const enableInstructionContinue = () => {
+  document.getElementById("continueBtn").disabled = true;
+};
 const getInstructionContinue = (text = "Continue") => {
   let button = document.createElement("button");
+  button.id = "continueBtn";
   button.onclick = finishStep;
   button.appendChild(document.createTextNode(text));
   return button;
@@ -72,11 +78,10 @@ const showIntro = () => {
 const handleResetBounds = () => {
   map.removeLayer(boundsRect);
   isClicked = false;
+  document.getElementById("userInstructionButtons").innerHTML = "";
   map.setZoom(originalZoomlevel);
 };
-const advanceToBounds = () => {
-  isClicked = false;
-  document.getElementById("boundsSelectionDialog").close();
+const addBoundsInstructionButtons = () => {
   let resetBtn = document.createElement("button");
   resetBtn.onclick = handleResetBounds;
   resetBtn.appendChild(document.createTextNode("Reset"));
@@ -85,6 +90,14 @@ const advanceToBounds = () => {
   document
     .getElementById("userInstructionButtons")
     .appendChild(getInstructionContinue());
+};
+const advanceToBounds = () => {
+  isClicked = false;
+  document.getElementById("boundsSelectionDialog").close();
+  document.getElementById("userInstructionButtons").innerHTML = "";
+  if (previousStep == steps.Complete) {
+    addBoundsInstructionButtons();
+  }
   setInstructions("Click to start drawing a boundary box.", "");
   currentStep = steps.Bounds;
 };
@@ -93,8 +106,17 @@ const advanceToBounds = () => {
 const advanceToMapCenter = () => {
   currentStep = steps.Center;
   advanceProgress("baseLayerProgress", "mapCenterProgress");
-  document.getElementById("intro").close();
   document.getElementById("userInstructions").classList.remove("hide");
+
+  document.getElementById("intro").close();
+  if (previousStep !== steps.Complete) {
+    document.getElementById("userInstructionButtons").innerHTML = "";
+  } else {
+    document.getElementById("userInstructionButtons").innerHTML = "";
+    document
+      .getElementById("userInstructionButtons")
+      .appendChild(getInstructionContinue());
+  }
   setInstructions("Select the center of your map.", "");
 };
 const addCenterMarker = () => {
@@ -482,12 +504,19 @@ const handleImagesSelected = () => {
 
 const setCurrentLatLang = () => {
   addCenterMarker();
+  document
+    .getElementById("userInstructionButtons")
+    .appendChild(getInstructionContinue());
   map.setView(currentMapCenter);
 };
 const advanceToPoints = () => {
   currentStep = steps.Points;
   advanceProgress("mapCenterProgress", "pointsProgress");
   setInstructions("Add points", "Click to create points");
+  document.getElementById("userInstructionButtons").innerHTML = "";
+  document
+    .getElementById("userInstructionButtons")
+    .appendChild(getInstructionContinue());
 };
 
 const addNewPoint = (latlng) => {
@@ -535,6 +564,9 @@ const handleProgressClick = (state) => {
       break;
     case "bounds":
       advanceToBounds();
+      break;
+    case "zoom":
+      advanceToSelectZoom();
       break;
   }
 };
@@ -672,6 +704,7 @@ const initializeMap = (
     if (currentStep == steps.Center) {
       currentMapCenter = e.latlng;
       setCurrentLatLang();
+
       return;
     }
     if (currentStep == steps.Points) {
@@ -684,6 +717,7 @@ const initializeMap = (
     if (currentStep == steps.Bounds && isClicked) {
       bounds = L.latLngBounds(startPos, e.latlng);
       console.log(bounds);
+      addBoundsInstructionButtons();
       map.setMaxBounds(bounds);
       map.fitBounds(bounds);
       setInstructions("Your current map bounds", "");
