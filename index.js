@@ -52,7 +52,6 @@ const initializeMap = (
   console.log(mapBounds);
   if (mapBounds) {
     let bounds = L.latLngBounds(mapBounds._northEast, mapBounds._southWest);
-    console.log(bounds);
     map.setMaxBounds(bounds);
     map.fitBounds(bounds);
   }

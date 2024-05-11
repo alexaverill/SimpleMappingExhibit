@@ -68,7 +68,7 @@
         </div>
       </div>
       <div class="uploadPrompt">
-        Upload a JSON file to edit: <input type="file" />
+        Upload a JSON file to edit: <input type="file" onchange="loadFile(this)" accept="application/json"/>
       </div>
       <div class="titleLine bottomLine"></div>
       <button onClick="finishStep()">Continue</button>
@@ -80,7 +80,7 @@
       <div class="titleLine"></div>
       <div class="description">
         <div id="imageList" class="imageList"></div>
-        <div class="imageAdd">Add a local image: <input id="imageInput" type="file" onchange="handlePrevewImageSelect()" accept="image/png, image/jpeg, image/jpg"/></div>
+        <div class="imageAdd">Add a local image: <input id="imageInput" type="file" onchange="uploadImage(this)" accept="image/png, image/jpeg, image/jpg"/></div>
         <div class="imageAdd">Link to an Image: <input type="text" id="imageLink" value="https://upload.wikimedia.org/wikipedia/commons/5/53/Ice_Skating-William_Frerichs-1869.jpg"><button onclick="addLinkedImage()">Add</button></button></div>
       </div>
       <div class="titleLine bottomLine"></div>
@@ -139,7 +139,6 @@
       </div>
       <div class="titleLine bottomLine"></div>
         <div class="buttonBar">
-        <!-- <button onClick="skipBounds()">Skip</button> -->
         <button onClick="advanceToBounds()">Select Bounds</button>
       </div>
     </div>

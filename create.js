@@ -185,9 +185,7 @@ const setBaseLayers = (shouldRefresh = false) => {
     updateBaseLayers();
   }
   map.eachLayer((layer) => {
-    console.log(layer);
     if (layer._url) {
-      console.log(layer._url);
       map.removeLayer(layer);
     }
   });
@@ -389,14 +387,10 @@ const pointClicked = (lat, lng) => {
   document.getElementById("dialog").classList.toggle("visible");
 };
 const setDialogImages = (imageList) => {};
-const setDialogContent = (point) => {
-  currentImage = 0;
-  imageList = [];
-  content = point;
+const setImageNavigationButtons = (length) => {
   let previousImgBtn = document.getElementById("previous");
   let nextImgBtn = document.getElementById("next");
-  imageList = content.images;
-  if (imageList.length <= 1) {
+  if (length <= 1) {
     if (!previousImgBtn.classList.contains("hide")) {
       previousImgBtn.classList.add("hide");
     }
@@ -407,6 +401,13 @@ const setDialogContent = (point) => {
     nextImgBtn.classList.remove("hide");
     previousImgBtn.classList.remove("hide");
   }
+};
+const setDialogContent = (point) => {
+  currentImage = 0;
+  imageList = [];
+  content = point;
+  imageList = content.images;
+  setImageNavigationButtons(imageList.length);
   document.getElementById("id").value = point.id;
   document.getElementById("title").value = point.title;
   document.getElementById("description").value = point.description;
@@ -467,6 +468,7 @@ const cancelImageSelect = () => {
 };
 const handleImagesSelected = () => {
   let images = document.getElementsByClassName("previewImageContainer");
+  imageList = [];
   for (let image of images) {
     let imageObj = { image: image.getAttribute("image") };
     imageList.push(imageObj);
@@ -474,6 +476,7 @@ const handleImagesSelected = () => {
   document.getElementById("imageLink").value = "";
   document.getElementById("imageList").innerHTML = "";
   dialogImage.src = imageList[currentImage].image;
+  setImageNavigationButtons(imageList.length);
   document.getElementById("imageAdd").close();
 };
 
@@ -542,6 +545,7 @@ const finishStep = () => {
         document.getElementById("baseLayerSelection").close();
         currentStep = steps.Complete;
         setBaseLayers(true);
+        advanceToMapCenter();
         break;
       case steps.Center:
         advanceToPoints();
@@ -552,6 +556,7 @@ const finishStep = () => {
       case steps.Bounds:
         map.setMaxBounds(boundsRect);
         currentStep = steps.MinZoomLevel;
+        advanceToSelectZoom();
         break;
       case steps.MinZoomLevel:
         minZoomLevel = map.getZoom();
@@ -562,6 +567,7 @@ const finishStep = () => {
         map.setMinZoom(minZoomLevel);
         map.setMaxZoom(maxZoomLevel);
         currentStep = steps.Complete;
+        handleComplete();
         break;
     }
     return;
@@ -603,7 +609,8 @@ const finishStep = () => {
   }
 };
 const closeComplete = () => {
-  setInstructions("Explore Your Map!", "You can return to previous steps.");
+  setInstructions("Explore Your Map!", "You can now return to previous steps.");
+  document.getElementById("userInstructionButtons").innerHTML = "";
   map.setZoom(minZoomLevel);
   document.getElementById("completedMap").close();
 };
@@ -629,7 +636,6 @@ const handleComplete = () => {
     mapBounds: boundsRect.getBounds(),
     pointsOfInterest: cleanedPoints,
   };
-  console.log(mapObject);
   let jsonString = JSON.stringify(mapObject);
   var data = new Blob([jsonString], { type: "application/json" });
 
@@ -690,7 +696,6 @@ const initializeMap = (
       return;
     }
     if (isClicked) {
-      console.log(`Moved: ${e.latlng}`);
       bounds = L.latLngBounds(startPos, e.latlng);
       endPos = e.latlng;
       let previousRects = document.getElementsByClassName("zoomRect");
@@ -712,16 +717,61 @@ const initializeMap = (
 const initializePointsOfInterest = (points) => {
   points.map((point) => {
     var marker = L.marker([point.latitude, point.longitude]).addTo(map);
-    marker.on("click", () => {
-      poiClicked(point.id);
+    marker.on("click", (e) => {
+      pointClicked(e.latlng.lat, e.latlng.lng);
     });
   });
 };
-
-const load = async () => {
-  let data = await fetch("./data.json");
-  let json = await data.json();
-  pointsOfInterest = json.pointsOfInterest;
-  initializePointsOfInterest(pointsOfInterest);
+const loadFile = (event) => {
+  var reader = new FileReader();
+  reader.onload = loadFileReader;
+  reader.readAsText(event.files[0]);
 };
+
+function loadFileReader(event) {
+  //alert(event.target.result);
+  var obj = JSON.parse(event.target.result);
+  if (
+    !obj.pointsOfInterest ||
+    !obj.baseLayers ||
+    !obj.minZoom ||
+    !obj.maxZoom ||
+    !obj.mapCenter ||
+    !obj.mapBounds
+  ) {
+    alert("Invalid JSON File");
+    return;
+  }
+  console.log(event);
+  console.log(obj);
+  points = obj.pointsOfInterest;
+  baseLayers = obj.baseLayers;
+  minZoomLevel = obj.minZoom;
+  maxZoomLevel = obj.maxZoom;
+  currentMapCenter = obj.mapCenter;
+  addCenterMarker();
+  let bounds = L.latLngBounds(
+    obj.mapBounds._northEast,
+    obj.mapBounds._southWest
+  );
+  console.log(bounds);
+  boundsRect = L.rectangle(bounds, {
+    color: "#FFFF00",
+    weight: 1,
+    className: "zoomRect",
+  }).addTo(map);
+  map.setMaxBounds(boundsRect);
+  map.fitBounds(bounds);
+  initializePointsOfInterest(points);
+}
+const uploadImage = (event) => {
+  var reader = new FileReader();
+  reader.onload = imageEncode;
+  reader.readAsDataURL(event.files[0]);
+};
+const imageEncode = (event) => {
+  console.log(event);
+  buildImagePreview(event.target.result);
+};
+const load = async () => {};
 initializeMap();
