@@ -19,7 +19,6 @@ const setBaseLayers = (baseLayers) => {
   }
   let tileNames = {};
   for (let layer of baseLayers) {
-    console.log(layer);
     let tileLayer = L.tileLayer(layer.tileUrl, layer.options);
     tileLayer.addTo(map);
     tileNames[layer.name] = tileLayer;
@@ -49,7 +48,6 @@ const initializeMap = (
   map.setZoom(minZoomLevel);
   map.setMinZoom(minZoomLevel);
   map.setMaxZoom(maxZoomLevel);
-  console.log(mapBounds);
   if (mapBounds) {
     let bounds = L.latLngBounds(mapBounds._northEast, mapBounds._southWest);
     map.setMaxBounds(bounds);
@@ -57,10 +55,7 @@ const initializeMap = (
   }
   setBaseLayers(baseLayers);
   map.on("click", (e) => {
-    console.log(`Clicked at ${e.latlng}`);
-    if (isClicked) {
-      console.log("Reset map bounds");
-    } else {
+    if (!isClicked) {
       startPos = e.latlng;
     }
     isClicked = !isClicked;
@@ -83,7 +78,6 @@ const handlePreviousImage = () => {
   }
   currentImage =
     currentImage > 0 ? currentImage - 1 : content.images.length - 1;
-  console.log(content.images.length);
   dialogImage.opacity = 0;
   dialogImage.src = content.images[currentImage].image;
   dialogImage.opacity = 1;
@@ -109,7 +103,6 @@ const poiClicked = (id) => {
     .getElementById("dialogBackground")
     .classList.add("dialogBackgroundVisible");
   document.getElementById("dialog").classList.toggle("visible");
-  console.log(`Clicked ${id}`);
 };
 const setDialogContent = (id) => {
   currentImage = 0;
@@ -130,13 +123,11 @@ const setDialogContent = (id) => {
   dialogTitle.innerText = content.title;
   dialogDescription.innerText = content.description;
   dialogImage.src = content.images[currentImage].image;
-  console.log(dialogImage.src);
 };
 const load = async () => {
   let data = await fetch("./data.json");
   let json = await data.json();
   pointsOfInterest = json.pointsOfInterest;
-  console.log(json);
   initializeMap(
     json.baseLayers,
     json.mapCenter,
