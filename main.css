@@ -82,6 +82,7 @@ button:active {
   transition: all var(--animation-speed) ease-in;
   transform: translateX(-110%);
 }
+
 .visible {
   transform: translateX(0%);
 }
@@ -551,4 +552,12 @@ textarea {
 .uploadPrompt {
   font-family: var(--body-font);
   font-size: 0.9rem;
+}
+@media (width <= 1250px) {
+  .dialog {
+    width: 98vw;
+  }
+  .dialogClose {
+    right: 10px;
+  }
 }
