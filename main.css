@@ -81,6 +81,7 @@ button:active {
   --animation-speed: 500ms;
   transition: all var(--animation-speed) ease-in;
   transform: translateX(-110%);
+  padding-top: 1rem;
 }
 
 .visible {
@@ -115,7 +116,7 @@ button:active {
   margin-right: 4rem;
   overflow: auto;
   line-height: 1.75;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   padding-right: 1rem;
 }
 .dialogImageContainer {
