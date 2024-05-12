@@ -159,7 +159,7 @@ const advanceToSelectMaxZoom = () => {
   resetBtn.appendChild(document.createTextNode("Set and Continue"));
   document.getElementById("userInstructionButtons").prepend(resetBtn);
   map.setZoom(map.getMaxZoom());
-  setInstructions("Suggested Maximum zoom level.", "Zoom in or out to modify");
+  setInstructions("Suggested maximum zoom level.", "Zoom in or out to modify");
 };
 
 //Base Layer functions
