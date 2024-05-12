@@ -504,6 +504,7 @@ const handleImagesSelected = () => {
 
 const setCurrentLatLang = () => {
   addCenterMarker();
+  document.getElementById("userInstructionButtons").innerHTML = "";
   document
     .getElementById("userInstructionButtons")
     .appendChild(getInstructionContinue());
@@ -596,8 +597,6 @@ const finishStep = () => {
         break;
       case steps.MaxZoomLevel:
         maxZoomLevel = map.getZoom();
-        map.setMinZoom(minZoomLevel);
-        map.setMaxZoom(maxZoomLevel);
         currentStep = steps.Complete;
         handleComplete();
         break;
@@ -634,8 +633,6 @@ const finishStep = () => {
       break;
     case steps.MaxZoomLevel:
       maxZoomLevel = map.getZoom();
-      map.setMinZoom(minZoomLevel);
-      map.setMaxZoom(maxZoomLevel);
       handleComplete();
       break;
   }
@@ -747,6 +744,7 @@ const initializeMap = (
       }).addTo(map);
     }
   });
+  map.addControl(L.control.search({ position: "bottomright" }));
 };
 const initializePointsOfInterest = (points) => {
   points.map((point) => {

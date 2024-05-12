@@ -8,6 +8,7 @@
     />
     <link rel="stylesheet" href="./leaflet/leaflet.css" />
     <script src="./leaflet/leaflet.js"></script>
+    <script src="./leaflet-search/leaflet-search.js"></script>
     <link rel="stylesheet" href="main.css" />
   </head>
   <div id="map"></div>
@@ -60,15 +61,13 @@
       <div class="title">Map Builder</div>
 <div class="titleLine"></div>
       <div class="description">
-        <div>This is a tool to help you build out a mapping interactive.</div>
-        <div>Before you get started make sure that you have:
-          <ol>
-            <li>Placed all your images are already hosted online somewhere, or in the images folder in the directory.</li>
-          </ol>
-        </div>
+        <div>This will guide you through the creation of mapped based exhibit. </div>
+        <div>If you are using this tool online note that none of the images you upload or content you write are stored anywhere outside your browser.</div>
+        <div>Images will be embeded into the data that is output at the end.</div>
       </div>
+      <div class="returnPrompt">Already Started?</div>
       <div class="uploadPrompt">
-        Upload a JSON file to edit: <input type="file" onchange="loadFile(this)" accept="application/json"/>
+        <div>Upload a JSON file to edit: </div><input type="file" onchange="loadFile(this)" accept="application/json"/>
       </div>
       <div class="titleLine bottomLine"></div>
       <button onClick="finishStep()">Continue</button>
