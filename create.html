@@ -112,17 +112,34 @@
       
     </div>
   </dialog>
+      <dialog id="mapCenterDialog" class="createDialog">
+      <div class="dialogContent">
+        <div class="title">Set Map Center</div>
+         <div class="titleLine"></div>
+                 
+                 <div class="description">
+                    The Map Center controls the default location where the map loads. 
+                 </div>
+                 <div class="search">
+
+                 </div>
+                 <div class="titleLine bottomLine"></div>
+        <div class="buttonBar">
+          <button onclick="advanceToMapCenter()">Continue</button>
+        </div>
+      </div>
+    </dialog>
     <dialog id="zoomSelection" class="createDialog shortCreateDialog">
     <div class="dialogContent">
       <div class="title">Define zoom levels</div>
       <div class="titleLine"></div>
       <div class="description">
-        <div>The minimum zoom level is how far out a user can zoom the map this should be as close to the edges of your bounding box</div>
+        <div>The minimum zoom level is automatically calculated from your map bounds.</div>
         <div>The maximum zoom level is how close people can zoom into the map. The default is the maximum zoom possible for the map  and baselayers</div> 
       </div>
       <div class="titleLine bottomLine"></div>
       <div class="buttonBar">
-        <button onclick="advanceToSelectZoom()">Continue</button>
+        <button onclick="advanceToSelectMaxZoom()">Continue</button>
       </div>
     </div>
   </dialog>
@@ -133,7 +150,7 @@
       <div class="title">Select Map Bounds</div>
       <div class="titleLine"></div>
       <div class="description">
-        <div>Select the outer limits that you want people to be able to drag the map to. </div>
+        <div>Select the outer limits that you want people to be able to drag the map to. These bounds will inform how far out users can zoom on your exhibit.</div>
         <div>Your bounding box should include some padding around your points to ensure that people can see all your points. When in doubt go larger. </div>
       </div>
       <div class="titleLine bottomLine"></div>

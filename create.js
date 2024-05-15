@@ -104,6 +104,7 @@ const advanceToBounds = () => {
 
 //Map Center Point
 const advanceToMapCenter = () => {
+  document.getElementById("mapCenterDialog").close();
   currentStep = steps.Center;
   advanceProgress("baseLayerProgress", "mapCenterProgress");
   document.getElementById("userInstructions").classList.remove("hide");
@@ -151,8 +152,9 @@ const advanceToSelectZoom = () => {
   );
 };
 const advanceToSelectMaxZoom = () => {
-  console.log("Max Zoom!");
+  minZoomLevel = map.getZoom();
   currentStep = steps.MaxZoomLevel;
+  document.getElementById("zoomSelection").close();
   document.getElementById("userInstructionButtons").innerHTML = "";
   let resetBtn = document.createElement("button");
   resetBtn.onclick = finishStep;
@@ -180,7 +182,6 @@ const advanceToBaseLayers = () => {
 };
 const updateBaseLayers = () => {
   let parent = document.getElementById("baseLayers");
-  console.log(parent.children);
   baseLayers = [];
   for (let child of parent.children) {
     console.log(child);
@@ -199,7 +200,6 @@ const updateBaseLayers = () => {
       },
     };
     baseLayers.push(mapLayer);
-    console.log(mapLayer);
   }
 };
 const setBaseLayers = (shouldRefresh = false) => {
@@ -215,9 +215,7 @@ const setBaseLayers = (shouldRefresh = false) => {
     map.removeControl(mapLayerControl);
   }
   let tileNames = {};
-  console.log(baseLayers);
   for (let layer of baseLayers) {
-    console.log(layer);
     let tileLayer = L.tileLayer(layer.tileUrl, layer.options);
     tileLayer.addTo(map);
     tileNames[layer.name] = tileLayer;
@@ -567,9 +565,12 @@ const handleProgressClick = (state) => {
       advanceToBounds();
       break;
     case "zoom":
-      advanceToSelectZoom();
+      advanceToSelectMaxZoom();
       break;
   }
+};
+const openMapCenterDialog = () => {
+  document.getElementById("mapCenterDialog").showModal();
 };
 const finishStep = () => {
   if (previousStep && previousStep == steps.Complete) {
@@ -589,7 +590,7 @@ const finishStep = () => {
       case steps.Bounds:
         map.setMaxBounds(boundsRect);
         currentStep = steps.MinZoomLevel;
-        advanceToSelectZoom();
+        advanceToSelectMaxZoom();
         break;
       case steps.MinZoomLevel:
         minZoomLevel = map.getZoom();
@@ -610,7 +611,8 @@ const finishStep = () => {
     case steps.BaseLayer:
       setBaseLayers(true);
       document.getElementById("baseLayerSelection").close();
-      advanceToMapCenter();
+      console.log("Opening Map Center Dialog");
+      openMapCenterDialog();
       break;
     case steps.Center:
       advanceToPoints();
