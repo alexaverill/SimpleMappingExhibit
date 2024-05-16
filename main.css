@@ -583,24 +583,17 @@ textarea {
   font-size: 1.5rem;
 }
 
-.geo-search {
+.leaflet-touch .leaflet-control-geocoder {
   height: 45px;
   button {
     width: 45px;
     height: 45px;
-    background: white;
     svg {
       width: 1.9rem;
     }
   }
   input {
     height: 100%;
-    margin-top: -3.5rem;
-  }
-  button:hover {
-    background: lightgrey;
-  }
-  button:active {
-    background: darkgray;
+    margin-top: -0.5rem;
   }
 }
