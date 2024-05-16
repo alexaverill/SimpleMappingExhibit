@@ -671,14 +671,14 @@ const handleComplete = () => {
   var data = new Blob([jsonString], { type: "application/json" });
 
   let textFile = window.URL.createObjectURL(data);
-  console.log(textFile);
-  //document.getElementById("downloadLink").href=textFile;
-  console.log(jsonString);
   //for some reason it was adding 3 links the normal way to deal with this
   let innerHtml = `<button onClick="closeComplete()">Explore Your Map</button>
         <a href="${textFile}" download="data.json" id="downloadLink" class="download" target="_blank"><img src="./assets/download.png"/>Download Data</button>`;
   document.getElementById("completeBtnBar").innerHTML = innerHtml;
   document.getElementById("completedMap").showModal();
+};
+const handleMarkerCreate = (e) => {
+  console.log("Marker Create");
 };
 const initializeMap = (
   startCoordinates = [0, 0],
@@ -746,7 +746,23 @@ const initializeMap = (
       }).addTo(map);
     }
   });
-  map.addControl(L.control.search({ position: "bottomright" }));
+  // map.addControl(L.control.search({ position: "bottomright", marker: false }));
+  var geocoder = L.Control.geocoder({
+    defaultMarkGeocode: false,
+    position: "bottomright",
+  })
+    .on("markgeocode", function (e) {
+      console.log(e);
+      var bbox = e.geocode.bbox;
+      var poly = L.polygon([
+        bbox.getSouthEast(),
+        bbox.getNorthEast(),
+        bbox.getNorthWest(),
+        bbox.getSouthWest(),
+      ]);
+      map.fitBounds(poly.getBounds());
+    })
+    .addTo(map);
 };
 const initializePointsOfInterest = (points) => {
   points.map((point) => {

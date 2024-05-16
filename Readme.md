@@ -12,6 +12,10 @@ Sample content is from wikipedia articles.
 
 https://leaflet-extras.github.io/leaflet-providers/preview/
 
+## Search Provider:
+
+https://github.com/perliedman/leaflet-control-geocoder
+
 ## ToDos:
 
 Small screen/mobile styeing
