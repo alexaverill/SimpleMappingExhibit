@@ -118,7 +118,10 @@ const advanceToMapCenter = () => {
       .getElementById("userInstructionButtons")
       .appendChild(getInstructionContinue());
   }
-  setInstructions("Select the center of your map.", "");
+  setInstructions(
+    "Select the center of your map.",
+    "This controls your maps default location. You can search using the Magnifying Glass in the bottom right."
+  );
 };
 const addCenterMarker = () => {
   if (centerMarker && map) {
@@ -612,7 +615,7 @@ const finishStep = () => {
       setBaseLayers(true);
       document.getElementById("baseLayerSelection").close();
       console.log("Opening Map Center Dialog");
-      openMapCenterDialog();
+      advanceToMapCenter();
       break;
     case steps.Center:
       advanceToPoints();
@@ -825,3 +828,4 @@ const imageEncode = (event) => {
 };
 const load = async () => {};
 initializeMap();
+document.getElementById("intro").showModal();

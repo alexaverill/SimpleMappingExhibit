@@ -1,187 +1,202 @@
 <html lang="en">
-  <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./leaflet/leaflet.css" />
-    <script src="./leaflet/leaflet.js"></script>
-<link rel="stylesheet" href="./geoencoding//geocoder.css" />
-<script src="./geoencoding/index.js"></script>
-    <link rel="stylesheet" href="main.css" />
-  </head>
-  <div id="map"></div>
 
-    <div id="dialog" class="dialog editDialog hidden">
-      <div class="dialogbuttons">
-        <button onClick="closeDialog()" class="dialogActionButton"><img class="icon" src="./assets/save.png" /></button>
-        <button onClick="deletePoint()" class="dialogActionButton"><img class="icon" src="./assets/delete.png" /></button>
-    
-    </div>
-    <input type="hidden" value="null" id="id"/>
-    <div class="dialogInputTitle" id="dialogTitle">
-      <input id="title" type="text" class="title" placeholder="Title" />
-    </div>
-    <div class="image" id="dialogImageContainer">
-      <button id="previous" onClick="handlePreviousImage()" class="imageIcon hide">
-        <img class="icon" src="./assets/arrow.png" />
-      </button>
-      <img id="dialogImage" src="" alt="" />
-      <button id="next" onClick="handleNextImage()" class="imageIcon hide">
-        <img class="icon" src="./assets/arrow.png" />
-      </button>
-      <button id="add" onClick="handleAddImage()" class="addButton">
-        <img class="icon" src="./assets/add.png"/>
-      </button>
-    </div>
-    <div class="descriptionTextArea" id="dialogDescription"><textarea id="description" placeholder="Description"></textarea></textarea></div>
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="./leaflet/leaflet.css" />
+  <script src="./leaflet/leaflet.js"></script>
+  <link rel="stylesheet" href="./geoencoding//geocoder.css" />
+  <script src="./geoencoding/index.js"></script>
+  <link rel="stylesheet" href="main.css" />
+</head>
+<div id="map"></div>
+
+<div id="dialog" class="dialog editDialog hidden">
+  <div class="dialogbuttons">
+    <button onClick="closeDialog()" class="dialogActionButton"><img class="icon" src="./assets/save.png" /></button>
+    <button onClick="deletePoint()" class="dialogActionButton"><img class="icon" src="./assets/delete.png" /></button>
+
   </div>
-  <div id="userInstructions" class="userInstructions hide">
-      <div id="progress">
+  <input type="hidden" value="null" id="id" />
+  <div class="dialogInputTitle" id="dialogTitle">
+    <input id="title" type="text" class="title" placeholder="Title" />
+  </div>
+  <div class="image" id="dialogImageContainer">
+    <button id="previous" onClick="handlePreviousImage()" class="imageIcon hide">
+      <img class="icon" src="./assets/arrow.png" />
+    </button>
+    <img id="dialogImage" src="" alt="" />
+    <button id="next" onClick="handleNextImage()" class="imageIcon hide">
+      <img class="icon" src="./assets/arrow.png" />
+    </button>
+    <button id="add" onClick="handleAddImage()" class="addButton">
+      <img class="icon" src="./assets/add.png" />
+    </button>
+  </div>
+  <div class="descriptionTextArea" id="dialogDescription"><textarea id="description"
+      placeholder="Description"></textarea></textarea></div>
+</div>
+<div id="userInstructions" class="userInstructions hide">
+  <div id="progress">
     <div class="progressBar">
       <div class="bar"></div>
-      <div class="progressIndicator active" id="baseLayerProgress" onclick="handleProgressClick('baselayer')">Base Layers</div>
-    <div class="progressIndicator" id="mapCenterProgress" onclick="handleProgressClick('center')">Map Center</div>
-    <div class="progressIndicator" id="pointsProgress" onclick="handleProgressClick('points')">Points</div>
-    <div class="progressIndicator" id="boundsProgress" onclick="handleProgressClick('bounds')"">Bounds</div>
-    <div class="progressIndicator" id="zoomProgress" onclick="handleProgressClick('zoom')">Zoom Levels</div>
-    
+      <div class="progressIndicator active" id="baseLayerProgress" onclick="handleProgressClick('baselayer')">Base
+        Layers</div>
+      <div class="progressIndicator" id="mapCenterProgress" onclick="handleProgressClick('center')">Map Center</div>
+      <div class="progressIndicator" id="pointsProgress" onclick="handleProgressClick('points')">Points</div>
+      <div class="progressIndicator" id="boundsProgress" onclick="handleProgressClick('bounds')"">Bounds</div>
+    <div class=" progressIndicator" id="zoomProgress" onclick="handleProgressClick('zoom')">Zoom Levels</div>
+
     </div>
   </div>
-    <div id="instructions" class="title">Select the Center of your map</div>
-    <div id="subtitle" class="subtitle"></div>
-    <div class="userInstructionButtons" id="userInstructionButtons">
+  <div id="instructions" class="title">Select the Center of your map</div>
+  <div id="subtitle" class="subtitle"></div>
+  <div class="userInstructionButtons" id="userInstructionButtons">
     <button onclick="finishStep()">Continue</button>
+  </div>
+</div>
+<button class="editButton" onclick="showIntro()">Start</button>
+<dialog id="intro" class="createDialog">
+  <div class="dialogContent">
+    <div class="title">Map Builder</div>
+    <div class="titleLine"></div>
+    <div class="description">
+      <div>This will guide you through the creation of mapped based exhibit. </div>
+      <div>If you are using this tool online note that none of the images you upload or content you write are stored
+        anywhere outside your browser.</div>
+      <div>Images will be embeded into the data that is output at the end.</div>
+    </div>
+    <div class="returnPrompt">Already Started?</div>
+    <div class="uploadPrompt">
+      <div>Upload a JSON file to edit: </div><input type="file" onchange="loadFile(this)" accept="application/json" />
+    </div>
+    <div class="titleLine bottomLine"></div>
+    <button onClick="finishStep()">Continue</button>
+  </div>
+</dialog>
+<dialog id="imageAdd" class="imageAddDialog" class="createDialog">
+  <div class="dialogContent">
+    <div class="title">Add Images</div>
+    <div class="titleLine"></div>
+    <div class="description">
+      <div id="imageList" class="imageList"></div>
+      <div class="imageAdd">Add a local image: <input id="imageInput" type="file" onchange="uploadImage(this)"
+          accept="image/png, image/jpeg, image/jpg" /></div>
+      <div class="imageAdd">Link to an Image: <input type="text" id="imageLink"
+          value="https://upload.wikimedia.org/wikipedia/commons/5/53/Ice_Skating-William_Frerichs-1869.jpg"><button
+          onclick="addLinkedImage()">Add</button></button></div>
+    </div>
+    <div class="titleLine bottomLine"></div>
+    <div class="buttonBar">
+      <button onClick="cancelImageSelect()">Cancel</button> <button onClick="handleImagesSelected()">Save</button>
     </div>
   </div>
-  <button class="editButton" onclick="showIntro()">Start</button>
-  <dialog id="intro" class="createDialog">
-    <div class="dialogContent">
-      <div class="title">Map Builder</div>
-<div class="titleLine"></div>
-      <div class="description">
-        <div>This will guide you through the creation of mapped based exhibit. </div>
-        <div>If you are using this tool online note that none of the images you upload or content you write are stored anywhere outside your browser.</div>
-        <div>Images will be embeded into the data that is output at the end.</div>
-      </div>
-      <div class="returnPrompt">Already Started?</div>
-      <div class="uploadPrompt">
-        <div>Upload a JSON file to edit: </div><input type="file" onchange="loadFile(this)" accept="application/json"/>
-      </div>
-      <div class="titleLine bottomLine"></div>
-      <button onClick="finishStep()">Continue</button>
+</dialog>
+<dialog id="baseLayerSelection" class="createDialog">
+  <div class="dialogContent">
+    <div class="title">Base Maps</div>
+    <div class="titleLine"></div>
+    <div class="description">
+      <div>Base layers control the appearance of the base map.</div>
+      <div><a href="https://leaflet-extras.github.io/leaflet-providers/preview/" target="_blank">View a list of some
+          possible base maps. </a></div>
+      <div>Generally you don't need more then one or two base maps.</div>
     </div>
-  </dialog>
-    <dialog id="imageAdd" class="imageAddDialog" class="createDialog" >
-    <div class="dialogContent">
-      <div class="title">Add Images</div>
-      <div class="titleLine"></div>
-      <div class="description">
-        <div id="imageList" class="imageList"></div>
-        <div class="imageAdd">Add a local image: <input id="imageInput" type="file" onchange="uploadImage(this)" accept="image/png, image/jpeg, image/jpg"/></div>
-        <div class="imageAdd">Link to an Image: <input type="text" id="imageLink" value="https://upload.wikimedia.org/wikipedia/commons/5/53/Ice_Skating-William_Frerichs-1869.jpg"><button onclick="addLinkedImage()">Add</button></button></div>
-      </div>
-      <div class="titleLine bottomLine"></div>
-      <div class="buttonBar">
-      <button onClick="cancelImageSelect()">Cancel</button> <button onClick="handleImagesSelected()">Save</button>
-      </div>
-    </div>
-  </dialog>
-  <dialog id="baseLayerSelection" class="createDialog">
-    <div class="dialogContent">
-      <div class="title">Base Maps</div>
-            <div class="titleLine"></div>
-      <div class="description">
-        <div>Base layers control the appearance of the base map.</div> 
-        <div><a href="https://leaflet-extras.github.io/leaflet-providers/preview/" target="_blank">View a list of some possible base maps. </a></div>
-        <div>Generally you don't need more then one or two base maps.</div>
-      </div>
-        <div class="subtitle">Current Base Layers:</div>
-        <div class="baseLayerList" id="baseLayers">
+    <div class="subtitle">Current Base Layers:</div>
+    <div class="baseLayerList" id="baseLayers">
 
-        </div>
-        <div class="addBaseLayer">
-          <button onclick="addBaseLayerUI()">Add Layer</button>
-        </div>
-        <div class="titleLine bottomLine"></div>
-        <div class="buttonBar">
-          <button onclick="finishStep()">Continue</button>
-        </div>
-      
-      
     </div>
-  </dialog>
-      <dialog id="mapCenterDialog" class="createDialog shortCreateDialog">
-      <div class="dialogContent">
-        <div class="title">Set Map Center</div>
-         <div class="titleLine"></div>
-                 
-                 <div class="description">
-                    The Map Center controls the default location where the map loads. 
-                 </div>
-                 <div class="search">
+    <div class="addBaseLayer">
+      <button onclick="addBaseLayerUI()">Add Layer</button>
+    </div>
+    <div class="titleLine bottomLine"></div>
+    <div class="buttonBar">
+      <button onclick="finishStep()">Continue</button>
+    </div>
 
-                 </div>
-                 <div class="titleLine bottomLine"></div>
-        <div class="buttonBar">
-          <button onclick="advanceToMapCenter()">Continue</button>
-        </div>
-      </div>
-    </dialog>
-    <dialog id="zoomSelection" class="createDialog shortCreateDialog">
-    <div class="dialogContent">
-      <div class="title">Define zoom levels</div>
-      <div class="titleLine"></div>
-      <div class="description">
-        <div>The minimum zoom level is automatically calculated from your map bounds.</div>
-        <div>The maximum zoom level is how close people can zoom into the map. The default is the maximum zoom possible for the map  and baselayers</div> 
-      </div>
-      <div class="titleLine bottomLine"></div>
-      <div class="buttonBar">
-        <button onclick="advanceToSelectMaxZoom()">Continue</button>
-      </div>
-    </div>
-  </dialog>
 
-    <dialog id="boundsSelectionDialog" class="createDialog shortCreateDialog">
-      <div class="dialogContent">
-        
-      <div class="title">Select Map Bounds</div>
-      <div class="titleLine"></div>
-      <div class="description">
-        <div>Select the outer limits that you want people to be able to drag the map to. These bounds will inform how far out users can zoom on your exhibit.</div>
-        <div>Your bounding box should include some padding around your points to ensure that people can see all your points. When in doubt go larger. </div>
-      </div>
-      <div class="titleLine bottomLine"></div>
-        <div class="buttonBar">
-        <button onClick="advanceToBounds()">Select Bounds</button>
-      </div>
+  </div>
+</dialog>
+<dialog id="mapCenterDialog" class="createDialog shortCreateDialog">
+  <div class="dialogContent">
+    <div class="title">Set Map Center</div>
+    <div class="titleLine"></div>
+
+    <div class="description">
+      The Map Center controls the default location where the map loads.
     </div>
-  </dialog>
-    <dialog id="completedMap" class="createDialog shortCreateDialog">
-        <div class="dialogContent">
-      <div class="title">Map Complete!</div>
-      <div class="titleLine"></div>
-      <div class="description">
-        You have completed your map, you can now download the data file and place it nex to the index.html file. Ensure all the images you selected are in a images folder that is next to the index.html file. 
-     </div>
-     <div class="titleLine bottomLine"></div>
-     
-        <div class="buttonBar" id="completeBtnBar">
-        
+    <div class="search">
+
+    </div>
+    <div class="titleLine bottomLine"></div>
+    <div class="buttonBar">
+      <button onclick="advanceToMapCenter()">Continue</button>
+    </div>
+  </div>
+</dialog>
+<dialog id="zoomSelection" class="createDialog shortCreateDialog">
+  <div class="dialogContent">
+    <div class="title">Zoom levels</div>
+    <div class="titleLine"></div>
+    <div class="description">
+      <div>
+        <p> Zoom levels control how far a user can zoom into or out of the map.
+
+        <p> A minimum zoom level is how far out of the map users can zoom. This is automatically calculated based on the
+          bounds you just set.</p>
+        <p> The maximum zoom level is how far into your map you want users to zoom. The suggested level is going to be
+          what the most zoomed in the maps base layers support.</p>
+        <p> Zoom in or out to change the maximum zoom level.</p>
       </div>
-    </div>  
-  </dialog>
-  <div
-    id="dialogBackground"
-    class="dialogBackground"
-    onclick="handleBackgroundClick()"
-  ></div>
-  <script type="text/javascript" src="./create.js"></script>
-  <script>
-   
-    document.getElementById("intro").showModal()
-  </script>
+
+    </div>
+    <div class="titleLine bottomLine"></div>
+    <div class="buttonBar">
+      <button onclick="advanceToSelectMaxZoom()">Continue</button>
+    </div>
+  </div>
+  </div>
+</dialog>
+
+<dialog id="boundsSelectionDialog" class="createDialog shortCreateDialog">
+  <div class="dialogContent">
+
+    <div class="title">Select Map Bounds</div>
+    <div class="titleLine"></div>
+    <div class="description">
+      <div>
+        <p>Next you will create a bounding box around the points that you defined.</p>
+        <p>Users will only be able to view the area that you select, and the map will use this bounding box to calculate
+          how far out to allow users to zoom</p>
+        <p>Make sure to add some padding around the edges to ensure that all your points will be visible.</p>
+      </div>
+
+    </div>
+    <div class="titleLine bottomLine"></div>
+    <div class="buttonBar">
+      <button onClick="advanceToBounds()">Select Bounds</button>
+    </div>
+  </div>
+</dialog>
+<dialog id="completedMap" class="createDialog shortCreateDialog">
+  <div class="dialogContent">
+    <div class="title">Map Complete!</div>
+    <div class="titleLine"></div>
+    <div class="description">
+      You have completed your map, you can now download the data file and place it nex to the index.html file. Ensure
+      all the images you selected are in a images folder that is next to the index.html file.
+    </div>
+    <div class="titleLine bottomLine"></div>
+
+    <div class="buttonBar" id="completeBtnBar">
+
+    </div>
+  </div>
+</dialog>
+<div id="dialogBackground" class="dialogBackground" onclick="handleBackgroundClick()"></div>
+<script type="text/javascript" src="./create.js"></script>
+
 </html>
