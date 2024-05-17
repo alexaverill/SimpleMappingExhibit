@@ -48,9 +48,9 @@
       <div class="progressIndicator" id="mapCenterProgress" onclick="handleProgressClick('center')">Map Center</div>
       <div class="progressIndicator" id="pointsProgress" onclick="handleProgressClick('points')">Points</div>
       <div class="progressIndicator" id="boundsProgress" onclick="handleProgressClick('bounds')"">Bounds</div>
-    <div class=" progressIndicator" id="zoomProgress" onclick="handleProgressClick('zoom')">Zoom Levels</div>
-
+      <div class=" progressIndicator" id="zoomProgress" onclick="handleProgressClick('zoom')">Zoom Levels</div>
     </div>
+
   </div>
   <div id="instructions" class="title">Select the Center of your map</div>
   <div id="subtitle" class="subtitle"></div>
@@ -64,10 +64,15 @@
     <div class="title">Map Builder</div>
     <div class="titleLine"></div>
     <div class="description">
-      <div>This will guide you through the creation of mapped based exhibit. </div>
-      <div>If you are using this tool online note that none of the images you upload or content you write are stored
-        anywhere outside your browser.</div>
-      <div>Images will be embeded into the data that is output at the end.</div>
+
+      <div>
+        <p>This will guide you through the creation of mapped based exhibit. You will select the base maps you want to
+          use, setup points of interest, a bounding box and zoom levels.</p>
+
+        <p>If you are using this tool online note that none of the images you upload or content you write are stored
+          anywhere except for the json file you download at the end. Images will be embeded into the data that is output
+          at the end.</p>
+      </div>
     </div>
     <div class="returnPrompt">Already Started?</div>
     <div class="uploadPrompt">
@@ -100,10 +105,17 @@
     <div class="title">Base Maps</div>
     <div class="titleLine"></div>
     <div class="description">
-      <div>Base layers control the appearance of the base map.</div>
-      <div><a href="https://leaflet-extras.github.io/leaflet-providers/preview/" target="_blank">View a list of some
-          possible base maps. </a></div>
-      <div>Generally you don't need more then one or two base maps.</div>
+      <div>
+        <p>Base layers control the appearance of the base map. Some common base layers would be a standard street map,
+          or satellite map.
+          There are tons of options, just remember some of them may have specific liscenses restrictions.
+          The default Street and Satelite layers suggested below are free to use. </p>
+        <p> <a href="https://leaflet-extras.github.io/leaflet-providers/preview/" target="_blank">View a list of some
+            possible base maps. </a> This is not an exhaustive list, and most map providers should provide a format that
+          can be utilized.
+        </p>
+      </div>
+
     </div>
     <div class="subtitle">Current Base Layers:</div>
     <div class="baseLayerList" id="baseLayers">
@@ -186,8 +198,8 @@
     <div class="title">Map Complete!</div>
     <div class="titleLine"></div>
     <div class="description">
-      You have completed your map, you can now download the data file and place it nex to the index.html file. Ensure
-      all the images you selected are in a images folder that is next to the index.html file.
+      You have completed your map, you can now download the data file and place it nex to the index.html file.
+
     </div>
     <div class="titleLine bottomLine"></div>
 

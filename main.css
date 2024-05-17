@@ -269,6 +269,7 @@ button:active {
   flex-direction: row;
   z-index: 10000;
   justify-content: center;
+  gap: 1rem;
 }
 .progressBar {
   position: relative;
@@ -284,6 +285,8 @@ button:active {
   padding-right: 2rem;
   border-radius: 4rem;
   border: 1px solid black;
+  justify-content: center;
+  align-items: center;
 }
 
 .progressIndicator {
@@ -603,5 +606,13 @@ textarea {
   input {
     height: 100%;
     margin-top: -0.5rem;
+  }
+}
+.downloadButton {
+  height: 40px;
+  font-size: 1rem;
+  display: flex;
+  img {
+    height: 24px;
   }
 }

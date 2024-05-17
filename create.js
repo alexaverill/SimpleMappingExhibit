@@ -648,9 +648,7 @@ const closeComplete = () => {
   map.setZoom(minZoomLevel);
   document.getElementById("completedMap").close();
 };
-const handleComplete = () => {
-  currentStep = steps.Complete;
-  advanceProgress("zoomProgress", "");
+const createDownloadData = () => {
   let cleanedPoints = points.map((point) => {
     console.log(point);
     return {
@@ -671,15 +669,23 @@ const handleComplete = () => {
     pointsOfInterest: cleanedPoints,
   };
   let jsonString = JSON.stringify(mapObject);
-  var data = new Blob([jsonString], { type: "application/json" });
+  return new Blob([jsonString], { type: "application/json" });
+};
+const handleComplete = () => {
+  currentStep = steps.Complete;
+  advanceProgress("zoomProgress", "");
 
-  let textFile = window.URL.createObjectURL(data);
+  let textFile = window.URL.createObjectURL(createDownloadData());
   //for some reason it was adding 3 links the normal way to deal with this
   let innerHtml = `<button onClick="closeComplete()">Explore Your Map</button>
-        <a href="${textFile}" download="data.json" id="downloadLink" class="download" target="_blank"><img src="./assets/download.png"/>Download Data</button>`;
+        <a href="${textFile}" download="data.json" id="downloadLink" class="download" target="_blank"><img src="./assets/download.png"/>Download Data</a>`;
   document.getElementById("completeBtnBar").innerHTML = innerHtml;
   document.getElementById("completedMap").showModal();
+  document.getElementById(
+    "progress"
+  ).innerHTML += `<a href="${textFile}" download="data.json" id="downloadLink" class="download downloadButton" target="_blank"><img src="./assets/download.png"/>Download Data</a>`;
 };
+const downloadData = () => {};
 const handleMarkerCreate = (e) => {
   console.log("Marker Create");
 };
