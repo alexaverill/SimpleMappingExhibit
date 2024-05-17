@@ -333,7 +333,9 @@ const createLabel = (id, label) => {
 //Content Dialog Setup
 const addLinkedImage = () => {
   let link = document.getElementById("imageLink");
-  buildImagePreview(link.value);
+  if (link.value.length > 0 && link.value.indexOf("http") >= 0) {
+    buildImagePreview(link.value);
+  }
   link.value = "";
 };
 const handlePrevewImageSelect = (e) => {
