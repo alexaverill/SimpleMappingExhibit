@@ -385,7 +385,35 @@ button:active {
 .addButton:active {
   background: grey;
 }
-
+.languageList {
+  overflow: auto;
+}
+#languageDialog {
+  overflow: hidden;
+  .description {
+    overflow: initial;
+    padding-left: 2rem;
+    margin-bottom: 0;
+  }
+}
+.languageEntry {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.deleteBtn {
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  img {
+    height: 100%;
+    margin-left: -7px;
+  }
+}
+.deleteBtn:hover {
+  background: lightgrey;
+  border-radius: 3rem;
+}
 .imageDeleteBtn {
   width: 3rem;
   height: 3rem;
