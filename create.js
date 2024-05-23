@@ -2,9 +2,14 @@ import {
   createLongInputElemeent,
   createInputElements,
   createZoomInput,
-  createLabel,
 } from "./createInputs.js";
-
+import {
+  buildDeleteIcon,
+  buildImagePreview,
+  handleAddImage,
+  cancelImageSelect,
+  handleImagesSelected,
+} from "./createImages.js";
 const steps = {
   Intro: 0,
   Language: 1,
@@ -90,6 +95,11 @@ const getInstructionContinue = (text = "Continue") => {
   button.onclick = finishStep;
   button.appendChild(document.createTextNode(text));
   return button;
+};
+const imagesSelected = () => {
+  imageList = handleImagesSelected();
+  dialogImage.src = imageList[currentImage].image;
+  setImageNavigationButtons(imageList.length);
 };
 //Intro Functionality
 const showIntro = () => {
@@ -337,7 +347,6 @@ const SaveLanguageText = () => {
   let titleIndex = titles.findIndex(
     (title) => title.language == currentLanguage
   );
-  console.log(`Title Index: ${titleIndex}`);
   if (titleIndex >= 0) {
     titles.splice(titleIndex, 1, titleObj);
   } else {
@@ -432,7 +441,6 @@ const deletePoint = () => {
 const closeDialog = () => {
   let currentid = document.getElementById("id").value;
   SaveLanguageText();
-  console.log(titles);
   if (currentid === "null") {
     console.log("Add New Point");
     let id = points.length;
@@ -531,58 +539,6 @@ const handleNextImage = () => {
   dialogImage.opacity = 0;
   dialogImage.src = imageList[currentImage].image;
   dialogImage.opacity = 1;
-};
-const buildDeleteIcon = () => {
-  let deleteBtnIcon = document.createElement("img");
-  deleteBtnIcon.src = "./assets/delete.png";
-  return deleteBtnIcon;
-};
-const buildImagePreview = (imgPath) => {
-  let parent = document.getElementById("imageList");
-  let imageContainer = document.createElement("div");
-  imageContainer.id = document.getElementsByClassName(
-    "previewImageContainer"
-  ).length; //want to be able to delete it easily
-  imageContainer.className = "previewImageContainer";
-  imageContainer.setAttribute("image", imgPath);
-  let image = document.createElement("img");
-  image.src = imgPath;
-  let deleteBtn = document.createElement("button");
-  deleteBtn.className = "imageDeleteBtn";
-  deleteBtn.appendChild(buildDeleteIcon());
-  deleteBtn.onclick = () => {
-    console.log(`Delete image: ${imageContainer.id}`);
-    document.getElementById(imageContainer.id).remove();
-  };
-  imageContainer.appendChild(image);
-  imageContainer.appendChild(deleteBtn);
-  parent.appendChild(imageContainer);
-};
-const handleAddImage = () => {
-  console.log(imageList);
-  if (imageList.length > 0) {
-    console.log("NEED to add images to dialog");
-    imageList.map((image) => {
-      buildImagePreview(image.image);
-    });
-  }
-  document.getElementById("imageAdd").showModal();
-};
-const cancelImageSelect = () => {
-  document.getElementById("imageAdd").close();
-};
-const handleImagesSelected = () => {
-  let images = document.getElementsByClassName("previewImageContainer");
-  imageList = [];
-  for (let image of images) {
-    let imageObj = { image: image.getAttribute("image") };
-    imageList.push(imageObj);
-  }
-  document.getElementById("imageLink").value = "";
-  document.getElementById("imageList").innerHTML = "";
-  dialogImage.src = imageList[currentImage].image;
-  setImageNavigationButtons(imageList.length);
-  document.getElementById("imageAdd").close();
 };
 
 const setCurrentLatLang = () => {
@@ -938,8 +894,10 @@ window.addBaseLayerUI = addBaseLayerUI;
 window.addLinkedImage = addLinkedImage;
 window.uploadImage = uploadImage;
 window.cancelImageSelect = cancelImageSelect;
-window.handleImagesSelected = handleImagesSelected;
 window.advanceToBounds = advanceToBounds;
 window.advanceToSelectMaxZoom = advanceToSelectMaxZoom;
 window.closeComplete = closeComplete;
 window.handleProgressClick = handleProgressClick;
+window.imagesSelected = imagesSelected;
+window.handleNextImage = handleNextImage;
+window.handlePreviousImage = handlePreviousImage;
