@@ -396,6 +396,12 @@ button:active {
     margin-bottom: 0;
   }
 }
+.dialogLanguageSelector {
+  position: absolute;
+  bottom: 2rem;
+  right: 6rem;
+  z-index: 10000;
+}
 .languageEntry {
   display: flex;
   align-items: center;

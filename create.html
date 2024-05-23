@@ -13,7 +13,12 @@
   <link rel="stylesheet" href="main.css" />
 </head>
 <div id="map"></div>
-
+<div class="dialogLanguageSelector">
+  <select onchange="handleLanguageSelection(this)" id="languageSelector" autocomplete="off">
+    <option>English</option>
+    <option>Spanish</option>
+  </select>
+</div>
 <div id="dialog" class="dialog editDialog hidden">
   <div class="dialogbuttons">
     <button onClick="closeDialog()" class="dialogActionButton"><img class="icon" src="./assets/save.png" /></button>
@@ -21,8 +26,9 @@
 
   </div>
   <input type="hidden" value="null" id="id" />
+
   <div class="dialogInputTitle" id="dialogTitle">
-    <input id="title" type="text" class="title" placeholder="Title" />
+    <input id="title" type="text" class="title" placeholder="Title" autocomplete="off" />
   </div>
   <div class="image" id="dialogImageContainer">
     <button id="previous" onClick="handlePreviousImage()" class="imageIcon hide">
@@ -36,8 +42,9 @@
       <img class="icon" src="./assets/add.png" />
     </button>
   </div>
-  <div class="descriptionTextArea" id="dialogDescription"><textarea id="description"
-      placeholder="Description"></textarea></textarea></div>
+  <div class="descriptionTextArea" id="dialogDescription">
+    <textarea id="description" placeholder="Description" autocomplete="off"></textarea>
+  </div>
 </div>
 <div id="userInstructions" class="userInstructions hide">
   <div id="progress">
