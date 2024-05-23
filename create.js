@@ -1,13 +1,14 @@
 const steps = {
   Intro: 0,
-  BaseLayer: 1,
-  Center: 2,
-  Points: 3,
-  Editing: 4,
-  Bounds: 5,
-  MinZoomLevel: 6,
-  MaxZoomLevel: 7,
-  Complete: 8,
+  Language: 1,
+  BaseLayer: 2,
+  Center: 3,
+  Points: 4,
+  Editing: 5,
+  Bounds: 6,
+  MinZoomLevel: 7,
+  MaxZoomLevel: 8,
+  Complete: 9,
 };
 let baseLayers = [
   {
@@ -40,15 +41,28 @@ let map;
 let mapLayerControl;
 let currentImage = 0;
 let content = null;
+//dialog pop ups
+let introDialog = document.getElementById("intro");
+let languageDialog = document.getElementById("languageDialog");
+let imageDialog = document.getElementById("imageAdd");
+let baseLayerDialog = document.getElementById("baseLayerSelection");
+let zoomDialog = document.getElementById("zoomSelection");
+let boundsDialog = document.getElementById("boundsSelectionDialog");
+
 let dialogTitle = document.getElementById("dialogTitle");
 let dialogImage = document.getElementById("dialogImage");
 let dialogDescription = document.getElementById("dialogDescription");
+let languageEntries = document.getElementById("languageEntries");
 let isClicked = false;
 let startPos = null;
 let endPos = null;
 let rectangle = null;
 let pointsOfInterest = null;
+let currentLanguage = "English";
+let languages = ["English", "Spanish"];
 let points = [];
+let titles = []; //{language:"","title":""}
+let descriptions = [];
 let pointLatLng = null;
 let newPointRef = null;
 let imageList = [];
@@ -104,7 +118,6 @@ const advanceToBounds = () => {
 
 //Map Center Point
 const advanceToMapCenter = () => {
-  document.getElementById("mapCenterDialog").close();
   currentStep = steps.Center;
   advanceProgress("baseLayerProgress", "mapCenterProgress");
   document.getElementById("userInstructions").classList.remove("hide");
@@ -329,7 +342,96 @@ const createLabel = (id, label) => {
   inputLabel.innerText = label;
   return inputLabel;
 };
+const createLanguageEntry = (language) => {
+  let div = document.createElement("div");
+  div.className = "languageEntry";
+  let languageName = document.createElement("p");
+  languageName.innerText = language;
+  div.appendChild(languageName);
 
+  let deleteBtn = document.createElement("button");
+  deleteBtn.className = "deleteBtn";
+  deleteBtn.appendChild(buildDeleteIcon());
+  deleteBtn.onclick = () => removeLanguage(language);
+  div.appendChild(deleteBtn);
+  return div;
+};
+const displayLanguages = () => {
+  let languageOptionDiv = document.getElementById("languageEntries");
+  languageOptionDiv.innerHTML = [];
+  for (let language of languages) {
+    console.log(language);
+    languageOptionDiv.appendChild(createLanguageEntry(language));
+  }
+};
+const SaveLanguageText = () => {
+  let titleInput = document.getElementById("title");
+  let descriptionInput = document.getElementById("description");
+  let title = titleInput.value;
+  let description = descriptionInput.value;
+  let titleObj = { language: currentLanguage, title };
+  let descriptionObj = { language: currentLanguage, description };
+  let titleIndex = titles.findIndex(
+    (title) => title.language == currentLanguage
+  );
+  console.log(`Title Index: ${titleIndex}`);
+  if (titleIndex >= 0) {
+    titles.splice(titleIndex, 1, titleObj);
+  } else {
+    titles.push(titleObj);
+  }
+  let descriptionIndex = descriptions.findIndex(
+    (description) => description.language == currentLanguage
+  );
+  if (descriptionIndex >= 0) {
+    descriptions.splice(descriptionIndex, 1, descriptionObj);
+  } else {
+    descriptions.push(descriptionObj);
+  }
+};
+const handleLanguageSelection = (e) => {
+  let titleInput = document.getElementById("title");
+  let descriptionInput = document.getElementById("description");
+  SaveLanguageText();
+  currentLanguage = e.value;
+  let newTitle =
+    titles.find((title) => title.language === currentLanguage) ?? "";
+  let newDescription =
+    descriptions.find((desc) => desc.language === currentLanguage) ?? "";
+
+  titleInput.value = newTitle.title != undefined ? newTitle.title : "";
+  descriptionInput.value =
+    newDescription.description != undefined ? newDescription.description : "";
+};
+const populateLanguageSelector = () => {
+  let languageSelector = document.getElementById("languageSelector");
+  languageSelector.innerHTML = "";
+  let languageOptions = [];
+  for (language of languages) {
+    let option = document.createElement("option");
+    option.value = language;
+    option.innerText = language;
+    languageSelector.appendChild(option);
+  }
+};
+const removeLanguage = (language) => {
+  if (languages.length <= 1) {
+    return;
+  }
+  languages.splice(languages.indexOf(language), 1);
+  displayLanguages();
+};
+const addLanguage = (language) => {
+  languages.push(language);
+  displayLanguages();
+  populateLanguageSelector();
+  currentLanguage = languages?.at(0);
+};
+const addLanguageHandler = (e) => {
+  let entry = document.getElementById("languageEntry");
+  addLanguage(entry.value);
+  entry.value = "";
+};
 //Content Dialog Setup
 const addLinkedImage = () => {
   let link = document.getElementById("imageLink");
@@ -360,18 +462,20 @@ const deletePoint = () => {
   document.getElementById("title").value = "";
   document.getElementById("description").value = "";
   document.getElementById("id").valu = "null";
+  titles = [];
+  descriptions = [];
   currentStep = steps.Points;
 };
 const closeDialog = () => {
   let currentid = document.getElementById("id").value;
-  let title = document.getElementById("title").value;
-  let description = document.getElementById("description").value;
+  SaveLanguageText();
+  console.log(titles);
   if (currentid === "null") {
     console.log("Add New Point");
     let id = points.length;
     let newPoint = {
-      title,
-      description,
+      titles,
+      descriptions,
       id,
       latitude: pointLatLng.lat,
       longitude: pointLatLng.lng,
@@ -385,8 +489,8 @@ const closeDialog = () => {
     console.log(currentid);
     let index = points.findIndex((point) => point.id == currentid);
     console.log(index);
-    points[index].title = title;
-    points[index].description = description;
+    points[index].titles = titles;
+    points[index].descriptions = descriptions;
     points[index].images = imageList;
   }
   document
@@ -399,6 +503,8 @@ const closeDialog = () => {
   newPointRef = null;
   imageList = [];
   dialogImage.src = "";
+  titles = [];
+  descriptions = [];
   currentStep = steps.Points;
 };
 const pointClicked = (lat, lng) => {
@@ -432,10 +538,18 @@ const setDialogContent = (point) => {
   imageList = [];
   content = point;
   imageList = content.images;
+  console.log(point.titles);
+  titles = point.titles;
+  descriptions = point.descriptions;
   setImageNavigationButtons(imageList.length);
   document.getElementById("id").value = point.id;
-  document.getElementById("title").value = point.title;
-  document.getElementById("description").value = point.description;
+  document.getElementById("title").value =
+    point.titles.find((title) => title.language === currentLanguage)?.title ??
+    "";
+  document.getElementById("description").value =
+    point.descriptions.find(
+      (description) => description.language === currentLanguage
+    )?.description ?? "";
   if (imageList.length > 0) {
     dialogImage.src = imageList[currentImage]?.image;
   }
@@ -455,6 +569,11 @@ const handleNextImage = () => {
   dialogImage.src = imageList[currentImage].image;
   dialogImage.opacity = 1;
 };
+const buildDeleteIcon = () => {
+  let deleteBtnIcon = document.createElement("img");
+  deleteBtnIcon.src = "./assets/delete.png";
+  return deleteBtnIcon;
+};
 const buildImagePreview = (imgPath) => {
   let parent = document.getElementById("imageList");
   let imageContainer = document.createElement("div");
@@ -467,9 +586,7 @@ const buildImagePreview = (imgPath) => {
   image.src = imgPath;
   let deleteBtn = document.createElement("button");
   deleteBtn.className = "imageDeleteBtn";
-  let deleteBtnIcon = document.createElement("img");
-  deleteBtnIcon.src = "./assets/delete.png";
-  deleteBtn.appendChild(deleteBtnIcon);
+  deleteBtn.appendChild(buildDeleteIcon());
   deleteBtn.onclick = () => {
     console.log(`Delete image: ${imageContainer.id}`);
     document.getElementById(imageContainer.id).remove();
@@ -549,6 +666,11 @@ const setInstructions = (title, subtitle) => {
   document.getElementById("instructions").innerText = title;
   document.getElementById("subtitle").innerText = subtitle;
 };
+const advanceToLanguage = () => {
+  currentStep = steps.Language;
+  languageDialog.showModal();
+  displayLanguages();
+};
 const handleProgressClick = (state) => {
   console.log(currentStep);
   if (currentStep != steps.Complete && previousStep !== steps.Complete) {
@@ -577,6 +699,7 @@ const handleProgressClick = (state) => {
 const openMapCenterDialog = () => {
   document.getElementById("mapCenterDialog").showModal();
 };
+
 const finishStep = () => {
   if (previousStep && previousStep == steps.Complete) {
     switch (currentStep) {
@@ -611,6 +734,10 @@ const finishStep = () => {
   }
   switch (currentStep) {
     case steps.Intro:
+      advanceToLanguage();
+      break;
+    case steps.Language:
+      languageDialog.close();
       advanceToBaseLayers();
       break;
     case steps.BaseLayer:
@@ -655,8 +782,8 @@ const createDownloadData = () => {
     console.log(point);
     return {
       id: point.id,
-      title: point.title,
-      description: point.description,
+      titles: point.titles,
+      descriptions: point.descriptions,
       latitude: point.latitude,
       longitude: point.longitude,
       images: point.images,

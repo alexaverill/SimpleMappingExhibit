@@ -13,7 +13,12 @@
   <link rel="stylesheet" href="main.css" />
 </head>
 <div id="map"></div>
-
+<div class="dialogLanguageSelector">
+  <select onchange="handleLanguageSelection(this)" id="languageSelector" autocomplete="off">
+    <option>English</option>
+    <option>Spanish</option>
+  </select>
+</div>
 <div id="dialog" class="dialog editDialog hidden">
   <div class="dialogbuttons">
     <button onClick="closeDialog()" class="dialogActionButton"><img class="icon" src="./assets/save.png" /></button>
@@ -21,8 +26,9 @@
 
   </div>
   <input type="hidden" value="null" id="id" />
+
   <div class="dialogInputTitle" id="dialogTitle">
-    <input id="title" type="text" class="title" placeholder="Title" />
+    <input id="title" type="text" class="title" placeholder="Title" autocomplete="off" />
   </div>
   <div class="image" id="dialogImageContainer">
     <button id="previous" onClick="handlePreviousImage()" class="imageIcon hide">
@@ -36,8 +42,9 @@
       <img class="icon" src="./assets/add.png" />
     </button>
   </div>
-  <div class="descriptionTextArea" id="dialogDescription"><textarea id="description"
-      placeholder="Description"></textarea></textarea></div>
+  <div class="descriptionTextArea" id="dialogDescription">
+    <textarea id="description" placeholder="Description" autocomplete="off"></textarea>
+  </div>
 </div>
 <div id="userInstructions" class="userInstructions hide">
   <div id="progress">
@@ -76,6 +83,23 @@
     <div class="returnPrompt">Already Started?</div>
     <div class="uploadPrompt">
       <div>Upload a JSON file to edit: </div><input type="file" onchange="loadFile(this)" accept="application/json" />
+    </div>
+    <div class="titleLine bottomLine"></div>
+    <button onClick="finishStep()">Continue</button>
+  </div>
+</dialog>
+<dialog id="languageDialog">
+  <div class="dialogContent">
+    <div class="title">Languages</div>
+    <div class="titleLine"></div>
+    <div class="description">
+      <p>Define the languages you want your mapping exhibit to support. These languages will only affect the content you
+        enter, the map itself will not change based on the language.</p>
+    </div>
+    <div class="languageList" id="languageEntries">
+    </div>
+    <div>
+      <input type="text" id="languageEntry" /><button onclick="addLanguageHandler()">Add Language</button>
     </div>
     <div class="titleLine bottomLine"></div>
     <button onClick="finishStep()">Continue</button>
@@ -128,23 +152,6 @@
     </div>
 
 
-  </div>
-</dialog>
-<dialog id="mapCenterDialog" class="createDialog shortCreateDialog">
-  <div class="dialogContent">
-    <div class="title">Set Map Center</div>
-    <div class="titleLine"></div>
-
-    <div class="description">
-      The Map Center controls the default location where the map loads.
-    </div>
-    <div class="search">
-
-    </div>
-    <div class="titleLine bottomLine"></div>
-    <div class="buttonBar">
-      <button onclick="advanceToMapCenter()">Continue</button>
-    </div>
   </div>
 </dialog>
 <dialog id="zoomSelection" class="createDialog shortCreateDialog">
