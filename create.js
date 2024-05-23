@@ -9,7 +9,8 @@ import {
   handleAddImage,
   cancelImageSelect,
   handleImagesSelected,
-} from "./createImages.js";
+  setImageNavigationButtons,
+} from "./imageviewer.js";
 const steps = {
   Intro: 0,
   Language: 1,
@@ -488,22 +489,7 @@ const pointClicked = (lat, lng) => {
   setDialogContent(point);
   document.getElementById("dialog").classList.toggle("visible");
 };
-const setDialogImages = (imageList) => {};
-const setImageNavigationButtons = (length) => {
-  let previousImgBtn = document.getElementById("previous");
-  let nextImgBtn = document.getElementById("next");
-  if (length <= 1) {
-    if (!previousImgBtn.classList.contains("hide")) {
-      previousImgBtn.classList.add("hide");
-    }
-    if (!nextImgBtn.classList.contains("hide")) {
-      nextImgBtn.classList.add("hide");
-    }
-  } else {
-    nextImgBtn.classList.remove("hide");
-    previousImgBtn.classList.remove("hide");
-  }
-};
+
 const setDialogContent = (point) => {
   currentImage = 0;
   imageList = [];
@@ -732,10 +718,6 @@ const handleComplete = () => {
   document.getElementById(
     "progress"
   ).innerHTML += `<a href="${textFile}" download="data.json" id="downloadLink" class="download downloadButton" target="_blank"><img src="./assets/download.png"/>Download Data</a>`;
-};
-const downloadData = () => {};
-const handleMarkerCreate = (e) => {
-  console.log("Marker Create");
 };
 const initializeMap = (
   startCoordinates = [0, 0],
