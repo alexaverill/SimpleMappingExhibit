@@ -1,3 +1,10 @@
+import {
+  createLongInputElemeent,
+  createInputElements,
+  createZoomInput,
+  createLabel,
+} from "./createInputs.js";
+
 const steps = {
   Intro: 0,
   Language: 1,
@@ -297,51 +304,7 @@ const buildBaseLayerInput = (
   container.appendChild(zoomDiv);
   parent.appendChild(container);
 };
-const createLongInputElemeent = (id, label, value) => {
-  let div = document.createElement("div");
-  div.className = "inputRow";
-  let input = document.createElement("textarea");
-  input.className = `baseLayerInput ${id}`;
-  input.id = id;
-  input.value = value;
-  let inputLabel = createLabel(id, label);
-  div.appendChild(inputLabel);
-  div.appendChild(input);
-  return div;
-};
-const createInputElements = (id, label, value) => {
-  let div = document.createElement("div");
-  div.className = "inputRow";
-  let input = document.createElement("input");
-  input.className = `baseLayerInput ${id}`;
-  input.type = "text";
-  input.id = id;
-  input.value = value;
-  let inputLabel = createLabel(id, label);
-  div.appendChild(inputLabel);
-  div.appendChild(input);
-  return div;
-};
-const createZoomInput = (id, label, value) => {
-  let div = document.createElement("div");
-  div.className = "inputRow";
-  let input = document.createElement("input");
-  input.className = `baseLayerInput ${id}`;
-  input.type = "number";
-  input.id = id;
-  input.value = value;
-  let inputLabel = createLabel(id, label);
-  div.appendChild(inputLabel);
-  div.appendChild(input);
-  return div;
-};
-const createLabel = (id, label) => {
-  let inputLabel = document.createElement("label");
-  inputLabel.className = "inputLabel";
-  inputLabel.htmlFor = id;
-  inputLabel.innerText = label;
-  return inputLabel;
-};
+
 const createLanguageEntry = (language) => {
   let div = document.createElement("div");
   div.className = "languageEntry";
@@ -964,3 +927,19 @@ const imageEncode = (event) => {
 const load = async () => {};
 initializeMap();
 document.getElementById("intro").showModal();
+
+window.finishStep = finishStep;
+window.closeDialog = closeDialog;
+window.deletePoint = deletePoint;
+window.handleAddImage = handleAddImage;
+window.loadFile = loadFile;
+window.addLanguageHandler = addLanguageHandler;
+window.addBaseLayerUI = addBaseLayerUI;
+window.addLinkedImage = addLinkedImage;
+window.uploadImage = uploadImage;
+window.cancelImageSelect = cancelImageSelect;
+window.handleImagesSelected = handleImagesSelected;
+window.advanceToBounds = advanceToBounds;
+window.advanceToSelectMaxZoom = advanceToSelectMaxZoom;
+window.closeComplete = closeComplete;
+window.handleProgressClick = handleProgressClick;
