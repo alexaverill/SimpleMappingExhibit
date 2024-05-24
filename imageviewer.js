@@ -75,7 +75,6 @@ class ImageViewer extends HTMLElement {
 
     this.img = document.createElement("img");
     this.img.className = "imageViewer";
-    this.img.src = "./images/winter_evening.jpg";
     let controls = document.createElement("div");
     controls.classList = "controls";
 
@@ -92,6 +91,8 @@ class ImageViewer extends HTMLElement {
     this.previousButton.addEventListener("click", this.handlePrevious);
     controls.appendChild(this.previousButton);
     controls.appendChild(this.nextButton);
+    this.nextButton.hidden = true;
+    this.previousButton.hidden = true;
     div.appendChild(this.img);
     div.appendChild(controls);
     this.shadowRoot.appendChild(div);
@@ -106,6 +107,13 @@ class ImageViewer extends HTMLElement {
     this.currentImage = 0;
     console.log(this.imageList);
     this.img.src = this.imageList[this.currentImage];
+    if (this.imageList.length <= 1) {
+      this.nextButton.hidden = true;
+      this.previousButton.hidden = true;
+    } else {
+      this.nextButton.hidden = false;
+      this.previousButton.hidden = false;
+    }
   }
 }
 customElements.define("image-viewer", ImageViewer);
