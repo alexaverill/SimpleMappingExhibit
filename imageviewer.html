@@ -1,0 +1,17 @@
+<html>
+
+<head>
+</head>
+
+<body>
+    <image-viewer></image-viewer>
+    <button onclick="handleSetImages()">Set Images</button>
+</body>
+<script src="./imageviewer.js"></script>
+<script>
+    handleSetImages = () => {
+        document.querySelector("image-viewer").setImages(["./images/winter_evening.jpg", "./images/court_statue.jpg", "./images/inner_cathedral.jpg"])
+    }
+</script>
+
+</html>

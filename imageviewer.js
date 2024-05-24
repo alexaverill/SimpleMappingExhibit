@@ -1,65 +1,111 @@
-export const buildDeleteIcon = () => {
-  let deleteBtnIcon = document.createElement("img");
-  deleteBtnIcon.src = "./assets/delete.png";
-  return deleteBtnIcon;
-};
-export const buildImagePreview = (imgPath) => {
-  let parent = document.getElementById("imageList");
-  let imageContainer = document.createElement("div");
-  imageContainer.id = document.getElementsByClassName(
-    "previewImageContainer"
-  ).length; //want to be able to delete it easily
-  imageContainer.className = "previewImageContainer";
-  imageContainer.setAttribute("image", imgPath);
-  let image = document.createElement("img");
-  image.src = imgPath;
-  let deleteBtn = document.createElement("button");
-  deleteBtn.className = "imageDeleteBtn";
-  deleteBtn.appendChild(buildDeleteIcon());
-  deleteBtn.onclick = () => {
-    console.log(`Delete image: ${imageContainer.id}`);
-    document.getElementById(imageContainer.id).remove();
-  };
-  imageContainer.appendChild(image);
-  imageContainer.appendChild(deleteBtn);
-  parent.appendChild(imageContainer);
-};
-export const handleAddImage = () => {
-  if (imageList.length > 0) {
-    console.log("NEED to add images to dialog");
-    imageList.map((image) => {
-      buildImagePreview(image.image);
-    });
+class ImageViewer extends HTMLElement {
+  constructor() {
+    super();
+    this.currentImage = 0;
+    this.imageList = [];
   }
-  document.getElementById("imageAdd").showModal();
-};
-export const cancelImageSelect = () => {
-  document.getElementById("imageAdd").close();
-};
-export const handleImagesSelected = () => {
-  let images = document.getElementsByClassName("previewImageContainer");
-  let tempImages = [];
-  for (let image of images) {
-    let imageObj = { image: image.getAttribute("image") };
-    tempImages.push(imageObj);
+  createStyles() {
+    let style = document.createElement("style");
+    style.textContent = `
+            .imageContainer{
+                position:relative;
+                display:flex;
+                justify-content:center;
+                height:400px;
+            }
+            .controls {
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: grid;
+                height: 100%;
+                width: 100%;
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr 1fr;
+                grid-template-areas: ". . ."
+                    "prev . next"
+                    ". . .";
+            }
+            .prev{
+                grid-area:prev;
+                height: 50px;
+                width:50px;
+                transform: rotateZ(180deg);
+                border-radius:50px;
+                background:rgba(255, 255, 255, 0.7);
+                border:none;
+                img{
+                    height: 35px;
+                }
+            }
+            .next{
+                grid-area:next;
+                height: 50px;
+                width:50px;
+                border:none;
+                margin-left: 2px;
+                border-radius:50px;
+                background:rgba(255, 255, 255, 0.7);
+                img{
+                   height: 35px;
+                }
+            }
+                    .imageViewer {
+                        height:100%;
+                        aspect-ratio:auto;
+                    }`;
+    this.shadowRoot.appendChild(style);
   }
-  document.getElementById("imageLink").value = "";
-  document.getElementById("imageList").innerHTML = "";
-  document.getElementById("imageAdd").close();
-  return tempImages;
-};
-export const setImageNavigationButtons = (length) => {
-  let previousImgBtn = document.getElementById("previous");
-  let nextImgBtn = document.getElementById("next");
-  if (length <= 1) {
-    if (!previousImgBtn.classList.contains("hide")) {
-      previousImgBtn.classList.add("hide");
-    }
-    if (!nextImgBtn.classList.contains("hide")) {
-      nextImgBtn.classList.add("hide");
-    }
-  } else {
-    nextImgBtn.classList.remove("hide");
-    previousImgBtn.classList.remove("hide");
+  handleNext(event) {
+    this.currentImage = (this.currentImage + 1) % this.imageList.length;
+    console.log(this.currentImage);
+    this.img.src = this.imageList[this.currentImage];
   }
-};
+  handlePrevious(event) {
+    this.currentImage =
+      this.currentImage > 0 ? this.currentImage - 1 : this.imageList.length - 1;
+    this.img.src = this.imageList[this.currentImage];
+  }
+  connectedCallback() {
+    this.attachShadow({ mode: "open" });
+    this.createStyles();
+
+    let div = document.createElement("div");
+    div.className = "imageContainer";
+
+    this.img = document.createElement("img");
+    this.img.className = "imageViewer";
+    this.img.src = "./images/winter_evening.jpg";
+    let controls = document.createElement("div");
+    controls.classList = "controls";
+
+    this.nextButton = document.createElement("button");
+    this.nextButton.innerHTML = '<img class="icon" src="./assets/arrow.png" />';
+    this.nextButton.classList = "next";
+    this.handleNext = this.handleNext.bind(this);
+    this.handlePrevious = this.handlePrevious.bind(this);
+    this.nextButton.addEventListener("click", this.handleNext);
+    this.previousButton = document.createElement("button");
+    this.previousButton.innerHTML =
+      '<img class="icon" src="./assets/arrow.png" />';
+    this.previousButton.classList = "prev";
+    this.previousButton.addEventListener("click", this.handlePrevious);
+    controls.appendChild(this.previousButton);
+    controls.appendChild(this.nextButton);
+    div.appendChild(this.img);
+    div.appendChild(controls);
+    this.shadowRoot.appendChild(div);
+  }
+  handleEvent(event) {
+    console.log(event);
+    console.log(this.imageList);
+  }
+  setImages(imageList) {
+    console.log(imageList);
+    this.imageList = imageList;
+    this.currentImage = 0;
+    console.log(this.imageList);
+    this.img.src = this.imageList[this.currentImage];
+  }
+}
+customElements.define("image-viewer", ImageViewer);

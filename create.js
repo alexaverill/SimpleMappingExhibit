@@ -10,7 +10,7 @@ import {
   cancelImageSelect,
   handleImagesSelected,
   setImageNavigationButtons,
-} from "./imageviewer.js";
+} from "./imageedit.js";
 const steps = {
   Intro: 0,
   Language: 1,
@@ -99,8 +99,14 @@ const getInstructionContinue = (text = "Continue") => {
 };
 const imagesSelected = () => {
   imageList = handleImagesSelected();
-  dialogImage.src = imageList[currentImage].image;
-  setImageNavigationButtons(imageList.length);
+  console.log(imageList);
+  let imageViewer = document.querySelector("image-viewer");
+  document
+    .querySelector("image-viewer")
+    .setImages(imageList.map((image) => image.image));
+  console.log(imageViewer);
+  // dialogImage.src = imageList[currentImage].image;
+  // setImageNavigationButtons(imageList.length);
 };
 //Intro Functionality
 const showIntro = () => {
@@ -514,18 +520,6 @@ const setDialogContent = (point) => {
 const handleBackgroundClick = () => {
   closeDialog();
 };
-const handlePreviousImage = () => {
-  currentImage = currentImage > 0 ? currentImage - 1 : imageList.length - 1;
-  dialogImage.opacity = 0;
-  dialogImage.src = imageList[currentImage].image;
-  dialogImage.opacity = 1;
-};
-const handleNextImage = () => {
-  currentImage = (currentImage + 1) % imageList.length;
-  dialogImage.opacity = 0;
-  dialogImage.src = imageList[currentImage].image;
-  dialogImage.opacity = 1;
-};
 
 const setCurrentLatLang = () => {
   addCenterMarker();
@@ -881,5 +875,3 @@ window.advanceToSelectMaxZoom = advanceToSelectMaxZoom;
 window.closeComplete = closeComplete;
 window.handleProgressClick = handleProgressClick;
 window.imagesSelected = imagesSelected;
-window.handleNextImage = handleNextImage;
-window.handlePreviousImage = handlePreviousImage;

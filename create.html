@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="main.css" />
 </head>
 <div id="map"></div>
+
 <div class="dialogLanguageSelector">
   <select onchange="handleLanguageSelection(this)" id="languageSelector" autocomplete="off">
     <option>English</option>
@@ -30,14 +31,10 @@
   <div class="dialogInputTitle" id="dialogTitle">
     <input id="title" type="text" class="title" placeholder="Title" autocomplete="off" />
   </div>
-  <div class="image" id="dialogImageContainer">
-    <button id="previous" onClick="handlePreviousImage()" class="imageIcon hide">
-      <img class="icon" src="./assets/arrow.png" />
-    </button>
-    <img id="dialogImage" src="" alt="" />
-    <button id="next" onClick="handleNextImage()" class="imageIcon hide">
-      <img class="icon" src="./assets/arrow.png" />
-    </button>
+  <div class="imageAdd">
+    <image-viewer id="dialogImageContainer">
+
+    </image-viewer>
     <button id="add" onClick="handleAddImage()" class="addButton">
       <img class="icon" src="./assets/add.png" />
     </button>
@@ -215,5 +212,6 @@
 </dialog>
 <div id="dialogBackground" class="dialogBackground" onclick="handleBackgroundClick()"></div>
 <script type="module" src="./create.js"></script>
+<script src="./imageviewer.js"></script>
 
 </html>

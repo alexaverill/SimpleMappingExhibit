@@ -145,30 +145,12 @@ button:active {
   height: 35px;
   margin-left: 2px;
 }
-#next {
-  position: absolute;
-  background: none;
-  border: none;
-  right: 3px;
-  top: 50%;
-  height: 50px;
-  width: 50px;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 10rem;
-}
-#previous {
-  position: absolute;
-  transform: rotateZ(180deg);
-  background: none;
-  border: none;
-  left: 3px;
-  top: 50%;
-  height: 50px;
-  width: 50px;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 10rem;
-}
+.imageAdd {
+  position: relative;
+  width: 90%;
 
+  background-color: #e8e8e8;
+}
 .hide {
   visibility: hidden;
 }
