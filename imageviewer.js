@@ -12,6 +12,7 @@ class ImageViewer extends HTMLElement {
                 display:flex;
                 justify-content:center;
                 height:400px;
+                border-radius:2rem;
             }
             .controls {
                 position: absolute;

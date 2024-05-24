@@ -9,7 +9,6 @@ import {
   handleAddImage,
   cancelImageSelect,
   handleImagesSelected,
-  setImageNavigationButtons,
 } from "./imageedit.js";
 const steps = {
   Intro: 0,
@@ -480,7 +479,7 @@ const closeDialog = () => {
   document.getElementById("id").value = "null";
   newPointRef = null;
   imageList = [];
-  dialogImage.src = "";
+  document.querySelector("image-viewer").setImages(imageList);
   titles = [];
   descriptions = [];
   currentStep = steps.Points;
@@ -504,7 +503,6 @@ const setDialogContent = (point) => {
   console.log(point.titles);
   titles = point.titles;
   descriptions = point.descriptions;
-  setImageNavigationButtons(imageList.length);
   document.getElementById("id").value = point.id;
   document.getElementById("title").value =
     point.titles.find((title) => title.language === currentLanguage)?.title ??
@@ -514,7 +512,9 @@ const setDialogContent = (point) => {
       (description) => description.language === currentLanguage
     )?.description ?? "";
   if (imageList.length > 0) {
-    dialogImage.src = imageList[currentImage]?.image;
+    document
+      .querySelector("image-viewer")
+      .setImages(imageList.map((image) => image.image));
   }
 };
 const handleBackgroundClick = () => {

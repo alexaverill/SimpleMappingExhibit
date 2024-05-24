@@ -48,18 +48,3 @@ export const handleImagesSelected = () => {
   document.getElementById("imageAdd").close();
   return tempImages;
 };
-export const setImageNavigationButtons = (length) => {
-  let previousImgBtn = document.getElementById("previous");
-  let nextImgBtn = document.getElementById("next");
-  if (length <= 1) {
-    if (!previousImgBtn.classList.contains("hide")) {
-      previousImgBtn.classList.add("hide");
-    }
-    if (!nextImgBtn.classList.contains("hide")) {
-      nextImgBtn.classList.add("hide");
-    }
-  } else {
-    nextImgBtn.classList.remove("hide");
-    previousImgBtn.classList.remove("hide");
-  }
-};
