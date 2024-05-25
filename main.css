@@ -233,16 +233,28 @@ button:active {
 }
 #intro {
   overflow: hidden;
+  height: 55vh;
   .description {
     overflow: hidden;
+    margin-bottom: 0;
   }
   .dialogContent {
     justify-content: space-evenly;
     align-items: center;
     padding-left: 1rem;
     padding-right: 1rem;
+    margin-bottom: 0;
     .description {
       font-size: 0.9rem;
+    }
+  }
+  .mapTitle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    input {
+      padding: 1rem;
+      font-size: 1rem;
     }
   }
 }

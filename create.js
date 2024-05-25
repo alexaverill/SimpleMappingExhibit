@@ -83,6 +83,10 @@ let originalZoomlevel = null;
 let boundsRect = null;
 let maxZoomLevel = null;
 let minZoomLevel = null;
+let mapTitle;
+const handleTitleChange = (e) => {
+  mapTitle = e.value;
+};
 const disableInstructionContinue = () => {
   document.getElementById("continueBtn").disabled = true;
 };
@@ -459,13 +463,9 @@ const closeDialog = () => {
       pointRef: newPointRef,
       images: imageList,
     };
-    console.log(newPoint);
     points.push(newPoint);
   } else {
-    console.log(points);
-    console.log(currentid);
     let index = points.findIndex((point) => point.id == currentid);
-    console.log(index);
     points[index].titles = titles;
     points[index].descriptions = descriptions;
     points[index].images = imageList;
@@ -689,6 +689,7 @@ const createDownloadData = () => {
     };
   });
   let mapObject = {
+    mapTitle,
     mapCenter: currentMapCenter,
     baseLayers: baseLayers,
     minZoom: minZoomLevel,
@@ -779,7 +780,6 @@ const initializeMap = (
       }).addTo(map);
     }
   });
-  // map.addControl(L.control.search({ position: "bottomright", marker: false }));
   var geocoder = L.Control.geocoder({
     defaultMarkGeocode: false,
     position: "bottomright",
@@ -837,7 +837,6 @@ function loadFileReader(event) {
     obj.mapBounds._northEast,
     obj.mapBounds._southWest
   );
-  console.log(bounds);
   boundsRect = L.rectangle(bounds, {
     color: "#FFFF00",
     weight: 1,
@@ -856,7 +855,6 @@ const imageEncode = (event) => {
   console.log(event);
   buildImagePreview(event.target.result);
 };
-const load = async () => {};
 initializeMap();
 document.getElementById("intro").showModal();
 
@@ -875,3 +873,4 @@ window.advanceToSelectMaxZoom = advanceToSelectMaxZoom;
 window.closeComplete = closeComplete;
 window.handleProgressClick = handleProgressClick;
 window.imagesSelected = imagesSelected;
+window.handleTitleChange = handleTitleChange;
