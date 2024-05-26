@@ -30,8 +30,7 @@ let baseLayers = [
     options: {
       minZoomLevel: 1,
       maxZoomLevel: 20,
-      attribution:
-        'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>',
+      attribution: "Tiles courtesy of the U.S. Geological Survey",
     },
   },
   {
@@ -41,7 +40,7 @@ let baseLayers = [
       minZoomLevel: 1,
       maxZoomLevel: 15,
       attribution:
-        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        "Tiles courtesy of OpenStreetMap. Visit openstreetmap.org to learn more.",
     },
   },
 ];
@@ -226,6 +225,7 @@ const advanceToBaseLayers = () => {
 const updateBaseLayers = () => {
   let parent = document.getElementById("baseLayers");
   baseLayers = [];
+  let credits = [];
   for (let child of parent.children) {
     console.log(child);
     let name = child.querySelector(".name").value;
@@ -242,8 +242,10 @@ const updateBaseLayers = () => {
         attribution: attribution,
       },
     };
+    credits.push({ name, credit: attribution });
     baseLayers.push(mapLayer);
   }
+  document.querySelector("map-credits").setCredits(credits);
 };
 const setBaseLayers = (shouldRefresh = false) => {
   if (shouldRefresh) {
@@ -389,7 +391,7 @@ const populateLanguageSelector = () => {
   let languageSelector = document.getElementById("languageSelector");
   languageSelector.innerHTML = "";
   let languageOptions = [];
-  for (language of languages) {
+  for (var language of languages) {
     let option = document.createElement("option");
     option.value = language;
     option.innerText = language;
@@ -729,9 +731,14 @@ const initializeMap = (
 
   // add the new control to the map
   var zoomHome = new L.Control.zoomHome();
+  var creditsControl = new L.Control.creditsControl();
+  creditsControl.addTo(map);
   zoomHome.addTo(map);
   document.addEventListener("mapRecenter", () => {
     map.setView(map.center);
+  });
+  document.addEventListener("mapCredits", () => {
+    document.querySelector("map-credits").show();
   });
   map.zoomControl.remove();
   if (minZoomLevel !== maxZoomLevel) {

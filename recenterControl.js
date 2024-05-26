@@ -1,19 +1,19 @@
 L.Control.zoomHome = L.Control.extend({
   options: {
     position: "bottomright",
-    zoomHomeText: "H",
+    zoomHomeText: "<img src='./assets/recenter.png'/>",
     zoomHomeTitle: "Zoom home",
   },
 
   onAdd: function (map) {
-    var controlName = "gin-control-zoom",
+    var controlName = "recenter-control",
       container = L.DomUtil.create("div", controlName + " leaflet-bar"),
       options = this.options;
 
     this._zoomHomeButton = this._createButton(
       options.zoomHomeText,
       options.zoomHomeTitle,
-      controlName + "-home",
+      controlName,
       container,
       this._zoomHome
     );
@@ -21,8 +21,6 @@ L.Control.zoomHome = L.Control.extend({
   },
 
   _zoomHome: function (e) {
-    console.log(map.center);
-    console.log(map.maxZoom);
     let recenterEvent = new CustomEvent("mapRecenter");
     document.dispatchEvent(recenterEvent);
   },

@@ -663,3 +663,8 @@ textarea {
     height: 24px;
   }
 }
+.recenter-control > img,
+.info-control > img {
+  height: 70%;
+  margin-top: 15%;
+}
