@@ -73,6 +73,9 @@ button:active {
   .description {
     font-size: 0.9rem;
   }
+  .title {
+    padding-bottom: 1rem;
+  }
 }
 .dialogFooter {
   margin: auto;
