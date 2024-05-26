@@ -528,6 +528,7 @@ const setCurrentLatLang = () => {
     .getElementById("userInstructionButtons")
     .appendChild(getInstructionContinue());
   map.setView(currentMapCenter);
+  map.center = currentMapCenter;
 };
 const advanceToPoints = () => {
   currentStep = steps.Points;
@@ -721,8 +722,17 @@ const initializeMap = (
   minZoomLevel = 3,
   zoomPosition = "bottomright"
 ) => {
-  map = L.map("map").setView(startCoordinates, zoomLevel);
+  map = L.map("map", { attributionControl: false, zoomControl: true }).setView(
+    startCoordinates,
+    zoomLevel
+  );
 
+  // add the new control to the map
+  var zoomHome = new L.Control.zoomHome();
+  zoomHome.addTo(map);
+  document.addEventListener("mapRecenter", () => {
+    map.setView(map.center);
+  });
   map.zoomControl.remove();
   if (minZoomLevel !== maxZoomLevel) {
     L.control

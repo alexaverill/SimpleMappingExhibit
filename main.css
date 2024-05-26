@@ -395,6 +395,25 @@ button:active {
   bottom: 2rem;
   right: 6rem;
   z-index: 10000;
+  select {
+    padding: 1rem;
+    background-color: white;
+    border: none;
+    border-radius: 0.25rem;
+  }
+  option {
+    padding: 1rem;
+    background-color: white;
+  }
+}
+
+.languageForm {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+#languageEntry {
+  padding: 0.6rem;
 }
 .languageEntry {
   display: flex;
