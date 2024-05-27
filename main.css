@@ -637,15 +637,9 @@ textarea {
   }
 }
 .download {
-  padding: 1rem;
-  max-height: 18px;
-  background: color;
-  background-color: #4299e1;
-  color: white;
   text-decoration: none;
   font-family: var(--title-font);
   font-weight: bold;
-  border-radius: 6px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -733,4 +727,9 @@ textarea {
 .info-control > img {
   height: 70%;
   margin-top: 15%;
+}
+image-viewer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

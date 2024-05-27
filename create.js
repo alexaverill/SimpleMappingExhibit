@@ -733,13 +733,13 @@ const handleComplete = () => {
   let textFile = window.URL.createObjectURL(createDownloadData());
   //for some reason it was adding 3 links the normal way to deal with this
   let innerHtml = `<button onClick="closeComplete()">Explore Your Map</button>
-        <button" id="downloadLink" class="download" onClick="downloadJson()"><img src="./assets/download.png"/>Download Data</button>`;
+        <button id="downloadLink" class="download" onClick="downloadJson()"><img src="./assets/download.png"/>Download Data</button>`;
   let downloadBtn = document.getElementById("completeBtnBar");
   downloadBtn.innerHTML = "";
   downloadBtn.innerHTML = innerHtml;
   document.getElementById("completedMap").showModal();
   document.getElementById("progress").innerHTML +=
-    '<button" id="downloadLink" class="download" onClick="downloadJson()"><img src="./assets/download.png"/>Download Data</button>';
+    '<button id="downloadLink" class="download" onClick="downloadJson()"><img src="./assets/download.png"/>Download Data</button>';
 };
 const initializeMap = (
   startCoordinates = [0, 0],
