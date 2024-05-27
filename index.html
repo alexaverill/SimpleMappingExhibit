@@ -1,36 +1,44 @@
 <html lang="en">
-  <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./leaflet/leaflet.css" />
-    <script src="./leaflet/leaflet.js"></script>
-    <link rel="stylesheet" href="main.css" />
-  </head>
-  <div id="map"></div>
-  <div
-    id="dialogBackground"
-    class="dialogBackground"
-    onclick="handleBackgroundClick()"
-  ></div>
-  <div id="dialog" class="dialog hidden">
+
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="./leaflet/leaflet.css" />
+  <script src="./leaflet/leaflet.js"></script>
+  <link rel="stylesheet" href="main.css" />
+</head>
+<div id="map"></div>
+<div class="mapTitleContainer">
+  <div class="mapTitleText" id="mapTitle"></div>
+</div>
+<div class="dialogLanguageSelector">
+  <select onchange="handleLanguageSelection(this)" id="languageSelector" autocomplete="off">
+    <option>English</option>
+    <option>Spanish</option>
+  </select>
+</div>
+<div id="dialogBackground" class="dialogBackground" onclick="handleBackgroundClick()"></div>
+<div id="dialog" class="dialog hidden">
+  <div class="dialogbuttons">
     <button class="dialogClose dialogActionButton" onClick="closeDialog()">
       <img src="./assets/close.svg" />
     </button>
-    <div class="dialogTitle title" id="dialogTitle">A test title</div>
-    <div class="image" id="dialogImageContainer">
-      <button id="previous" onClick="handlePreviousImage()" class="imageIcon">
-        <img class="icon" src="./assets/arrow.png" />
-      </button>
-      <img id="dialogImage" src="" alt="" />
-      <button id="next" onClick="handleNextImage()" class="imageIcon">
-        <img class="icon" src="./assets/arrow.png" />
-      </button>
-    </div>
-    <div class="description" id="dialogDescription"></div>
   </div>
-  <script type="text/javascript" src="./index.js"></script>
+  <div class="dialogTitle title" id="dialogTitle">A test title</div>
+  <image-viewer id="dialogImageContainer">
+
+  </image-viewer>
+  <div class="description" id="dialogDescription"></div>
+</div>
+<map-credits></map-credits>
+
+<script type="module" src="./creditsComponent/credit.js"></script>
+<script type="module" src="./recenterControl.js"></script>
+<script type="module" src="./creditsControl.js"></script>
+<script src="./imageviewer.js"></script>
+<script type="text/javascript" src="./index.js"></script>
+
 </html>

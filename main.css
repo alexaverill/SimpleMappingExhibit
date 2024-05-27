@@ -98,6 +98,30 @@ button:active {
   font-weight: 400;
   margin-top: 1rem;
 }
+.mapTitleContainer {
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  font-size: 3.5rem;
+  display: flex;
+  justify-content: center;
+  font-family: var(--title-font);
+  font-weight: bold;
+  
+  color: white;
+  filter: drop-shadow(0px 4px 20px rgba(0, 0, 0, 0.6));
+}
+#mapTitle{
+  background: #333;
+
+  border-radius: 0rem 0rem 1.75rem 1.75rem;
+    padding: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+}
 .dialogClose {
   position: absolute;
   right: 5px;

@@ -10,6 +10,9 @@ let endPos = null;
 let rectangle = null;
 let pointsOfInterest = null;
 let mapLayerControl;
+let languages;
+let currentLanguage;
+let selectedId = null;
 const setBaseLayers = (baseLayers) => {
   map.eachLayer((layer) => {
     map.removeLayer(layer);
@@ -23,11 +26,13 @@ const setBaseLayers = (baseLayers) => {
     tileLayer.addTo(map);
     tileNames[layer.name] = tileLayer;
   }
+
   mapLayerControl = L.control
     .layers(tileNames, {}, { position: "bottomright" })
     .addTo(map);
 };
 const initializeMap = (
+  mapTitle,
   baseLayers = [],
   startCoordinates = [44.9377, -93.1007],
   maxZoomLevel = 15,
@@ -35,8 +40,27 @@ const initializeMap = (
   mapBounds = null,
   zoomPosition = "bottomright"
 ) => {
-  map = L.map("map").setView(startCoordinates, minZoomLevel);
-
+  if (mapTitle && mapTitle.length > 0) {
+    document.querySelector("#mapTitle").innerText = mapTitle;
+  }
+  map = L.map("map", { attributionControl: false }).setView(
+    startCoordinates,
+    minZoomLevel
+  );
+  var zoomHome = new L.Control.zoomHome();
+  var creditsControl = new L.Control.creditsControl();
+  creditsControl.addTo(map);
+  zoomHome.addTo(map);
+  document.addEventListener("mapRecenter", () => {
+    map.setView(startCoordinates);
+  });
+  document.addEventListener("mapCredits", () => {
+    let credits = baseLayers.map((layer) => {
+      return { name: layer.name, credit: layer.options.attribution };
+    });
+    document.querySelector("map-credits").setCredits(credits);
+    document.querySelector("map-credits").show();
+  });
   map.zoomControl.remove();
   if (minZoomLevel !== maxZoomLevel) {
     L.control
@@ -72,26 +96,8 @@ const initializePointsOfInterest = (points) => {
 const handleBackgroundClick = () => {
   closeDialog();
 };
-const handlePreviousImage = () => {
-  if (!content) {
-    return;
-  }
-  currentImage =
-    currentImage > 0 ? currentImage - 1 : content.images.length - 1;
-  dialogImage.opacity = 0;
-  dialogImage.src = content.images[currentImage].image;
-  dialogImage.opacity = 1;
-};
-const handleNextImage = () => {
-  if (!content) {
-    return;
-  }
-  currentImage = (currentImage + 1) % content.images.length;
-  dialogImage.opacity = 0;
-  dialogImage.src = content.images[currentImage].image;
-  dialogImage.opacity = 1;
-};
 const closeDialog = () => {
+  selectedId = null;
   document
     .getElementById("dialogBackground")
     .classList.remove("dialogBackgroundVisible");
@@ -99,36 +105,54 @@ const closeDialog = () => {
 };
 const poiClicked = (id) => {
   setDialogContent(id);
+  selectedId = id;
   document
     .getElementById("dialogBackground")
     .classList.add("dialogBackgroundVisible");
   document.getElementById("dialog").classList.toggle("visible");
 };
+const populateLanguageSelector = () => {
+  if (languages.length == 1) {
+  }
+  let languageSelector = document.getElementById("languageSelector");
+  languageSelector.innerHTML = "";
+  if (languages.length == 1) {
+    languageSelector.hidden = true;
+  }
+  let languageOptions = [];
+  for (var language of languages) {
+    let option = document.createElement("option");
+    option.value = language;
+    option.innerText = language;
+    languageSelector.appendChild(option);
+  }
+};
+const handleLanguageSelection = (e) => {
+  currentLanguage = languages.indexOf(e.value);
+  if (selectedId) {
+    setDialogContent(selectedId);
+  }
+};
 const setDialogContent = (id) => {
   currentImage = 0;
   content = pointsOfInterest.find((element) => element.id === id);
-  let previousImgBtn = document.getElementById("previous");
-  let nextImgBtn = document.getElementById("next");
-  if (content.images.length <= 1) {
-    if (!previousImgBtn.classList.contains("hide")) {
-      previousImgBtn.classList.add("hide");
-    }
-    if (!nextImgBtn.classList.contains("hide")) {
-      nextImgBtn.classList.add("hide");
-    }
-  } else {
-    nextImgBtn.classList.remove("hide");
-    previousImgBtn.classList.remove("hide");
-  }
-  dialogTitle.innerText = content.title;
-  dialogDescription.innerText = content.description;
-  dialogImage.src = content.images[currentImage].image;
+  dialogTitle.innerText = content.title[currentLanguage].title;
+
+  dialogDescription.innerText =
+    content.description[currentLanguage].description;
+  document
+    .querySelector("image-viewer")
+    .setImages(content.images.map((image) => image.image));
 };
 const load = async () => {
   let data = await fetch("./data.json");
   let json = await data.json();
   pointsOfInterest = json.pointsOfInterest;
+  languages = json.languages;
+  currentLanguage = 0;
+  populateLanguageSelector();
   initializeMap(
+    json.mapTitle,
     json.baseLayers,
     json.mapCenter,
     json.maxZoom,

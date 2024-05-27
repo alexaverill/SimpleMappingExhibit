@@ -8,11 +8,15 @@ class ImageViewer extends HTMLElement {
     let style = document.createElement("style");
     style.textContent = `
             .imageContainer{
-                position:relative;
-                display:flex;
-                justify-content:center;
-                height:400px;
-                border-radius:2rem;
+position: relative;
+  display: flex;
+  justify-content: center;
+  height: 400px;
+  border-radius: 1rem;
+  width: 90%;
+  max-height: 400px;
+  background: lightgray;
+
             }
             .controls {
                 position: absolute;
@@ -52,8 +56,10 @@ class ImageViewer extends HTMLElement {
                 }
             }
                     .imageViewer {
-                        height:100%;
-                        aspect-ratio:auto;
+                        height: 100%;
+  aspect-ratio: auto;
+  width: 100%;
+  object-fit: contain;
                     }`;
     this.shadowRoot.appendChild(style);
   }

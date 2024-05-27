@@ -101,12 +101,10 @@ const getInstructionContinue = (text = "Continue") => {
 };
 const imagesSelected = () => {
   imageList = handleImagesSelected();
-  console.log(imageList);
   let imageViewer = document.querySelector("image-viewer");
   document
     .querySelector("image-viewer")
     .setImages(imageList.map((image) => image.image));
-  console.log(imageViewer);
   // dialogImage.src = imageList[currentImage].image;
   // setImageNavigationButtons(imageList.length);
 };
@@ -227,7 +225,6 @@ const updateBaseLayers = () => {
   baseLayers = [];
   let credits = [];
   for (let child of parent.children) {
-    console.log(child);
     let name = child.querySelector(".name").value;
     let tiles = child.querySelector(".tiles").value;
     let attribution = child.querySelector(".attribution").value;
@@ -693,6 +690,7 @@ const createDownloadData = () => {
   });
   let mapObject = {
     mapTitle,
+    languages,
     mapCenter: currentMapCenter,
     baseLayers: baseLayers,
     minZoom: minZoomLevel,
@@ -891,3 +889,4 @@ window.closeComplete = closeComplete;
 window.handleProgressClick = handleProgressClick;
 window.imagesSelected = imagesSelected;
 window.handleTitleChange = handleTitleChange;
+window.handleLanguageSelection = handleLanguageSelection;
