@@ -720,6 +720,12 @@ const createDownloadData = () => {
   let jsonString = JSON.stringify(mapObject);
   return new Blob([jsonString], { type: "application/json" });
 };
+const downloadJson = () => {
+  var link = document.createElement("a");
+  link.download = "data.json";
+  link.href = window.URL.createObjectURL(createDownloadData());
+  link.click();
+};
 const handleComplete = () => {
   currentStep = steps.Complete;
   advanceProgress("zoomProgress", "");
@@ -727,14 +733,13 @@ const handleComplete = () => {
   let textFile = window.URL.createObjectURL(createDownloadData());
   //for some reason it was adding 3 links the normal way to deal with this
   let innerHtml = `<button onClick="closeComplete()">Explore Your Map</button>
-        <a href="${textFile}" download="data.json" id="downloadLink" class="download" target="_blank"><img src="./assets/download.png"/>Download Data</a>`;
+        <button" id="downloadLink" class="download" onClick="downloadJson()"><img src="./assets/download.png"/>Download Data</button>`;
   let downloadBtn = document.getElementById("completeBtnBar");
   downloadBtn.innerHTML = "";
   downloadBtn.innerHTML = innerHtml;
   document.getElementById("completedMap").showModal();
-  document.getElementById(
-    "progress"
-  ).innerHTML += `<a href="${textFile}" download="data.json" id="downloadLink" class="download downloadButton" target="_blank"><img src="./assets/download.png"/>Download Data</a>`;
+  document.getElementById("progress").innerHTML +=
+    '<button" id="downloadLink" class="download" onClick="downloadJson()"><img src="./assets/download.png"/>Download Data</button>';
 };
 const initializeMap = (
   startCoordinates = [0, 0],
@@ -925,3 +930,4 @@ window.imagesSelected = imagesSelected;
 window.handleTitleChange = handleTitleChange;
 window.handleLanguageSelection = handleLanguageSelection;
 window.handleTitleBlur = handleTitleBlur;
+window.downloadJson = downloadJson;
