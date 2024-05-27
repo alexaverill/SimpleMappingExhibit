@@ -71,6 +71,7 @@ let rectangle = null;
 let pointsOfInterest = null;
 let currentLanguage = "English";
 let languages = ["English", "Spanish"];
+let mapTitles = [];
 let points = [];
 let titles = []; //{language:"","title":""}
 let descriptions = [];
@@ -82,9 +83,13 @@ let originalZoomlevel = null;
 let boundsRect = null;
 let maxZoomLevel = null;
 let minZoomLevel = null;
-let mapTitle;
+let mapTitle = null;
+
 const handleTitleChange = (e) => {
   mapTitle = e.value;
+};
+const handleTitleBlur = (e) => {
+  saveMapTitle();
 };
 const disableInstructionContinue = () => {
   document.getElementById("continueBtn").disabled = true;
@@ -347,12 +352,16 @@ const displayLanguages = () => {
   }
 };
 const SaveLanguageText = () => {
+  saveMapTitle();
+
   let titleInput = document.getElementById("title");
   let descriptionInput = document.getElementById("description");
   let title = titleInput.value;
   let description = descriptionInput.value;
+
   let titleObj = { language: currentLanguage, title };
   let descriptionObj = { language: currentLanguage, description };
+
   let titleIndex = titles.findIndex(
     (title) => title.language == currentLanguage
   );
@@ -373,8 +382,14 @@ const SaveLanguageText = () => {
 const handleLanguageSelection = (e) => {
   let titleInput = document.getElementById("title");
   let descriptionInput = document.getElementById("description");
+  let mapTitle = document.querySelector("#mapTitleInput");
   SaveLanguageText();
   currentLanguage = e.value;
+  let newMapTitle =
+    mapTitles.find((title) => title.language === currentLanguage) ?? "";
+
+  mapTitle.value = newMapTitle;
+
   let newTitle =
     titles.find((title) => title.language === currentLanguage) ?? "";
   let newDescription =
@@ -567,6 +582,7 @@ const setInstructions = (title, subtitle) => {
 };
 const advanceToLanguage = () => {
   currentStep = steps.Language;
+  introDialog.close();
   languageDialog.showModal();
   displayLanguages();
 };
@@ -688,8 +704,11 @@ const createDownloadData = () => {
       images: point.images,
     };
   });
+  if (mapTitles.length <= 0) {
+    mapTitles.push({ language: currentLanguage, title: mapTitle });
+  }
   let mapObject = {
-    mapTitle,
+    mapTitles,
     languages,
     mapCenter: currentMapCenter,
     baseLayers: baseLayers,
@@ -709,7 +728,9 @@ const handleComplete = () => {
   //for some reason it was adding 3 links the normal way to deal with this
   let innerHtml = `<button onClick="closeComplete()">Explore Your Map</button>
         <a href="${textFile}" download="data.json" id="downloadLink" class="download" target="_blank"><img src="./assets/download.png"/>Download Data</a>`;
-  document.getElementById("completeBtnBar").innerHTML = innerHtml;
+  let downloadBtn = document.getElementById("completeBtnBar");
+  downloadBtn.innerHTML = "";
+  downloadBtn.innerHTML = innerHtml;
   document.getElementById("completedMap").showModal();
   document.getElementById(
     "progress"
@@ -826,6 +847,19 @@ const loadFile = (event) => {
   reader.readAsText(event.files[0]);
 };
 
+function saveMapTitle() {
+  let mapTitleInput = document.querySelector("#mapTitleInput");
+  let mapTitle = mapTitleInput.value;
+  let mapTitleObj = { language: currentLanguage, title: mapTitle };
+  console.log(mapTitleObj);
+  let mapTitleIndex = mapTitles.findIndex((title) => title.title === mapTitle);
+  if (mapTitleIndex >= 0) {
+    mapTitles.splice(mapTitleIndex, 1, mapTitleObj);
+  } else {
+    mapTitles.push(mapTitleObj);
+  }
+}
+
 function loadFileReader(event) {
   //alert(event.target.result);
   var obj = JSON.parse(event.target.result);
@@ -890,3 +924,4 @@ window.handleProgressClick = handleProgressClick;
 window.imagesSelected = imagesSelected;
 window.handleTitleChange = handleTitleChange;
 window.handleLanguageSelection = handleLanguageSelection;
+window.handleTitleBlur = handleTitleBlur;

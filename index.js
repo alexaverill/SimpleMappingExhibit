@@ -13,6 +13,7 @@ let mapLayerControl;
 let languages;
 let currentLanguage;
 let selectedId = null;
+let mapTitles;
 const setBaseLayers = (baseLayers) => {
   map.eachLayer((layer) => {
     map.removeLayer(layer);
@@ -32,7 +33,7 @@ const setBaseLayers = (baseLayers) => {
     .addTo(map);
 };
 const initializeMap = (
-  mapTitle,
+  mapTitles,
   baseLayers = [],
   startCoordinates = [44.9377, -93.1007],
   maxZoomLevel = 15,
@@ -40,8 +41,9 @@ const initializeMap = (
   mapBounds = null,
   zoomPosition = "bottomright"
 ) => {
-  if (mapTitle && mapTitle.length > 0) {
-    document.querySelector("#mapTitle").innerText = mapTitle;
+  if (mapTitles && mapTitles.length > 0) {
+    document.querySelector("#mapTitle").innerText =
+      mapTitles[currentLanguage].title;
   }
   map = L.map("map", { attributionControl: false }).setView(
     startCoordinates,
@@ -53,6 +55,7 @@ const initializeMap = (
   zoomHome.addTo(map);
   document.addEventListener("mapRecenter", () => {
     map.setView(startCoordinates);
+    map.setZoom(minZoomLevel);
   });
   document.addEventListener("mapCredits", () => {
     let credits = baseLayers.map((layer) => {
@@ -132,27 +135,31 @@ const handleLanguageSelection = (e) => {
   if (selectedId) {
     setDialogContent(selectedId);
   }
+  document.querySelector("#mapTitle").innerText =
+    mapTitles[currentLanguage].title;
 };
 const setDialogContent = (id) => {
   currentImage = 0;
   content = pointsOfInterest.find((element) => element.id === id);
-  dialogTitle.innerText = content.title[currentLanguage].title;
+  dialogTitle.innerText = content.titles[currentLanguage].title;
 
   dialogDescription.innerText =
-    content.description[currentLanguage].description;
+    content.descriptions[currentLanguage].description;
   document
     .querySelector("image-viewer")
     .setImages(content.images.map((image) => image.image));
 };
+const setMapTitle = () => {};
 const load = async () => {
   let data = await fetch("./data.json");
   let json = await data.json();
   pointsOfInterest = json.pointsOfInterest;
   languages = json.languages;
   currentLanguage = 0;
+  mapTitles = json.mapTitles;
   populateLanguageSelector();
   initializeMap(
-    json.mapTitle,
+    json.mapTitles,
     json.baseLayers,
     json.mapCenter,
     json.maxZoom,

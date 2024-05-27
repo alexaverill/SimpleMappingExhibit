@@ -1,6 +1,9 @@
 {
-  "mapTitle": "Explore Historic Saint Paul",
-  "languages": ["English"],
+  "mapTitles": [
+    { "language": "English", "title": "Explore Historic Saint Paul" },
+    { "language": "Spanish", "title": "Explora el histórico Saint Paul" }
+  ],
+  "languages": ["English", "Spanish"],
   "mapCenter": { "lat": 44.93880014185138, "lng": -93.08827400207521 },
   "baseLayers": [
     {
@@ -31,11 +34,18 @@
   "pointsOfInterest": [
     {
       "id": 0,
-      "title": [{ "language": "English", "title": "Cathedral of Saint Paul" }],
-      "description": [
+      "titles": [
+        { "language": "English", "title": "Cathedral of Saint Paul" },
+        { "language": "Spanish", "title": "Catedral de San Pablo" }
+      ],
+      "descriptions": [
         {
           "language": "English",
           "description": "The Cathedral of Saint Paul, located in Saint Paul, Minnesota, is a magnificent example of Beaux-Arts architecture and a prominent landmark in the city. Completed in 1915, the cathedral's stunning design features a classical exterior adorned with intricate carvings and statues, while its interior boasts soaring arches, intricate stained glass windows, and a breathtaking dome. As the co-cathedral of the Archdiocese of Saint Paul and Minneapolis, it serves as a center for Catholic worship and community gatherings. Its grandeur and historical significance make it a cherished symbol of faith and architectural achievement in the region."
+        },
+        {
+          "language": "Spanish",
+          "description": "La Catedral de Saint Paul, ubicada en Saint Paul, Minnesota, es un magnífico ejemplo de arquitectura Beaux-Arts y un hito destacado en la ciudad. Terminada en 1915, el impresionante diseño de la catedral presenta un exterior clásico adornado con tallas y estatuas intrincadas, mientras que su interior cuenta con arcos altísimos, vidrieras intrincadas y una cúpula impresionante. Como cocatedral de la Arquidiócesis de Saint Paul y Minneapolis, sirve como centro para el culto católico y reuniones comunitarias. Su grandeza y significado histórico lo convierten en un preciado símbolo de fe y logro arquitectónico en la región."
         }
       ],
       "latitude": 44.946697911653835,
@@ -48,11 +58,18 @@
     },
     {
       "id": 1,
-      "title": [{ "language": "English", "title": "Holman Field" }],
-      "description": [
+      "titles": [
+        { "language": "English", "title": "Holman Field" },
+        { "language": "Spanish", "title": "Campo Holman" }
+      ],
+      "descriptions": [
         {
           "language": "English",
           "description": "Holman Field, nestled in Saint Paul, Minnesota, is an iconic aviation hub steeped in history. Originally established in 1929, it has served as a vital center for aviation activities, ranging from military operations to commercial flights and general aviation. The field's legacy traces back to its role as a training base during World War II, where it contributed significantly to the war effort.\n\nAdjacent to Holman Field stands a historic airway beacon, a tangible relic of early aviation navigation. These beacons played a crucial role in guiding pilots during the dawn of air travel, serving as visual markers along established air routes. While advancements in technology have rendered them obsolete, they remain as poignant reminders of aviation's pioneering days.\n\nTogether, Holman Field and its neighboring airway beacon encapsulate the evolution of aviation and its profound impact on transportation and society, making them invaluable pieces of Saint Paul's heritage."
+        },
+        {
+          "language": "Spanish",
+          "description": "Holman Field, ubicado en Saint Paul, Minnesota, es un centro de aviación icónico lleno de historia. Fundado originalmente en 1929, ha servido como un centro vital para las actividades de aviación, que van desde operaciones militares hasta vuelos comerciales y aviación general. El legado del campo se remonta a su papel como base de entrenamiento durante la Segunda Guerra Mundial, donde contribuyó significativamente al esfuerzo bélico.\n\nJunto a Holman Field se encuentra una histórica baliza de vía aérea, una reliquia tangible de la navegación aérea temprana. Estas balizas desempeñaron un papel crucial a la hora de guiar a los pilotos durante los albores de los viajes aéreos, sirviendo como marcadores visuales a lo largo de rutas aéreas establecidas. Si bien los avances tecnológicos los han vuelto obsoletos, siguen siendo un recordatorio conmovedor de los días pioneros de la aviación.\n\nJuntos, Holman Field y la baliza aérea vecina resumen la evolución de la aviación y su profundo impacto en el transporte y la sociedad, lo que los convierte en piezas invaluables del patrimonio de Saint Paul."
         }
       ],
       "latitude": 44.93430400302379,
@@ -64,11 +81,18 @@
     },
     {
       "id": 2,
-      "title": [{ "language": "English", "title": "Saint Paul City Hall" }],
-      "description": [
+      "titles": [
+        { "language": "English", "title": "Saint Paul City Hall" },
+        { "language": "Spanish", "title": "Ayuntamiento de Saint Paul" }
+      ],
+      "descriptions": [
         {
           "language": "English",
           "description": "Saint Paul City Hall, a stately architectural gem located in the heart of the downtown. It stands as a testament to the city's rich history and enduring civic pride. Completed in 1936, this majestic structure embodies the Art Deco style, characterized by its geometric shapes, ornate detailing, and elegant symmetry.\n\nDesigned by renowned architects Thomas Ellerbe & Company of Saint Paul and Holabird & Root of Chicago.  Saint Paul City Hall features a grand facade adorned with intricate carvings, that punctuates the city skyline. Its interior is equally impressive, boasting a spacious rotunda featuring a 60 ton statue named Vision of Peace  by Carl Milles\n\nBeyond its architectural grandeur, Saint Paul City Hall serves as a hub of municipal governance, housing various administrative offices and serving as a venue for public meetings and civic events. "
+        },
+        {
+          "language": "Spanish",
+          "description": "Ayuntamiento de Saint Paul, una joya arquitectónica señorial situada en pleno centro de la ciudad. Es un testimonio de la rica historia de la ciudad y su perdurable orgullo cívico. Terminada en 1936, esta majestuosa estructura encarna el estilo Art Déco, caracterizado por sus formas geométricas, detalles ornamentados y simetría elegante.\n\nDiseñado por los reconocidos arquitectos Thomas Ellerbe & Company de Saint Paul y Holabird & Root de Chicago.   El Ayuntamiento de Saint Paul cuenta con una gran fachada adornada con intrincadas tallas que realzan el horizonte de la ciudad. Su interior es igualmente impresionante y cuenta con una espaciosa rotonda con una estatua de 60 toneladas llamada Visión de la Paz de Carl Milles.\n\nMás allá de su grandeza arquitectónica, el Ayuntamiento de Saint Paul sirve como centro de gobierno municipal, alberga varias oficinas administrativas y sirve como lugar para reuniones públicas y eventos cívicos."
         }
       ],
       "latitude": 44.94421478767228,
@@ -80,11 +104,18 @@
     },
     {
       "id": 3,
-      "title": [{ "language": "English", "title": "Landmark Center" }],
-      "description": [
+      "titles": [
+        { "language": "English", "title": "Landmark Center" },
+        { "language": "Spanish", "title": "Landmark Center" }
+      ],
+      "descriptions": [
         {
           "language": "English",
           "description": "Landmark Center is a cherished architectural treasure that serves as a focal point for culture, history, and community engagement. Originally built in 1902 as the Federal Courts Building and Post Office, this majestic structure underwent a meticulous restoration in the 1970s and was reborn as Landmark Center, a vibrant cultural center.\n\nFeaturing a stunnin Romanesque-style facade, Landmark Center boasts intricate stonework, towering arches, and a central clock tower that commands attention. Its interior is equally captivating, with ornate marble corridors, soaring ceilings, and beautiful stained glass windows.\n\nToday, Landmark Center serves as a hub for arts, education, and civic events, housing galleries, theaters, and event spaces that host a diverse array of performances, exhibitions, and programs. As a designated National Historic Landmark, it stands as a testament to Saint Paul's rich heritage and enduring commitment to preserving its architectural legacy for future generations to enjoy."
+        },
+        {
+          "language": "Spanish",
+          "description": "Landmark Center es un preciado tesoro arquitectónico que sirve como punto focal para la cultura, la historia y la participación comunitaria. Originalmente construida en 1902 como edificio de los tribunales federales y oficina de correos, esta majestuosa estructura se sometió a una meticulosa restauración en la década de 1970 y renació como Landmark Center, un vibrante centro cultural.\n\nCon una impresionante fachada de estilo románico, Landmark Center cuenta con intrincadas mampostería, arcos imponentes y una torre de reloj central que llama la atención. Su interior es igualmente cautivador, con pasillos de mármol ornamentados, techos altos y hermosas vidrieras.\n\nHoy en día, Landmark Center sirve como centro para eventos artísticos, educativos y cívicos, y alberga galerías, teatros y espacios para eventos que albergan una amplia gama de actuaciones, exposiciones y programas. Como Monumento Histórico Nacional designado, es un testimonio del rico patrimonio de Saint Paul y su compromiso duradero de preservar su legado arquitectónico para que lo disfruten las generaciones futuras."
         }
       ],
       "latitude": 44.94552090908932,
@@ -96,11 +127,18 @@
     },
     {
       "id": 4,
-      "title": [{ "language": "English", "title": "Wabasha Street Caves" }],
-      "description": [
+      "titles": [
+        { "language": "English", "title": "Wabasha Street Caves" },
+        { "language": "Spanish", "title": "Cuevas de Wabasha" }
+      ],
+      "descriptions": [
         {
           "language": "English",
           "description": "The Wabasha Street Caves, located in Saint Paul, Minnesota, are a captivating and historic underground network of sandstone caves that have played a fascinating role in the city's history. Carved out of the natural limestone formations, these caves have served a multitude of purposes over the years.\n\nOriginally used as storage spaces for the brewing and warehousing industries in the 19th century, the Wabasha Street Caves later gained notoriety during the Prohibition era of the 1920s. They became secret speakeasies, offering a clandestine venue for illegal drinking and entertainment during the nationwide ban on alcohol.\n\nToday, the Wabasha Street Caves stand as a unique tourist attraction, offering guided tours that provide insight into their rich history and the colorful characters who once frequented them. Visitors can explore the dimly lit passages, marvel at the natural formations, and learn about the fascinating stories that have unfolded within these underground chambers, making them a captivating destination for history enthusiasts and curious explorers alike.\n"
+        },
+        {
+          "language": "Spanish",
+          "description": "Las cuevas de Wabasha Street, ubicadas en Saint Paul, Minnesota, son una red subterránea histórica y cautivadora de cuevas de arenisca que han desempeñado un papel fascinante en la historia de la ciudad. Excavadas en formaciones naturales de piedra caliza, estas cuevas han servido para multitud de propósitos a lo largo de los años.\n\nOriginalmente utilizadas como espacios de almacenamiento para las industrias cervecera y de almacenamiento en el siglo XIX, las cuevas de la calle Wabasha ganaron notoriedad durante la era de la Prohibición de la década de 1920. Se convirtieron en bares clandestinos secretos que ofrecían un lugar clandestino para beber ilegalmente y entretenerse durante la prohibición nacional del alcohol.\n\nHoy en día, las cuevas de la calle Wabasha son una atracción turística única, que ofrece visitas guiadas que brindan información sobre su rica historia y los coloridos personajes que alguna vez las frecuentaron. Los visitantes pueden explorar los pasajes poco iluminados, maravillarse con las formaciones naturales y aprender sobre las fascinantes historias que se han desarrollado dentro de estas cámaras subterráneas, lo que las convierte en un destino cautivador tanto para los entusiastas de la historia como para los exploradores curiosos."
         }
       ],
       "latitude": 44.93564072971839,

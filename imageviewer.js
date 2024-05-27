@@ -12,7 +12,7 @@ position: relative;
   display: flex;
   justify-content: center;
   height: 400px;
-  border-radius: 1rem;
+  border-radius: .5rem;
   width: 90%;
   max-height: 400px;
   background: lightgray;
@@ -25,11 +25,14 @@ position: relative;
                 display: grid;
                 height: 100%;
                 width: 100%;
-                grid-template-columns: 1fr;
-                grid-template-rows: 1fr 1fr 1fr;
-                grid-template-areas: ". . ."
-                    "prev . next"
-                    ". . .";
+                grid-template-columns: .9fr;
+                  grid-template-rows: 1.5fr 1fr 1fr;
+                  grid-template-areas:
+                ".    . .   " 
+                "prev . next" 
+                ".    . .   ";
+                  padding-left: 1rem;
+                  padding-right: 1rem;
             }
             .prev{
                 grid-area:prev;
@@ -60,6 +63,7 @@ position: relative;
   aspect-ratio: auto;
   width: 100%;
   object-fit: contain;
+  margin: auto;
                     }`;
     this.shadowRoot.appendChild(style);
   }
