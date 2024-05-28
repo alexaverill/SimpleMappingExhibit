@@ -728,7 +728,7 @@ textarea {
   height: 70%;
   margin-top: 15%;
 }
-image-viewer{
+.edit-image-viewer{
   display: flex;
   justify-content: center;
   align-items: center;
