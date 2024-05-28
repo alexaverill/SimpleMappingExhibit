@@ -1,4 +1,4 @@
-export const createLongInputElemeent = (id, label, value) => {
+const createLongInputElemeent = (id, label, value) => {
   let div = document.createElement("div");
   div.className = "inputRow";
   let input = document.createElement("textarea");
@@ -10,7 +10,7 @@ export const createLongInputElemeent = (id, label, value) => {
   div.appendChild(input);
   return div;
 };
-export const createInputElements = (id, label, value) => {
+const createInputElements = (id, label, value) => {
   let div = document.createElement("div");
   div.className = "inputRow";
   let input = document.createElement("input");
@@ -23,7 +23,7 @@ export const createInputElements = (id, label, value) => {
   div.appendChild(input);
   return div;
 };
-export const createZoomInput = (id, label, value) => {
+const createZoomInput = (id, label, value) => {
   let div = document.createElement("div");
   div.className = "inputRow";
   let input = document.createElement("input");
@@ -36,7 +36,7 @@ export const createZoomInput = (id, label, value) => {
   div.appendChild(input);
   return div;
 };
-export const createLabel = (id, label) => {
+const createLabel = (id, label) => {
   let inputLabel = document.createElement("label");
   inputLabel.className = "inputLabel";
   inputLabel.htmlFor = id;

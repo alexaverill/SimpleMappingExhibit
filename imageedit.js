@@ -1,9 +1,9 @@
-export const buildDeleteIcon = () => {
+const buildDeleteIcon = () => {
   let deleteBtnIcon = document.createElement("img");
   deleteBtnIcon.src = "./assets/delete.png";
   return deleteBtnIcon;
 };
-export const buildImagePreview = (imgPath) => {
+const buildImagePreview = (imgPath) => {
   let parent = document.getElementById("imageList");
   let imageContainer = document.createElement("div");
   imageContainer.id = document.getElementsByClassName(
@@ -24,7 +24,7 @@ export const buildImagePreview = (imgPath) => {
   imageContainer.appendChild(deleteBtn);
   parent.appendChild(imageContainer);
 };
-export const handleAddImage = () => {
+const handleAddImage = () => {
   if (imageList.length > 0) {
     console.log("NEED to add images to dialog");
     imageList.map((image) => {
@@ -33,10 +33,10 @@ export const handleAddImage = () => {
   }
   document.getElementById("imageAdd").showModal();
 };
-export const cancelImageSelect = () => {
+const cancelImageSelect = () => {
   document.getElementById("imageAdd").close();
 };
-export const handleImagesSelected = () => {
+const handleImagesSelected = () => {
   let images = document.getElementsByClassName("previewImageContainer");
   let tempImages = [];
   for (let image of images) {

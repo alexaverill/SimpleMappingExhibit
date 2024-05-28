@@ -1,15 +1,3 @@
-import {
-  createLongInputElemeent,
-  createInputElements,
-  createZoomInput,
-} from "./createInputs.js";
-import {
-  buildDeleteIcon,
-  buildImagePreview,
-  handleAddImage,
-  cancelImageSelect,
-  handleImagesSelected,
-} from "./imageedit.js";
 const steps = {
   Intro: 0,
   Language: 1,
@@ -915,13 +903,11 @@ document.getElementById("intro").showModal();
 window.finishStep = finishStep;
 window.closeDialog = closeDialog;
 window.deletePoint = deletePoint;
-window.handleAddImage = handleAddImage;
 window.loadFile = loadFile;
 window.addLanguageHandler = addLanguageHandler;
 window.addBaseLayerUI = addBaseLayerUI;
 window.addLinkedImage = addLinkedImage;
 window.uploadImage = uploadImage;
-window.cancelImageSelect = cancelImageSelect;
 window.advanceToBounds = advanceToBounds;
 window.advanceToSelectMaxZoom = advanceToSelectMaxZoom;
 window.closeComplete = closeComplete;

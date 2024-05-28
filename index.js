@@ -151,8 +151,7 @@ const setDialogContent = (id) => {
 };
 const setMapTitle = () => {};
 const load = async () => {
-  let data = await fetch("./data.json");
-  let json = await data.json();
+  let json = mapData;
   pointsOfInterest = json.pointsOfInterest;
   languages = json.languages;
   currentLanguage = 0;
