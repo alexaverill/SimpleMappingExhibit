@@ -33,7 +33,7 @@
     <input id="title" type="text" class="title" placeholder="Title" autocomplete="off" />
   </div>
   <div class="imageAddContainer">
-    <image-viewer id="dialogImageContainer" class="edit-image-viewer{">
+    <image-viewer id="dialogImageContainer" class="edit-image-viewer">
 
     </image-viewer>
     <button id="add" onClick="handleAddImage()" class="addButton">
@@ -77,8 +77,8 @@
     <div class="description">
 
       <div>
-        <p>This will guide you through the creation of mapped based exhibit. You will select the base maps you want to
-          use, setup points of interest, a bounding box and zoom levels.</p>
+        <p>This will guide you through the creation of map based exhibit. You will define languages you want to use,
+          select the base maps you want to show, setup points of interest, a bounding box and zoom levels.</p>
 
         <p>If you are using this tool online note that none of the images you upload or content you write are stored
           anywhere except for the json file you download at the end. Images will be embeded into the data that is output
@@ -93,7 +93,7 @@
     <button onClick="finishStep()">Continue</button>
   </div>
 </dialog>
-<dialog id="languageDialog">
+<dialog id="languageDialog" class="createDialog">
   <div class="dialogContent">
     <div class="title">Languages</div>
     <div class="titleLine"></div>
@@ -103,16 +103,20 @@
         enter, the map itself will not change based on the language.</p>
       <p>Use the language selector in the bottom right to change the language that you are editing in.</p>
     </div>
-    <div class="languageList" id="languageEntries">
-    </div>
-    <div class="languageForm">
-      <input type="text" id="languageEntry" /><button onclick="addLanguageHandler()">Add Language</button>
+    <div class="languageColumn">
+      <div class="languageList" id="languageEntries">
+      </div>
+      <div class="languageForm">
+        <input type="text" id="languageEntry" /><button onclick="addLanguageHandler()">Add Language</button>
+      </div>
     </div>
     <div class="titleLine bottomLine"></div>
-    <button onClick="finishStep()">Continue</button>
+    <div class="buttonBar">
+      <button onClick="finishStep()">Continue</button>
+    </div>
   </div>
 </dialog>
-<dialog id="imageAdd" class="imageAddDialog" class="createDialog">
+<dialog id="imageAdd" class="imageAddDialog">
   <div class="dialogContent">
     <div class="title">Add Images</div>
     <div class="titleLine"></div>

@@ -1,6 +1,3 @@
-// fetch("creditsComponent/credit.html")
-//   .then((stream) => stream.text())
-//   .then((text) => define(text));
 let html = `
 <link rel="stylesheet" href="creditsComponent/credit.css">
 <dialog class="dialog">
@@ -23,13 +20,6 @@ let html = `
 class Credits extends HTMLElement {
   constructor() {
     super();
-
-    //   this.valueElement = shadow.querySelector("p");
-    //   var incrementButton = shadow.querySelectorAll("button")[1];
-    //   var decrementButton = shadow.querySelectorAll("button")[0];
-
-    //   incrementButton.onclick = () => this.value++;
-    //   decrementButton.onclick = () => this.value--;
   }
   connectedCallback() {
     var shadow = this.attachShadow({ mode: "open" });

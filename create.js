@@ -58,7 +58,7 @@ let endPos = null;
 let rectangle = null;
 let pointsOfInterest = null;
 let currentLanguage = "English";
-let languages = ["English", "Spanish"];
+let languages = ["English"];
 let mapTitles = [];
 let points = [];
 let titles = []; //{language:"","title":""}
@@ -706,7 +706,7 @@ const createDownloadData = () => {
     pointsOfInterest: cleanedPoints,
   };
   let jsonString = JSON.stringify(mapObject);
-  return new Blob([jsonString], { type: "application/json" });
+  return new Blob(["mapData = " + jsonString], { type: "application/json" });
 };
 const downloadJson = () => {
   var link = document.createElement("a");
@@ -899,21 +899,3 @@ const imageEncode = (event) => {
 };
 initializeMap();
 document.getElementById("intro").showModal();
-
-window.finishStep = finishStep;
-window.closeDialog = closeDialog;
-window.deletePoint = deletePoint;
-window.loadFile = loadFile;
-window.addLanguageHandler = addLanguageHandler;
-window.addBaseLayerUI = addBaseLayerUI;
-window.addLinkedImage = addLinkedImage;
-window.uploadImage = uploadImage;
-window.advanceToBounds = advanceToBounds;
-window.advanceToSelectMaxZoom = advanceToSelectMaxZoom;
-window.closeComplete = closeComplete;
-window.handleProgressClick = handleProgressClick;
-window.imagesSelected = imagesSelected;
-window.handleTitleChange = handleTitleChange;
-window.handleLanguageSelection = handleLanguageSelection;
-window.handleTitleBlur = handleTitleBlur;
-window.downloadJson = downloadJson;

@@ -1,6 +1,7 @@
 :root {
   --title-font: "Inter";
   --body-font: "Open Sans";
+  --dialog-body-font-size:.9rem;
 }
 body {
   margin: 0;
@@ -301,7 +302,7 @@ button:active {
     padding-right: 1rem;
     margin-bottom: 0;
     .description {
-      font-size: 0.9rem;
+      font-size: var(--dialog-body-font-size,.9rem);
     }
   }
   .mapTitle {
@@ -389,8 +390,13 @@ button:active {
 .imageAddDialog {
   width: 90%;
   height: 90%;
+  overflow: hidden;
   .dialogContent {
+
     justify-content: flex-start;
+  }
+  .description{
+    height:100%;
   }
 }
 .imageAdd {
@@ -443,10 +449,20 @@ button:active {
 
 #languageDialog {
   overflow: hidden;
+  height:auto;
+  min-height:60vh;
+  font-size: var(--dialog-body-font-size,.9rem);
   .description {
     overflow: initial;
     padding-left: 2rem;
     margin-bottom: 0;
+    font-size: var(--dialog-body-font-size,.9rem);
+  }
+  .languageColumn{
+    display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 50%;
   }
 }
 .dialogLanguageSelector {
@@ -478,12 +494,14 @@ button:active {
 .languageEntry {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   font-size: 1rem;
   font-weight: bold;
   font-family: var(--body-font);
   border-bottom: 1px solid black;
-  width: 100%;
+  width: 104%;
+  height:3rem;
 }
 .deleteBtn {
   width: 2rem;
@@ -552,7 +570,7 @@ textarea {
   .description {
     width: 100%;
     margin-bottom: 0;
-    font-size: 0.9rem;
+    font-size: var(--dialog-body-font-size,.9rem);
     text-align: center;
     overflow: hidden;
   }
@@ -654,7 +672,7 @@ textarea {
 .createDialog {
   .dialogContent {
     .description {
-      font-size: 0.9rem;
+      font-size: var(--dialog-body-font-size,.9rem);
     }
     overflow: hidden;
   }
@@ -672,7 +690,7 @@ textarea {
 }
 .uploadPrompt {
   font-family: var(--body-font);
-  font-size: 0.9rem;
+  font-size: var(--dialog-body-font-size,.9rem);
   align-self: flex-start;
   display: flex;
   flex-direction: column;

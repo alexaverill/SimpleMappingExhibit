@@ -18,8 +18,6 @@ https://github.com/perliedman/leaflet-control-geocoder
 
 ## ToDos:
 
-Small screen/mobile styeing
-
 ## Troubleshooting
 
 1. I set up my map and zoom levels, but when I zoom in to far on one of my base layers it goes grey!
