@@ -72,6 +72,8 @@ let boundsRect = null;
 let maxZoomLevel = null;
 let minZoomLevel = null;
 let mapTitle = null;
+let currentCustomMarker;
+let customMarkers = [];
 
 const handleTitleChange = (e) => {
   mapTitle = e.value;
@@ -430,6 +432,54 @@ const handlePrevewImageSelect = (e) => {
   let path = `./images/${files[0].name}`;
   buildImagePreview(path);
 };
+const closeIconImageSelector = () => {
+  document.querySelector("#customMarker").close();
+};
+const saveIconImageSelector = () => {
+  let editor = document.querySelector("icon-editor");
+  let marker = editor.getImageObj();
+  if (!marker) {
+    console.log("No image or offset set");
+    closeIconImageSelector();
+  }
+  let icon = L.icon({
+    iconUrl: marker.image,
+    iconSize: marker.size,
+    iconAnchor: marker.offset,
+  });
+  console.log(newPointRef);
+  //save image and apply it to current point;
+  currentCustomMarker = marker;
+  if (!newPointRef) {
+    map.eachLayer((layer) => {
+      if (layer._icon && layer._icon.src.indexOf("flag.svg") < 0) {
+        //map.removeLayer(layer);
+        if (
+          layer._latlng.lat === content.latitude &&
+          layer._latlng.lng === content.longitude
+        ) {
+          console.log("Foudn Point");
+          layer.setIcon(icon);
+        }
+      }
+    });
+  } else {
+    newPointRef.setIcon(icon);
+  }
+
+  customMarkers.push(marker);
+  closeIconImageSelector();
+};
+const setExistingMarkers = () => {
+  let markerDiv = document.querySelector("#existingMarkers");
+};
+
+const customMarker = () => {
+  let editor = document.querySelector("icon-editor");
+  editor.reset();
+  setExistingMarkers();
+  document.querySelector("#customMarker").showModal();
+};
 const deletePoint = () => {
   let currentid = document.getElementById("id").value;
   if (currentid === "null") {
@@ -450,6 +500,7 @@ const deletePoint = () => {
   descriptions = [];
   currentStep = steps.Points;
 };
+
 const closeDialog = () => {
   let currentid = document.getElementById("id").value;
   SaveLanguageText();
@@ -464,6 +515,7 @@ const closeDialog = () => {
       longitude: pointLatLng.lng,
       pointRef: newPointRef,
       images: imageList,
+      marker: currentCustomMarker,
     };
     points.push(newPoint);
   } else {
@@ -471,7 +523,11 @@ const closeDialog = () => {
     points[index].titles = titles;
     points[index].descriptions = descriptions;
     points[index].images = imageList;
+    points[index].marker = currentCustomMarker;
   }
+  // if (currentCustomMarker) {
+  //   initializePointsOfInterest(points);
+  // }
   document
     .getElementById("dialogBackground")
     .classList.remove("dialogBackgroundVisible");
@@ -484,6 +540,7 @@ const closeDialog = () => {
   document.querySelector("image-viewer").setImages(imageList);
   titles = [];
   descriptions = [];
+  currentCustomMarker = null;
   currentStep = steps.Points;
 };
 const pointClicked = (lat, lng) => {
@@ -541,18 +598,19 @@ const advanceToPoints = () => {
     .getElementById("userInstructionButtons")
     .appendChild(getInstructionContinue());
 };
-
 const addNewPoint = (latlng) => {
   document.getElementById("id").value = "null";
   currentStep = steps.Editing;
   pointLatLng = latlng;
   console.log(pointLatLng);
+
   let point = L.marker(latlng).addTo(map);
   point.on("click", (e) => {
     console.log(e);
     pointClicked(e.latlng.lat, e.latlng.lng);
   });
   newPointRef = point;
+
   document.getElementById("dialog").classList.toggle("visible");
 };
 
@@ -828,7 +886,19 @@ const initializeMap = (
 };
 const initializePointsOfInterest = (points) => {
   points.map((point) => {
-    var marker = L.marker([point.latitude, point.longitude]).addTo(map);
+    console.log(point);
+    let marker;
+    if (point.marker) {
+      console.log(point.marker);
+      let icon = L.icon({
+        iconUrl: point.marker.image,
+        iconSize: point.marker.size,
+        iconAnchor: point.marker.offset,
+      });
+      marker = L.marker([point.latitude, point.longitude], { icon }).addTo(map);
+    } else {
+      marker = L.marker([point.latitude, point.longitude]).addTo(map);
+    }
     marker.on("click", (e) => {
       pointClicked(e.latlng.lat, e.latlng.lng);
     });
@@ -867,8 +937,6 @@ function loadFileReader(event) {
     alert("Invalid JSON File");
     return;
   }
-  console.log(event);
-  console.log(obj);
   points = obj.pointsOfInterest;
   baseLayers = obj.baseLayers;
   minZoomLevel = obj.minZoom;

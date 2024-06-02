@@ -23,6 +23,7 @@
 </div>
 <div id="dialog" class="dialog editDialog hidden">
   <div class="dialogbuttons">
+    <button onClick="customMarker()" class="dialogActionButton"><img class="icon" src="./assets/pin.png" /></button>
     <button onClick="closeDialog()" class="dialogActionButton"><img class="icon" src="./assets/save.png" /></button>
     <button onClick="deletePoint()" class="dialogActionButton"><img class="icon" src="./assets/delete.png" /></button>
 
@@ -224,8 +225,31 @@
     </div>
   </div>
 </dialog>
+<dialog id="customMarker" class="createDialog customMarker">
+  <div class="dialogContent">
+    <div class="title">Custom Marker</div>
+    <div class="titleLine"></div>
+    <div>
+      <div class="description">
+        <p>Define a custom image to use to mark this point.</p>
+        <p>Images should be no bigger then 82x82 pixels. </p>
+      </div>
+      <icon-editor iconWidth="41" iconHeight="41"></icon-editor>
+      <div class="subtitle">
+        <p>Select Existing:</p>
+      </div>
+      <div class="iconGrid" id="existingMarkers"></div>
+    </div>
+    <div class="titleLine bottomLine"></div>
+    <div class="buttonBar" id="completeBtnBar">
+      <button onclick="closeIconImageSelector()">Cancel</button>
+      <button onclick="saveIconImageSelector()">Save</button>
+    </div>
+  </div>
+</dialog>
 <map-credits></map-credits>
 <div id="dialogBackground" class="dialogBackground" onclick="handleBackgroundClick()"></div>
+<script src="./iconEditor/iconEditor.js"></script>
 <script src="./createInputs.js"></script>
 <script src="./imageedit.js"></script>
 <script src="./creditsComponent/credit.js"></script>

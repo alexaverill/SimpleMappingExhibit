@@ -24,7 +24,7 @@ class Credits extends HTMLElement {
   connectedCallback() {
     var shadow = this.attachShadow({ mode: "open" });
     shadow.innerHTML = html;
-    console.log(html);
+    //console.log(html);
     this.closeDialog = this.closeDialog.bind(this);
     this.dialog = shadow.querySelector("dialog");
     this.button = shadow.querySelector("#close");
