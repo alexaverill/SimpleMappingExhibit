@@ -2,10 +2,6 @@ class IconEditor extends HTMLElement {
   html = `
   <link rel="stylesheet" href="iconEditor/iconEditor.css">
   <div class="content">
-            <div class="titlerow">
-                <p id="title" class="title">Create a custom marker.</p>
-                <p id="instructions">The default image size is 82x82px</p>
-            </div>
             <div class="canvasLayers">
                 <canvas id="imageEditor"></canvas>
                 <canvas id="originPoint"></canvas>
@@ -86,8 +82,6 @@ class IconEditor extends HTMLElement {
     this.handleEvent = this.handleEvent.bind(this);
     this.imageEncode = this.imageEncode.bind(this);
     this.getCursorPosition = this.getCursorPosition.bind(this);
-    this.instructions = shadow.querySelector("#instructions");
-    this.instructions.innerText = this.uploadInstructions;
     this.imageCanvas = shadow.querySelector("#imageEditor");
     this.imageCanvas.width = this.iconWidth ?? 82;
     this.imageCanvas.height = this.iconHeight ?? 82;
@@ -118,13 +112,11 @@ class IconEditor extends HTMLElement {
         height > this.imageCanvas.offsetHeight
           ? this.imageCanvas.offsetHeight
           : height;
-      console.log(displayHeight);
       ctx.clearRect(0, 0, this.iconWidth, this.iconHeight);
       ctx.drawImage(this.img, 0, 0, displayWidth, displayHeight);
       this.imageSize = [displayHeight, displayHeight];
       this.imageData = this.imageCanvas.toDataURL();
       this.drawDefaultOffset(displayWidth, displayHeight);
-      this.instructions.innerText = this.offsetInstructions;
     };
     this.img.src = event.target.result;
   }

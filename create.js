@@ -471,12 +471,20 @@ const saveIconImageSelector = () => {
   closeIconImageSelector();
 };
 const setExistingMarkers = () => {
+  if (customMarkers && customMarkers.length <= 0) {
+    return;
+  }
   let markerDiv = document.querySelector("#existingMarkers");
+  markerDiv.innerHTML = "";
+  for (let marker of customMarkers) {
+    let imageDiv = `<div><button class="iconButton"><img src="${marker.image}"/></button></div>`;
+    markerDiv.innerHTML += imageDiv;
+  }
 };
 
 const customMarker = () => {
-  let editor = document.querySelector("icon-editor");
-  editor.reset();
+  //let editor = document.querySelector("icon-editor");
+  // editor.reset();
   setExistingMarkers();
   document.querySelector("#customMarker").showModal();
 };
@@ -967,3 +975,4 @@ const imageEncode = (event) => {
 };
 initializeMap();
 document.getElementById("intro").showModal();
+customMarker();
