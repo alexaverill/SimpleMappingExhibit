@@ -435,21 +435,17 @@ const handlePrevewImageSelect = (e) => {
 const closeIconImageSelector = () => {
   document.querySelector("#customMarker").close();
 };
-const saveIconImageSelector = () => {
-  let editor = document.querySelector("icon-editor");
-  let marker = editor.getImageObj();
-  if (!marker) {
-    console.log("No image or offset set");
-    closeIconImageSelector();
-  }
+const addExistingMarker = (index) => {
+  let marker = customMarkers[index];
   let icon = L.icon({
     iconUrl: marker.image,
     iconSize: marker.size,
     iconAnchor: marker.offset,
   });
-  console.log(newPointRef);
-  //save image and apply it to current point;
-  currentCustomMarker = marker;
+  setIcon(icon);
+  closeIconImageSelector();
+};
+const setIcon = (icon) => {
   if (!newPointRef) {
     map.eachLayer((layer) => {
       if (layer._icon && layer._icon.src.indexOf("flag.svg") < 0) {
@@ -466,6 +462,22 @@ const saveIconImageSelector = () => {
   } else {
     newPointRef.setIcon(icon);
   }
+};
+const saveIconImageSelector = () => {
+  let editor = document.querySelector("icon-editor");
+  let marker = editor.getImageObj();
+  if (!marker) {
+    console.log("No image or offset set");
+    closeIconImageSelector();
+  }
+  let icon = L.icon({
+    iconUrl: marker.image,
+    iconSize: marker.size,
+    iconAnchor: marker.offset,
+  });
+  console.log(newPointRef);
+  //save image and apply it to current point;
+  setIcon(icon);
 
   customMarkers.push(marker);
   closeIconImageSelector();
@@ -476,15 +488,17 @@ const setExistingMarkers = () => {
   }
   let markerDiv = document.querySelector("#existingMarkers");
   markerDiv.innerHTML = "";
+  let index = 0;
   for (let marker of customMarkers) {
-    let imageDiv = `<div><button class="iconButton"><img src="${marker.image}"/></button></div>`;
+    let imageDiv = `<div><button class="iconButton" onclick="addExistingMarker(${index})"><img src="${marker.image}"/></button></div>`;
     markerDiv.innerHTML += imageDiv;
+    index++;
   }
 };
 
 const customMarker = () => {
-  //let editor = document.querySelector("icon-editor");
-  // editor.reset();
+  let editor = document.querySelector("icon-editor");
+  editor.reset();
   setExistingMarkers();
   document.querySelector("#customMarker").showModal();
 };
@@ -533,9 +547,6 @@ const closeDialog = () => {
     points[index].images = imageList;
     points[index].marker = currentCustomMarker;
   }
-  // if (currentCustomMarker) {
-  //   initializePointsOfInterest(points);
-  // }
   document
     .getElementById("dialogBackground")
     .classList.remove("dialogBackgroundVisible");
