@@ -433,10 +433,12 @@ const handlePrevewImageSelect = (e) => {
   buildImagePreview(path);
 };
 const closeIconImageSelector = () => {
+  document.querySelector("icon-editor").reset();
   document.querySelector("#customMarker").close();
 };
 const addExistingMarker = (index) => {
   let marker = customMarkers[index];
+  currentCustomMarker = marker;
   let icon = L.icon({
     iconUrl: marker.image,
     iconSize: marker.size,
@@ -454,7 +456,7 @@ const setIcon = (icon) => {
           layer._latlng.lat === content.latitude &&
           layer._latlng.lng === content.longitude
         ) {
-          console.log("Foudn Point");
+          console.log("Found Point");
           layer.setIcon(icon);
         }
       }
@@ -475,10 +477,17 @@ const saveIconImageSelector = () => {
     iconSize: marker.size,
     iconAnchor: marker.offset,
   });
-  console.log(newPointRef);
+
   //save image and apply it to current point;
   setIcon(icon);
-
+  if (newPointRef) {
+    console.log("Saving marker");
+    newPointRef.marker = marker;
+  } else if (content) {
+    console.log("Updating Marker");
+    content.marker = marker;
+  }
+  currentCustomMarker = marker;
   customMarkers.push(marker);
   closeIconImageSelector();
 };
@@ -498,7 +507,17 @@ const setExistingMarkers = () => {
 
 const customMarker = () => {
   let editor = document.querySelector("icon-editor");
-  editor.reset();
+  console.log(content);
+  if (content) {
+    if (content.marker) {
+      document.querySelector("icon-editor").setImage(content.marker.image);
+    }
+  } else if (newPointRef) {
+    console.log(newPointRef);
+    if (newPointRef.marker) {
+      document.querySelector("icon-editor").setImage(newPointRef.marker.image);
+    }
+  }
   setExistingMarkers();
   document.querySelector("#customMarker").showModal();
 };
@@ -524,6 +543,7 @@ const deletePoint = () => {
 };
 
 const closeDialog = () => {
+  console.log(currentCustomMarker);
   let currentid = document.getElementById("id").value;
   SaveLanguageText();
   if (currentid === "null") {
@@ -593,6 +613,11 @@ const setDialogContent = (point) => {
     document
       .querySelector("image-viewer")
       .setImages(imageList.map((image) => image.image));
+  }
+  console.log(point);
+  if (point.marker) {
+    console.log(point.marker);
+    document.querySelector("icon-editor").setImage(point.marker.image);
   }
 };
 const handleBackgroundClick = () => {
@@ -767,6 +792,7 @@ const createDownloadData = () => {
       latitude: point.latitude,
       longitude: point.longitude,
       images: point.images,
+      marker: point.marker,
     };
   });
   if (mapTitles.length <= 0) {
@@ -986,4 +1012,3 @@ const imageEncode = (event) => {
 };
 initializeMap();
 document.getElementById("intro").showModal();
-customMarker();

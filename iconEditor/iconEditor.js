@@ -81,6 +81,7 @@ class IconEditor extends HTMLElement {
     shadow.innerHTML = this.html;
     this.handleEvent = this.handleEvent.bind(this);
     this.imageEncode = this.imageEncode.bind(this);
+    this.setImage = this.setImage.bind(this);
     this.getCursorPosition = this.getCursorPosition.bind(this);
     this.imageCanvas = shadow.querySelector("#imageEditor");
     this.imageCanvas.width = this.iconWidth ?? 82;
@@ -92,8 +93,20 @@ class IconEditor extends HTMLElement {
     this.fileUpload = shadow.querySelector("#imageUpload");
     this.fileUpload.addEventListener("change", this.handleEvent);
   }
+  setImage(imageData, offset) {
+    console.log(imageData);
+    this.img = new Image();
+    this.img.onload = () => {
+      let ctx = this.imageCanvas.getContext("2d");
+      const width = this.img.naturalWidth;
+      const height = this.img.naturalHeight;
+      this.imageSize = [width, height];
+      this.imageData = this.imageCanvas.toDataURL();
+      ctx.drawImage(this.img, 0, 0);
+    };
+    this.img.src = imageData;
+  }
   handleEvent(e) {
-    console.log(e);
     var reader = new FileReader();
     reader.onload = this.imageEncode;
     reader.readAsDataURL(e.target.files[0]);
@@ -114,7 +127,7 @@ class IconEditor extends HTMLElement {
           : height;
       ctx.clearRect(0, 0, this.iconWidth, this.iconHeight);
       ctx.drawImage(this.img, 0, 0, displayWidth, displayHeight);
-      this.imageSize = [displayHeight, displayHeight];
+      this.imageSize = [displayWidth, displayHeight];
       this.imageData = this.imageCanvas.toDataURL();
       this.drawDefaultOffset(displayWidth, displayHeight);
     };
