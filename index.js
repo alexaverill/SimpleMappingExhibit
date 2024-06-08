@@ -90,7 +90,18 @@ const initializeMap = (
 };
 const initializePointsOfInterest = (points) => {
   points.map((point) => {
-    var marker = L.marker([point.latitude, point.longitude]).addTo(map);
+    let marker;
+    if (point.marker) {
+      console.log(point.marker);
+      let icon = L.icon({
+        iconUrl: point.marker.image,
+        iconSize: point.marker.size,
+        iconAnchor: point.marker.offset,
+      });
+      marker = L.marker([point.latitude, point.longitude], { icon }).addTo(map);
+    } else {
+      marker = L.marker([point.latitude, point.longitude]).addTo(map);
+    }
     marker.on("click", () => {
       poiClicked(point.id);
     });

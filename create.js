@@ -938,7 +938,6 @@ const initializeMap = (
 };
 const initializePointsOfInterest = (points) => {
   points.map((point) => {
-    console.log(point);
     let marker;
     if (point.marker) {
       console.log(point.marker);
