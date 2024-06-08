@@ -1,0 +1,45 @@
+<html>
+
+<head>
+    <style>
+        .genericDialog {
+            max-height: 75vh;
+            width: 60vw;
+            border: 1 px solid grey;
+            border: 2px solid;
+            border-radius: 5px;
+            border: none;
+            filter: drop-shadow(0px 5px 35px rgba(0, 0, 0, 0.4));
+        }
+
+        .genericDialog::backdrop {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .title {
+            font-size: 1.5rem;
+        }
+
+        .footer {
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body>
+    <dialog id="dialog" class="genericDialog">
+        <div class="title">Test Title</div>
+        <div class="content">
+        </div>
+        <div class="footer">
+            <button>Continue</button>
+        </div>
+    </dialog>
+</body>
+<script>
+    document.querySelector("#dialog").showModal();
+</script>
+
+</html>

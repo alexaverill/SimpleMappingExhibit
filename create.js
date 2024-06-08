@@ -72,6 +72,15 @@ let boundsRect = null;
 let maxZoomLevel = null;
 let minZoomLevel = null;
 let mapTitle = null;
+let currentCustomMarker;
+let customMarkers = [
+  {
+    image:
+      "data:image/png;base64,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",
+    offset: [12.5, 41],
+    size: [25, 41],
+  },
+];
 
 const handleTitleChange = (e) => {
   mapTitle = e.value;
@@ -430,6 +439,95 @@ const handlePrevewImageSelect = (e) => {
   let path = `./images/${files[0].name}`;
   buildImagePreview(path);
 };
+const closeIconImageSelector = () => {
+  document.querySelector("icon-editor").reset();
+  document.querySelector("#customMarker").close();
+};
+const addExistingMarker = (index) => {
+  let marker = customMarkers[index];
+  currentCustomMarker = marker;
+  let icon = L.icon({
+    iconUrl: marker.image,
+    iconSize: marker.size,
+    iconAnchor: marker.offset,
+  });
+  setIcon(icon);
+  closeIconImageSelector();
+};
+const setIcon = (icon) => {
+  if (!newPointRef) {
+    map.eachLayer((layer) => {
+      if (layer._icon && layer._icon.src.indexOf("flag.svg") < 0) {
+        //map.removeLayer(layer);
+        if (
+          layer._latlng.lat === content.latitude &&
+          layer._latlng.lng === content.longitude
+        ) {
+          console.log("Found Point");
+          layer.setIcon(icon);
+        }
+      }
+    });
+  } else {
+    newPointRef.setIcon(icon);
+  }
+};
+const saveIconImageSelector = () => {
+  let editor = document.querySelector("icon-editor");
+  let marker = editor.getImageObj();
+  if (!marker) {
+    console.log("No image or offset set");
+    closeIconImageSelector();
+  }
+  let icon = L.icon({
+    iconUrl: marker.image,
+    iconSize: marker.size,
+    iconAnchor: marker.offset,
+  });
+
+  //save image and apply it to current point;
+  setIcon(icon);
+  if (newPointRef) {
+    console.log("Saving marker");
+    newPointRef.marker = marker;
+  } else if (content) {
+    console.log("Updating Marker");
+    content.marker = marker;
+  }
+  currentCustomMarker = marker;
+  customMarkers.push(marker);
+  closeIconImageSelector();
+};
+const setExistingMarkers = () => {
+  if (customMarkers && customMarkers.length <= 0) {
+    return;
+  }
+  let markerDiv = document.querySelector("#existingMarkers");
+  markerDiv.innerHTML = "";
+  let index = 0;
+  for (let marker of customMarkers) {
+    let imageDiv = `<div><button class="iconButton" onclick="addExistingMarker(${index})"><img src="${marker.image}"/></button></div>`;
+    markerDiv.innerHTML += imageDiv;
+    index++;
+  }
+};
+
+const customMarker = () => {
+  let editor = document.querySelector("icon-editor");
+  console.log(content);
+  if (content) {
+    if (content.marker) {
+      document.querySelector("icon-editor").setImage(content.marker.image);
+    }
+  } else if (newPointRef) {
+    console.log(newPointRef);
+    if (newPointRef.marker) {
+      document.querySelector("icon-editor").setImage(newPointRef.marker.image);
+    }
+  }
+  setExistingMarkers();
+  document.querySelector("#customMarker").showModal();
+};
 const deletePoint = () => {
   let currentid = document.getElementById("id").value;
   if (currentid === "null") {
@@ -450,7 +548,9 @@ const deletePoint = () => {
   descriptions = [];
   currentStep = steps.Points;
 };
+
 const closeDialog = () => {
+  console.log(currentCustomMarker);
   let currentid = document.getElementById("id").value;
   SaveLanguageText();
   if (currentid === "null") {
@@ -464,6 +564,7 @@ const closeDialog = () => {
       longitude: pointLatLng.lng,
       pointRef: newPointRef,
       images: imageList,
+      marker: currentCustomMarker,
     };
     points.push(newPoint);
   } else {
@@ -471,6 +572,7 @@ const closeDialog = () => {
     points[index].titles = titles;
     points[index].descriptions = descriptions;
     points[index].images = imageList;
+    points[index].marker = currentCustomMarker;
   }
   document
     .getElementById("dialogBackground")
@@ -484,6 +586,7 @@ const closeDialog = () => {
   document.querySelector("image-viewer").setImages(imageList);
   titles = [];
   descriptions = [];
+  currentCustomMarker = null;
   currentStep = steps.Points;
 };
 const pointClicked = (lat, lng) => {
@@ -518,6 +621,9 @@ const setDialogContent = (point) => {
       .querySelector("image-viewer")
       .setImages(imageList.map((image) => image.image));
   }
+  if (point.marker) {
+    document.querySelector("icon-editor").setImage(point.marker.image);
+  }
 };
 const handleBackgroundClick = () => {
   closeDialog();
@@ -541,18 +647,19 @@ const advanceToPoints = () => {
     .getElementById("userInstructionButtons")
     .appendChild(getInstructionContinue());
 };
-
 const addNewPoint = (latlng) => {
   document.getElementById("id").value = "null";
   currentStep = steps.Editing;
   pointLatLng = latlng;
   console.log(pointLatLng);
+
   let point = L.marker(latlng).addTo(map);
   point.on("click", (e) => {
     console.log(e);
     pointClicked(e.latlng.lat, e.latlng.lng);
   });
   newPointRef = point;
+
   document.getElementById("dialog").classList.toggle("visible");
 };
 
@@ -575,7 +682,6 @@ const advanceToLanguage = () => {
   displayLanguages();
 };
 const handleProgressClick = (state) => {
-  console.log(currentStep);
   if (currentStep != steps.Complete && previousStep !== steps.Complete) {
     return;
   }
@@ -690,6 +796,7 @@ const createDownloadData = () => {
       latitude: point.latitude,
       longitude: point.longitude,
       images: point.images,
+      marker: point.marker,
     };
   });
   if (mapTitles.length <= 0) {
@@ -828,7 +935,18 @@ const initializeMap = (
 };
 const initializePointsOfInterest = (points) => {
   points.map((point) => {
-    var marker = L.marker([point.latitude, point.longitude]).addTo(map);
+    let marker;
+    if (point.marker) {
+      console.log(point.marker);
+      let icon = L.icon({
+        iconUrl: point.marker.image,
+        iconSize: point.marker.size,
+        iconAnchor: point.marker.offset,
+      });
+      marker = L.marker([point.latitude, point.longitude], { icon }).addTo(map);
+    } else {
+      marker = L.marker([point.latitude, point.longitude]).addTo(map);
+    }
     marker.on("click", (e) => {
       pointClicked(e.latlng.lat, e.latlng.lng);
     });
@@ -867,8 +985,6 @@ function loadFileReader(event) {
     alert("Invalid JSON File");
     return;
   }
-  console.log(event);
-  console.log(obj);
   points = obj.pointsOfInterest;
   baseLayers = obj.baseLayers;
   minZoomLevel = obj.minZoom;

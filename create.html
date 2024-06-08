@@ -23,6 +23,7 @@
 </div>
 <div id="dialog" class="dialog editDialog hidden">
   <div class="dialogbuttons">
+    <button onClick="customMarker()" class="dialogActionButton"><img class="icon" src="./assets/pin.png" /></button>
     <button onClick="closeDialog()" class="dialogActionButton"><img class="icon" src="./assets/save.png" /></button>
     <button onClick="deletePoint()" class="dialogActionButton"><img class="icon" src="./assets/delete.png" /></button>
 
@@ -70,10 +71,9 @@
     </div>
   </div>
 </div>
-<dialog id="intro" class="createDialog">
-  <div class="dialogContent">
-    <div class="title">Map Builder</div>
-    <div class="titleLine"></div>
+<dialog id="intro" class="genericDialog">
+  <div class="dialogTitle">Map Builder</div>
+  <div class="content">
     <div class="description">
 
       <div>
@@ -89,14 +89,15 @@
     <div class="uploadPrompt">
       <div>Upload a JSON file to edit: </div><input type="file" onchange="loadFile(this)" accept="application/json" />
     </div>
-    <div class="titleLine bottomLine"></div>
+  </div>
+  <div class="footer">
     <button onClick="finishStep()">Continue</button>
   </div>
+  </div>
 </dialog>
-<dialog id="languageDialog" class="createDialog">
-  <div class="dialogContent">
-    <div class="title">Languages</div>
-    <div class="titleLine"></div>
+<dialog id="languageDialog" class="genericDialog">
+  <div class="dialogTitle">Languages</div>
+  <div class="content">
     <div class="description">
       <p>Define the languages you want your mapping exhibit to support. </p>
       <p>These languages will only affect the content you
@@ -110,10 +111,9 @@
         <input type="text" id="languageEntry" /><button onclick="addLanguageHandler()">Add Language</button>
       </div>
     </div>
-    <div class="titleLine bottomLine"></div>
-    <div class="buttonBar">
-      <button onClick="finishStep()">Continue</button>
-    </div>
+  </div>
+  <div class="footer">
+    <button onClick="finishStep()">Continue</button>
   </div>
 </dialog>
 <dialog id="imageAdd" class="imageAddDialog">
@@ -133,10 +133,9 @@
     </div>
   </div>
 </dialog>
-<dialog id="baseLayerSelection" class="createDialog">
-  <div class="dialogContent">
-    <div class="title">Base Maps</div>
-    <div class="titleLine"></div>
+<dialog id="baseLayerSelection" class="genericDialog">
+  <div class="dialogTitle">Base Maps</div>
+  <div class="content">
     <div class="description">
       <div>
         <p>Base layers control the appearance of the base map. Some common base layers would be a standard street map,
@@ -157,18 +156,14 @@
     <div class="addBaseLayer">
       <button onclick="addBaseLayerUI()">Add Layer</button>
     </div>
-    <div class="titleLine bottomLine"></div>
-    <div class="buttonBar">
-      <button onclick="finishStep()">Continue</button>
-    </div>
-
-
+  </div>
+  <div class="footer">
+    <button onclick="finishStep()">Continue</button>
   </div>
 </dialog>
-<dialog id="zoomSelection" class="createDialog shortCreateDialog">
-  <div class="dialogContent">
-    <div class="title">Zoom levels</div>
-    <div class="titleLine"></div>
+<dialog id="zoomSelection" class="genericDialog">
+  <div class="dialogTitle">Zoom levels</div>
+  <div class="content">
     <div class="description">
       <div>
         <p> Zoom levels control how far a user can zoom into or out of the map.
@@ -181,19 +176,15 @@
       </div>
 
     </div>
-    <div class="titleLine bottomLine"></div>
-    <div class="buttonBar">
-      <button onclick="advanceToSelectMaxZoom()">Continue</button>
-    </div>
   </div>
+  <div class="footer">
+    <button onclick="advanceToSelectMaxZoom()">Continue</button>
   </div>
 </dialog>
 
-<dialog id="boundsSelectionDialog" class="createDialog shortCreateDialog">
-  <div class="dialogContent">
-
-    <div class="title">Select Map Bounds</div>
-    <div class="titleLine"></div>
+<dialog id="boundsSelectionDialog" class="genericDialog">
+  <div class="dialogTitle">Select Map Bounds</div>
+  <div class="content">
     <div class="description">
       <div>
         <p>Next you will create a bounding box around the points that you defined.</p>
@@ -203,29 +194,45 @@
       </div>
 
     </div>
-    <div class="titleLine bottomLine"></div>
-    <div class="buttonBar">
-      <button onClick="advanceToBounds()">Select Bounds</button>
-    </div>
+  </div>
+  <div class="footer">
+    <button onClick="advanceToBounds()">Select Bounds</button>
   </div>
 </dialog>
-<dialog id="completedMap" class="createDialog shortCreateDialog">
-  <div class="dialogContent">
-    <div class="title">Map Complete!</div>
-    <div class="titleLine"></div>
+<dialog id="completedMap" class="genericDialog">
+  <div class="dialogTitle">Map Complete!</div>
+  <div class="content">
     <div class="description">
       You have completed your map, you can now download the data file and place it nex to the index.html file.
 
     </div>
-    <div class="titleLine bottomLine"></div>
-
-    <div class="buttonBar" id="completeBtnBar">
-
-    </div>
+  </div>
+  <div class="footer" id="completeBtnBar">
   </div>
 </dialog>
+
+<dialog id="customMarker" class="genericDialog">
+  <div class="dialogTitle">Custom Marker</div>
+  <div class="content">
+    <div class="description">
+      <p>Define a custom image to use to mark this point.</p>
+      <p>A square image will work best, Images will be downsized to a max of 41x41 pixels </p>
+    </div>
+    <icon-editor iconWidth="41" iconHeight="41"></icon-editor>
+    <div class="subtitle">
+      <p>Select Existing:</p>
+    </div>
+    <div class="iconGrid" id="existingMarkers"></div>
+  </div>
+  <div class="footer">
+    <button onclick="closeIconImageSelector()">Cancel</button>
+    <button onclick="saveIconImageSelector()">Save</button>
+  </div>
+</dialog>
+
 <map-credits></map-credits>
 <div id="dialogBackground" class="dialogBackground" onclick="handleBackgroundClick()"></div>
+<script src="./iconEditor/iconEditor.js"></script>
 <script src="./createInputs.js"></script>
 <script src="./imageedit.js"></script>
 <script src="./creditsComponent/credit.js"></script>
