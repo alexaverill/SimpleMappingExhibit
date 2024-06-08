@@ -94,7 +94,6 @@ class IconEditor extends HTMLElement {
     this.fileUpload.addEventListener("change", this.handleEvent);
   }
   setImage(imageData, offset) {
-    console.log(imageData);
     this.img = new Image();
     this.img.onload = () => {
       let ctx = this.imageCanvas.getContext("2d");

@@ -621,9 +621,7 @@ const setDialogContent = (point) => {
       .querySelector("image-viewer")
       .setImages(imageList.map((image) => image.image));
   }
-  console.log(point);
   if (point.marker) {
-    console.log(point.marker);
     document.querySelector("icon-editor").setImage(point.marker.image);
   }
 };
@@ -684,7 +682,6 @@ const advanceToLanguage = () => {
   displayLanguages();
 };
 const handleProgressClick = (state) => {
-  console.log(currentStep);
   if (currentStep != steps.Complete && previousStep !== steps.Complete) {
     return;
   }
