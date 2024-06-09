@@ -81,6 +81,7 @@ let customMarkers = [
     size: [25, 41],
   },
 ];
+let customCredits = [];
 
 const handleTitleChange = (e) => {
   mapTitle = e.value;
@@ -244,7 +245,7 @@ const updateBaseLayers = () => {
     credits.push({ name, credit: attribution });
     baseLayers.push(mapLayer);
   }
-  document.querySelector("map-credits").setCredits(credits);
+  document.querySelector("edit-map-credits").setCredits(credits, customCredits);
 };
 const setBaseLayers = (shouldRefresh = false) => {
   if (shouldRefresh) {
@@ -811,6 +812,7 @@ const createDownloadData = () => {
     maxZoom: maxZoomLevel,
     mapBounds: boundsRect.getBounds(),
     pointsOfInterest: cleanedPoints,
+    customCredits,
   };
   let jsonString = JSON.stringify(mapObject);
   return new Blob(["mapData = " + jsonString], { type: "application/json" });
@@ -857,7 +859,10 @@ const initializeMap = (
     map.setView(map.center);
   });
   document.addEventListener("mapCredits", () => {
-    document.querySelector("map-credits").show();
+    document.querySelector("edit-map-credits").show();
+  });
+  document.addEventListener("customCreditChange", (event) => {
+    customCredits = event.detail.customCredits;
   });
   map.zoomControl.remove();
   if (minZoomLevel !== maxZoomLevel) {
@@ -921,7 +926,6 @@ const initializeMap = (
     position: "bottomright",
   })
     .on("markgeocode", function (e) {
-      console.log(e);
       var bbox = e.geocode.bbox;
       var poly = L.polygon([
         bbox.getSouthEast(),

@@ -39,6 +39,7 @@ const initializeMap = (
   maxZoomLevel = 15,
   minZoomLevel = 13,
   mapBounds = null,
+  customCredits = [],
   zoomPosition = "bottomright"
 ) => {
   if (mapTitles && mapTitles.length > 0) {
@@ -61,7 +62,7 @@ const initializeMap = (
     let credits = baseLayers.map((layer) => {
       return { name: layer.name, credit: layer.options.attribution };
     });
-    document.querySelector("map-credits").setCredits(credits);
+    document.querySelector("map-credits").setCredits(credits, customCredits);
     document.querySelector("map-credits").show();
   });
   map.zoomControl.remove();
@@ -174,7 +175,8 @@ const load = async () => {
     json.mapCenter,
     json.maxZoom,
     json.minZoom,
-    json.mapBounds
+    json.mapBounds,
+    json.customCredits
   );
   initializePointsOfInterest(pointsOfInterest);
 };
