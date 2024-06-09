@@ -1,19 +1,23 @@
-dialog {
-  width: 50vw;
-  max-height: 50vh;
-  overflow: hidden;
+.genericDialog {
+  max-height: 75vh;
+  width: 60vw;
   border: 1 px solid grey;
   border: 2px solid;
   border-radius: 5px;
   border: none;
   filter: drop-shadow(0px 5px 35px rgba(0, 0, 0, 0.4));
 }
-dialog::backdrop {
+
+.genericDialog::backdrop {
   background: rgba(0, 0, 0, 0.4);
 }
 
-.title {
-  font-size: 3rem;
+.dialogTitle {
+  font-size: 1.5rem;
+  text-align: center;
+  border-bottom: 0.75px solid #b5b5b5;
+  padding-bottom: 0.75rem;
+  font-size: var(--title-font-size, 3rem);
   font-family: var(--title-font), sans-serif;
   font-weight: 600;
 }
@@ -22,14 +26,24 @@ dialog::backdrop {
   font-family: var(--title-font), sans-serif;
   font-weight: 400;
   margin-top: 1rem;
+  align-self: center;
 }
-.titleLine {
-  width: 110%;
-  margin: 0;
-  padding: 0;
-  margin-left: -1rem;
-  margin-top: -0.5rem;
-  border-bottom: 0.75px solid #b5b5b5;
+.content {
+  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--body-font);
+}
+.footer {
+  margin: auto;
+
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  border-top: 0.75px solid #b5b5b5;
+  padding-top: 0.75rem;
 }
 button {
   padding-left: 1rem;
@@ -109,4 +123,47 @@ button:active {
 .mapLayerList {
   padding: 1rem;
   padding-bottom: 3rem;
+}
+.creditEntry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 1rem;
+  font-family: var(--body-font);
+  border-bottom: 1px solid black;
+  width: 100%;
+  height: 3rem;
+  .deleteBtn {
+    width: 2rem;
+    height: 2rem;
+    background: none;
+    img {
+      height: 100%;
+      margin-left: -7px;
+    }
+  }
+  .deleteBtn:hover {
+    background: lightgrey;
+    border-radius: 3rem;
+  }
+}
+.creditView {
+  border-bottom: none;
+}
+#creditEntries {
+  max-height: 20vh;
+  overflow: scroll;
+}
+#creditEntry {
+  padding: 0.6rem;
+  width: 85%;
+}
+#addCreditButton {
+  width: 15%;
+}
+.customCredits {
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
 }

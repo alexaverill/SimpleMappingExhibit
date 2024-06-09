@@ -5,6 +5,7 @@ mapData = {
   ],
   "languages": ["English", "Spanish"],
   "mapCenter": { "lat": 44.93880014185138, "lng": -93.08827400207521 },
+  "customCredits":["All images sourced from Wikipedia"],
   "baseLayers": [
     {
       "name": "Satellite",
