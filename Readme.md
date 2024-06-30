@@ -1,22 +1,27 @@
 # Simple Mapping Exhibit
 
-A simple mapping exhibit intended to be used for GIS visualization
+A completely local and easy to setup mapping exhibit intended for Museums who want to create and display custom GIS like mapping experiances.
 
-## Setup
+## [Demo](https://maps.averill.dev)
 
-## Sample Content
+## [Editor Demo](https://maps.averill.dev/create.html)
 
-Sample content is from wikipedia articles.
+## Features
 
-## Map Layer Previews:
+1. Points of Interest tied to an Image Viewer and Text Content.
+1. Supports any online tiled mapping base layers.
+1. Multi-language support.
+1. Lock the map to specific bounds.
+1. Lock the map to specific zoom levels.
+1. Guided map creation editor.
+1. Can be run on desktop or mobile.
+1. Easily run it locally.
 
-https://leaflet-extras.github.io/leaflet-providers/preview/
+# Setup
 
-## Search Provider:
+Running locally is a breeze, you can download this repo, and then open either the index.html or create.html in a browser and get started immediately.
 
-https://github.com/perliedman/leaflet-control-geocoder
-
-## ToDos:
+Once you have created a map with the create.html, simply replace the data.json file thats next to the index.html with the output you get from the create.html
 
 ## Troubleshooting
 
