@@ -976,8 +976,7 @@ function saveMapTitle() {
 }
 
 function loadFileReader(event) {
-  //alert(event.target.result);
-  var obj = JSON.parse(event.target.result);
+  var obj = JSON.parse(event.target.result.replace("mapData = ", ""));
   if (
     !obj.pointsOfInterest ||
     !obj.baseLayers ||

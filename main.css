@@ -750,11 +750,11 @@ textarea {
 
 }
   .iconButton{
-    background: none;
+    background: lightgray;
 
   }
   .iconButton:hover{
-    background: lightgray;
+    background: rgb(167, 165, 165);
   }
   .iconButton:active{
     background: darkgray;
@@ -764,7 +764,7 @@ textarea {
     min-height: 75vh;
     overflow: hidden;
     .dialogContent{
-justify-content: space-evenly;
+    justify-content: space-evenly;
     align-items: center;
     padding-left: 1rem;
     padding-right: 1rem;

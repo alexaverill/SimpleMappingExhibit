@@ -14,6 +14,8 @@ let languages;
 let currentLanguage;
 let selectedId = null;
 let mapTitles;
+let timeoutComponent = document.querySelector("timeout-component");
+
 const setBaseLayers = (baseLayers) => {
   map.eachLayer((layer) => {
     map.removeLayer(layer);
@@ -59,6 +61,7 @@ const initializeMap = (
     map.setZoom(minZoomLevel);
   });
   document.addEventListener("mapCredits", () => {
+    timeoutComponent.setAttribute("timeout-active", "true");
     let credits = baseLayers.map((layer) => {
       return { name: layer.name, credit: layer.options.attribution };
     });
@@ -112,6 +115,7 @@ const handleBackgroundClick = () => {
   closeDialog();
 };
 const closeDialog = () => {
+  timeoutComponent.setAttribute("timeout-active", "false");
   selectedId = null;
   document
     .getElementById("dialogBackground")
@@ -125,6 +129,7 @@ const poiClicked = (id) => {
     .getElementById("dialogBackground")
     .classList.add("dialogBackgroundVisible");
   document.getElementById("dialog").classList.toggle("visible");
+  timeoutComponent.setAttribute("timeout-active", true);
 };
 const populateLanguageSelector = () => {
   if (languages.length == 1) {
@@ -163,7 +168,15 @@ const setDialogContent = (id) => {
 };
 const setMapTitle = () => {};
 const load = async () => {
-  let json = mapData;
+  //check if we want to override which data we are pulling
+  const urlParams = new URL(window.location).searchParams;
+  let data = urlParams.get("data");
+  let jsonData;
+  if (data === "moon") {
+    json = apolloData;
+  } else {
+    json = mapData;
+  }
   pointsOfInterest = json.pointsOfInterest;
   languages = json.languages;
   currentLanguage = 0;
@@ -180,4 +193,11 @@ const load = async () => {
   );
   initializePointsOfInterest(pointsOfInterest);
 };
+const handleTimeout = () => {
+  timeoutComponent.setAttribute("timeout-active", "false");
+  document.dispatchEvent(new CustomEvent("mapRecenter"));
+  document.querySelector("map-credits").closeDialog();
+  closeDialog();
+};
 load();
+document.addEventListener("timeout", handleTimeout);
