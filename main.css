@@ -1,57 +1,63 @@
 :root {
   --title-font: "Inter";
   --body-font: "Open Sans";
-  --dialog-body-font-size:.9rem;
+  --dialog-body-font-size: .9rem;
 }
+
 body {
   margin: 0;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
 }
-        .genericDialog {
-            max-height: 75vh;
-            width: 60vw;
-            border: 1 px solid grey;
-            border: 2px solid;
-            border-radius: 5px;
-            border: none;
-            filter: drop-shadow(0px 5px 35px rgba(0, 0, 0, 0.4));
-        }
 
-        .genericDialog::backdrop {
-            background: rgba(0, 0, 0, 0.4);
-        }
-        
-        .dialogTitle {
-            font-size: 1.5rem;
-            text-align: center;
-            border-bottom: 0.75px solid #b5b5b5;
-            padding-bottom: .75rem;
-              font-size: var(--title-font-size, 3rem);
+.genericDialog {
+  max-height: 75vh;
+  width: 60vw;
+  border: 1 px solid grey;
+  border: 2px solid;
+  border-radius: 5px;
+  border: none;
+  filter: drop-shadow(0px 5px 35px rgba(0, 0, 0, 0.4));
+}
+
+.genericDialog::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.dialogTitle {
+  font-size: 1.5rem;
+  text-align: center;
+  border-bottom: 0.75px solid #b5b5b5;
+  padding-bottom: .75rem;
+  font-size: var(--title-font-size, 3rem);
   font-family: var(--title-font), sans-serif;
   font-weight: 600;
-        }
-        .content{
-          padding-bottom: 1rem;
-        }
-        .footer {
-            margin: auto;
-            
-            display: flex;
-            flex-direction: row;
-            gap:1rem;
-            justify-content: center;
-            align-items: center;
-            border-top: 0.75px solid #b5b5b5;
-            padding-top: .75rem;
-        }
+}
+
+.content {
+  padding-bottom: 1rem;
+}
+
+.footer {
+  margin: auto;
+
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  border-top: 0.75px solid #b5b5b5;
+  padding-top: .75rem;
+}
+
 button {
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
+
 button {
   display: inline-block;
   outline: 0;
@@ -65,20 +71,25 @@ button {
   color: white;
   line-height: 26px;
 }
+
 button:disabled {
   background-color: gray;
   pointer-events: none;
 }
+
 button:hover {
   background-color: #3a85c4;
 }
+
 button:active {
   background-color: #2f6a9b;
 }
+
 #map {
   height: 100vh;
   width: 100vw;
 }
+
 .dialogBackground {
   position: absolute;
   top: 0;
@@ -88,11 +99,13 @@ button:active {
   width: 100vw;
   height: 100vh;
 }
+
 .dialogBackgroundVisible {
   visibility: visible;
 }
+
 .dialog {
-  
+
   position: absolute;
   height: 100vh;
   width: 40%;
@@ -114,17 +127,20 @@ button:active {
 .visible {
   transform: translateX(0%);
 }
+
 .title {
   font-size: var(--title-font-size, 3rem);
   font-family: var(--title-font), sans-serif;
   font-weight: 600;
 }
+
 .subtitle {
   font-size: var(--subtitle-font-size, 1.5rem);
   font-family: var(--title-font), sans-serif;
   font-weight: 400;
   margin-top: 1rem;
 }
+
 .mapTitleContainer {
   position: absolute;
   z-index: 1000;
@@ -140,6 +156,7 @@ button:active {
   color: var(--map-title-font-color, white);
   filter: drop-shadow(0px 4px 20px rgba(0, 0, 0, 0.6));
 }
+
 #mapTitle {
   background: #333;
 
@@ -148,6 +165,7 @@ button:active {
   padding-left: 2rem;
   padding-right: 2rem;
 }
+
 .mapTitleEditContainer {
   width: 100vw;
   z-index: 10001;
@@ -160,26 +178,30 @@ button:active {
 
   color: var(--map-title-font-color, white);
 }
+
 .mapTitleEditInput {
   background: none;
   border: none;
   font-family: var(--title-font);
   font-weight: bold;
-  text-align:center;
+  text-align: center;
   color: var(--map-title-font-color, white);
 }
+
 .dialogClose {
   position: absolute;
   right: 5px;
   top: 5px;
   background: none;
   border: none;
+
   img {
     height: 32px;
     margin-left: -9px;
     margin-top: 0px;
   }
 }
+
 .description {
   font-size: 1.2rem;
   font-family: var(--body-font), sans-serif;
@@ -189,9 +211,11 @@ button:active {
   margin-bottom: 2rem;
   padding-right: 1rem;
 }
+
 .dialogImageContainer {
   position: relative;
 }
+
 .image {
   position: relative;
   width: 90%;
@@ -202,33 +226,40 @@ button:active {
   border-radius: 6px;
   transition: all 250ms ease-in-out;
 }
-.image > img {
+
+.image>img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
+
 .imageIcon {
   height: 10%;
   position: relative;
 }
-.imageIcon > img {
+
+.imageIcon>img {
   height: 35px;
   margin-left: 2px;
 }
+
 .imageAddContainer {
   position: relative;
   width: 90%;
 
   background-color: #e8e8e8;
 }
+
 .hide {
   visibility: hidden;
 }
+
 .editButton {
   position: absolute;
   top: 0;
   left: 0;
 }
+
 .userInstructions {
   position: absolute;
   /*pointer-events: none;*/
@@ -243,6 +274,7 @@ button:active {
   align-items: center;
 
   padding-bottom: 2rem;
+
   .userInstruction-background {
     filter: drop-shadow(0px 4px 10px rgba(255, 255, 255, 0.6));
     background: rgba(255, 255, 255, 0.75);
@@ -255,30 +287,37 @@ button:active {
     padding-bottom: .5rem;
     margin-bottom: 0;
   }
-  }
-  button {
-    pointer-events: all;
-  }
-  .title {
-    font-size: 2rem;
-  }
-  .subtitle {
-    font-size: 1.3rem;
-    margin-top: 0;
-  }
-  gap: 0.5rem;
 }
+
+button {
+  pointer-events: all;
+}
+
+.title {
+  font-size: 2rem;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  margin-top: 0;
+}
+
+gap: 0.5rem;
+}
+
 .editDialog {
   z-index: 50000;
 }
+
 .dialogbuttons {
   position: absolute;
-  top:0;
+  top: 0;
   right: 5;
   display: flex;
   gap: 0.5rem;
   margin-top: 0.75rem;
   flex-direction: column;
+
   button {
     img {
       height: 32px;
@@ -287,36 +326,45 @@ button:active {
     }
   }
 }
+
 .dialogActionButton {
   background: none;
   width: 45px;
   height: 45px;
 }
+
 .dialogActionButton:hover {
   background: lightgray;
 }
+
 .dialogActionButton:active {
   background: gray;
 }
+
 .descriptionTextArea {
   height: 100%;
+
   textarea {
     width: 90%;
     line-height: 1.75;
     height: 90%;
   }
 }
+
 .dialogInputTitle {
   margin-top: 1rem;
+
   input {
     font-size: 3rem;
     font-family: var(--title-font), sans-serif;
     width: 90%;
   }
 }
-    .description {
-      font-size: var(--dialog-body-font-size,.9rem);
-    }
+
+.description {
+  font-size: var(--dialog-body-font-size, .9rem);
+}
+
 #progress {
   display: flex;
   flex-direction: row;
@@ -324,6 +372,7 @@ button:active {
   justify-content: center;
   gap: 1rem;
 }
+
 .progressBar {
   position: relative;
   display: flex;
@@ -349,10 +398,12 @@ button:active {
   padding-left: 10px;
   padding-right: 10px;
 }
+
 .progressIndicator:hover {
   cursor: pointer;
   background-color: lightgray;
 }
+
 .progressIndicator::before {
   content: "";
   display: flex;
@@ -367,13 +418,16 @@ button:active {
   display: inline-block;
   margin-right: 0.5rem;
 }
+
 .active.progressIndicator::before {
   border: 3px solid gold;
 }
+
 .completed.progressIndicator::before {
   background-image: url("./assets/checked-circle.png");
   background-repeat: no-repeat;
 }
+
 .bar {
   position: absolute;
   top: 35%;
@@ -382,6 +436,7 @@ button:active {
   height: 10px;
   background-color: rgba(106, 132, 102, 0.3);
 }
+
 .dialogContent {
   display: flex;
   flex-direction: column;
@@ -389,24 +444,29 @@ button:active {
   height: 100%;
   align-items: center;
 }
+
 .imageAddDialog {
   width: 90%;
   height: 90%;
   overflow: hidden;
+
   .dialogContent {
 
     justify-content: flex-start;
   }
-  .description{
-    height:100%;
+
+  .description {
+    height: 100%;
   }
 }
+
 .imageAdd {
   input {
     padding-top: 0.75rem;
     padding-bottom: 0.6rem;
   }
 }
+
 .previewImageContainer {
   display: flex;
   flex-direction: row;
@@ -419,10 +479,12 @@ button:active {
   border: 1px solid black;
   position: relative;
   border-radius: 0.4rem;
+
   img {
     max-height: 20vh;
   }
 }
+
 .addButton {
   position: absolute;
   right: 5;
@@ -432,17 +494,21 @@ button:active {
   padding: 0;
   height: 3rem;
   border-radius: 3rem;
+
   img {
     width: 100%;
     height: 100%;
   }
 }
+
 .addButton:hover {
   background: lightgrey;
 }
+
 .addButton:active {
   background: grey;
 }
+
 .languageList {
   overflow-y: auto;
   max-height: 15rem;
@@ -450,25 +516,28 @@ button:active {
 }
 
 #languageDialog {
-  .languageColumn{
+  .languageColumn {
     display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  height: 50%;
+    flex-direction: column;
+    gap: 2rem;
+    height: 50%;
   }
 }
+
 .dialogLanguageSelector {
   position: absolute;
   bottom: 0.75rem;
   right: 6rem;
   z-index: 10000;
   filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.2));
+
   select {
     padding: 1rem;
     background-color: white;
     border: none;
     border-radius: 0.25rem;
   }
+
   option {
     padding: 1rem;
     background-color: white;
@@ -480,9 +549,11 @@ button:active {
   flex-direction: row;
   gap: 1rem;
 }
+
 #languageEntry {
   padding: 0.6rem;
 }
+
 .languageEntry {
   display: flex;
   align-items: center;
@@ -493,21 +564,25 @@ button:active {
   font-family: var(--body-font);
   border-bottom: 1px solid black;
   width: 100%;
-  height:3rem;
+  height: 3rem;
 }
+
 .deleteBtn {
   width: 2rem;
   height: 2rem;
   background: none;
+
   img {
     height: 100%;
     margin-left: -7px;
   }
 }
+
 .deleteBtn:hover {
   background: lightgrey;
   border-radius: 3rem;
 }
+
 .imageDeleteBtn {
   width: 3rem;
   height: 3rem;
@@ -519,27 +594,32 @@ button:active {
   right: 2px;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 3rem;
+
   img {
     height: 100%;
     margin-left: -7px;
   }
 }
+
 .imageDeleteBtn:hover {
   background: lightgrey;
   border-radius: 3rem;
 }
+
 .imageList {
   gap: 1rem;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
+
 .buttonBar {
   display: flex;
   gap: 1rem;
   justify-content: center;
   margin-top: auto;
 }
+
 textarea {
   font-size: 1.2rem;
   font-family: var(--body-font) sans-serif;
@@ -547,6 +627,7 @@ textarea {
   overflow: auto;
   line-height: 1.75;
 }
+
 .inputRow {
   display: flex;
   gap: 0.1rem;
@@ -554,32 +635,45 @@ textarea {
   font-size: 0.8rem;
   justify-content: center;
 }
+
 #baseLayerSelection {
   height: 80vh;
   max-height: 80vh;
   font-family: var(--title-font);
-  overflow: hidden;
+
   .description {
     width: 100%;
     margin-bottom: 0;
-    font-size: var(--dialog-body-font-size,.9rem);
+    font-size: var(--dialog-body-font-size, .9rem);
     text-align: center;
     overflow: hidden;
   }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
   .dialogContent {
     align-items: flex-start;
+
     .title {
       align-self: center;
     }
+
     .buttonBar {
       align-self: center;
     }
+
     textarea {
       width: 100%;
     }
+
     input {
       width: 100%;
     }
+
     .inputRow {
       .name {
         width: 94%;
@@ -587,10 +681,13 @@ textarea {
     }
   }
 }
+
 .zoomInputs {
   display: flex;
   justify-content: space-evenly;
   gap: 2rem;
+  width: 98%;
+
   .inputRow {
     width: 100%;
   }
@@ -599,6 +696,7 @@ textarea {
 .baseLayerInputRow {
   position: relative;
   border: 1px solid #b5b5b5;
+  background-color: #efefef;
   padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
@@ -607,9 +705,11 @@ textarea {
   margin-right: 1rem;
   border-radius: 0.75rem;
 }
+
 .inputLabel {
   display: inline-block;
 }
+
 .baseLayerList {
   display: flex;
   flex-direction: column;
@@ -619,6 +719,7 @@ textarea {
   overflow-x: hidden;
   width: 100%;
 }
+
 .titleLine {
   width: 110%;
   margin: 0;
@@ -627,25 +728,31 @@ textarea {
   margin-top: -0.5rem;
   border-bottom: 0.75px solid #b5b5b5;
 }
+
 .bottomLine {
   margin-top: 0;
   margin-bottom: -0.5rem;
 }
+
 .baseLayerInput {
   font-family: var(--body-font);
   font-size: 0.8rem;
+  width: 95%;
 }
+
 .deleteRow {
   position: absolute;
   right: 0;
   width: 45px;
   height: 45px;
+
   img {
     height: 32px;
     margin-left: -10px;
     margin-top: -3px;
   }
 }
+
 .download {
   text-decoration: none;
   font-family: var(--title-font);
@@ -654,21 +761,25 @@ textarea {
   flex-direction: row;
   align-items: center;
   gap: 0.4rem;
+
   img {
     height: 30px;
   }
 }
+
 /* .download::before {
   content: url("./assets/download.png");
 } */
 .createDialog {
   .dialogContent {
     .description {
-      font-size: var(--dialog-body-font-size,.9rem);
+      font-size: var(--dialog-body-font-size, .9rem);
     }
+
     overflow: hidden;
   }
 }
+
 .shortCreateDialog {
   .dialogContent {
     .description {
@@ -676,36 +787,43 @@ textarea {
     }
   }
 }
+
 .userInstructionButtons {
   display: flex;
   gap: 1rem;
 }
+
 .uploadPrompt {
   font-family: var(--body-font);
-  font-size: var(--dialog-body-font-size,.9rem);
+  font-size: var(--dialog-body-font-size, .9rem);
   align-self: flex-start;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
-@media (width <= 1250px) {
+
+@media (width <=1250px) {
   .dialog {
     width: 98vw;
   }
+
   .dialogClose {
     right: 10px;
   }
 }
+
 .leaflet-control-layers label {
   font-size: 13px;
   font-size: 1.5rem;
 }
+
 .leaflet-touch .leaflet-bar a {
   line-height: 37px;
   width: 45px;
   height: 45px;
   font-size: 30pxx;
 }
+
 .returnPrompt {
   font-family: var(--title-font);
   font-size: 1.5rem;
@@ -713,62 +831,74 @@ textarea {
 
 .leaflet-touch .leaflet-control-geocoder {
   height: 45px;
+
   button {
     width: 45px;
     height: 45px;
+
     svg {
       width: 1.9rem;
     }
   }
+
   input {
     height: 100%;
     margin-top: -0.5rem;
   }
 }
+
 .downloadButton {
   height: 40px;
   font-size: 1rem;
   display: flex;
+
   img {
     height: 24px;
   }
 }
-.recenter-control > img,
-.info-control > img {
+
+.recenter-control>img,
+.info-control>img {
   height: 70%;
   margin-top: 15%;
 }
-.edit-image-viewer{
+
+.edit-image-viewer {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.iconGrid{
+
+.iconGrid {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 
 }
-  .iconButton{
-    background: lightgray;
 
-  }
-  .iconButton:hover{
-    background: rgb(167, 165, 165);
-  }
-  .iconButton:active{
-    background: darkgray;
-  }
+.iconButton {
+  background: lightgray;
 
-  .customMarker{
-    min-height: 75vh;
-    overflow: hidden;
-    .dialogContent{
+}
+
+.iconButton:hover {
+  background: rgb(167, 165, 165);
+}
+
+.iconButton:active {
+  background: darkgray;
+}
+
+.customMarker {
+  min-height: 75vh;
+  overflow: hidden;
+
+  .dialogContent {
     justify-content: space-evenly;
     align-items: center;
     padding-left: 1rem;
     padding-right: 1rem;
     margin-bottom: 0;
-  
-    }
+
   }
+}

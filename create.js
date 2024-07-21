@@ -421,10 +421,20 @@ const addLanguage = (language) => {
   populateLanguageSelector();
   currentLanguage = languages?.at(0);
 };
-const addLanguageHandler = (e) => {
+const AddNewLanguage = () => {
   let entry = document.getElementById("languageEntry");
-  addLanguage(entry.value);
+  if (entry.value.length > 0) {
+    addLanguage(entry.value);
+  }
   entry.value = "";
+};
+const handleLanguageKeyPress = (e) => {
+  if (e.key === "Enter") {
+    AddNewLanguage();
+  }
+};
+const addLanguageHandler = (e) => {
+  AddNewLanguage();
 };
 //Content Dialog Setup
 const addLinkedImage = () => {

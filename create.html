@@ -77,12 +77,21 @@
     <div class="description">
 
       <div>
-        <p>This will guide you through the creation of map based exhibit. You will define languages you want to use,
-          select the base maps you want to show, setup points of interest, a bounding box and zoom levels.</p>
-
-        <p>If you are using this tool online note that none of the images you upload or content you write are stored
-          anywhere except for the json file you download at the end. Images will be embeded into the data that is output
-          at the end.</p>
+        <p>This will guide you through the creation of a map-based exhibit. It will guide you step-by-step to:</p>
+        <ul>
+          <li>Set Languages</li>
+          <li>Select Base Maps</li>
+          <li>Set up points of interest</li>
+          <li>Write content in multiple languages</li>
+          <li>Upload Images</li>
+          <li>Define the bounding box</li>
+          <li>Adjust zoom levels</li>
+        </ul>
+        <p>If you are using this tool online, <b>please note that your content will not be saved after your browser
+            session expires.
+            You must download the .json at the end of creating the exhibit to preserve your data.</b> This tool does not
+          store any of
+          your data beyond this current session. Images will be embedded into the .json file.</p>
       </div>
     </div>
     <div class="returnPrompt">Already Started?</div>
@@ -99,17 +108,21 @@
   <div class="dialogTitle">Languages</div>
   <div class="content">
     <div class="description">
-      <p>Define the languages you want your mapping exhibit to support. </p>
-      <p>These languages will only affect the content you
-        enter, the map itself will not change based on the language.</p>
-      <p>Use the language selector in the bottom right to change the language that you are editing in.</p>
+      <p>Define the languages your exhibit will support. </p>
+      <p>For each point of interest, you can add a version of the content in each language listed here. Use the language
+        selector
+        in the bottom right corner of the map to change the language that you are editing in. Content is not
+        automatically
+        translated.</p>
     </div>
     <div class="languageColumn">
+      <div class="languageForm">
+        <input type="text" id="languageEntry" onkeydown="handleLanguageKeyPress(event)" /><button
+          onclick="addLanguageHandler()">Add Language</button>
+      </div>
       <div class="languageList" id="languageEntries">
       </div>
-      <div class="languageForm">
-        <input type="text" id="languageEntry" /><button onclick="addLanguageHandler()">Add Language</button>
-      </div>
+
     </div>
   </div>
   <div class="footer">
@@ -134,17 +147,17 @@
   </div>
 </dialog>
 <dialog id="baseLayerSelection" class="genericDialog">
-  <div class="dialogTitle">Base Maps</div>
+  <div class="dialogTitle">Base Layers</div>
   <div class="content">
     <div class="description">
       <div>
-        <p>Base layers control the appearance of the base map. Some common base layers would be a standard street map,
-          or satellite map.
-          There are tons of options, just remember some of them may have specific liscenses restrictions.
-          The default Street and Satelite layers suggested below are free to use. </p>
-        <p> <a href="https://leaflet-extras.github.io/leaflet-providers/preview/" target="_blank">View a list of some
-            possible base maps. </a> This is not an exhaustive list, and most map providers should provide a format that
-          can be utilized.
+        <p>Base layers control the appearance of the base map, such as a street view or satellite view. We've included a
+          default
+          street and satellite layer that are free to use.</p>
+        <p> <a href="https://leaflet-extras.github.io/leaflet-providers/preview/" target="_blank">Additional options for
+            base layers can be found here.</a> This is not an exhaustive list, and most map providers provide a format
+          that can be utilized. Make sure to follow any
+          licensing restrictions.
         </p>
       </div>
 
