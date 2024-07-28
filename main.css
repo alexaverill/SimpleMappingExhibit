@@ -348,6 +348,7 @@ gap: 0.5rem;
     width: 90%;
     line-height: 1.75;
     height: 90%;
+    font-family: var(--title-font), sans-serif;
   }
 }
 
