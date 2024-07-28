@@ -134,11 +134,13 @@
     <div class="title">Add Images</div>
     <div class="titleLine"></div>
     <div class="description">
-      <div id="imageList" class="imageList"></div>
-      <div class="imageAdd">Add a local image: <input id="imageInput" type="file" onchange="uploadImage(this)"
+
+      <div class="imageAdd">Add a local image: <input id="imageInput" type="file" multiple onchange="uploadImage(this)"
           accept="image/png, image/jpeg, image/jpg" /></div>
-      <div class="imageAdd">Link to an Image: <input type="text" id="imageLink"><button
-          onclick="addLinkedImage()">Add</button></button></div>
+      <div class="imageAdd">Link to an Image: <input type="text" id="imageLink">
+        <button onclick="addLinkedImage()">Add</button>
+      </div>
+      <div id="imageList" class="imageList"></div>
     </div>
     <div class="titleLine bottomLine"></div>
     <div class="buttonBar">

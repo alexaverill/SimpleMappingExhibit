@@ -1018,12 +1018,13 @@ function loadFileReader(event) {
   initializePointsOfInterest(points);
 }
 const uploadImage = (event) => {
-  var reader = new FileReader();
-  reader.onload = imageEncode;
-  reader.readAsDataURL(event.files[0]);
+  for (let file of event.files) {
+    let reader = new FileReader();
+    reader.onload = imageEncode;
+    reader.readAsDataURL(file);
+  }
 };
 const imageEncode = (event) => {
-  console.log(event);
   buildImagePreview(event.target.result);
 };
 initializeMap();

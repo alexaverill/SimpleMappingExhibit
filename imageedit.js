@@ -26,7 +26,8 @@ const buildImagePreview = (imgPath) => {
 };
 const handleAddImage = () => {
   if (imageList.length > 0) {
-    console.log("NEED to add images to dialog");
+    let parent = document.getElementById("imageList");
+    parent.innerHTML = "";
     imageList.map((image) => {
       buildImagePreview(image.image);
     });
