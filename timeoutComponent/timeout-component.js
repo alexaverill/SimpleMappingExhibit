@@ -39,6 +39,9 @@ class Timeout extends HTMLElement {
                     &:hover {
                         background-color: var(--timeout-button-background-hover, darkgray);
                     }
+                        &:active{
+                        background-color: var(--timeout-button-background-active, darkgray);
+                        }
 
                 }
             }

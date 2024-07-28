@@ -2,6 +2,9 @@
   --title-font: "Inter";
   --body-font: "Open Sans";
   --dialog-body-font-size: .9rem;
+  --timeout-button-background-color: #2976ee;
+  --timeout-button-background-hover: #1c51a8;
+  --timeout-button-background-active: #133976;
 }
 
 body {
