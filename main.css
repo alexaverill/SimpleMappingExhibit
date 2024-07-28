@@ -907,3 +907,8 @@ textarea {
 
   }
 }
+
+.leaflet-control-geocoder-alternatives {
+  background: white;
+  border: 1.5px solid #efefef;
+}
