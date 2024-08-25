@@ -5,8 +5,6 @@ class IconEditor extends HTMLElement {
             <div class="canvasLayers">
                 <canvas id="imageEditor"></canvas>
                 <canvas id="originPoint"></canvas>
-
-
             </div>
             <input type="file" id="imageUpload">
         </div>`;
