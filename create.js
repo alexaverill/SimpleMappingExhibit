@@ -517,7 +517,6 @@ const setExistingMarkers = () => {
   markerDiv.innerHTML = "";
   let index = 0;
   for (let marker of customMarkers) {
-    console.log(marker);
     let imageDiv = `<div><button class="iconButton" onclick="addExistingMarker(${index})"><img src="${marker.image}"/></button></div>`;
     markerDiv.innerHTML += imageDiv;
     index++;
