@@ -126,7 +126,6 @@ class Timeout extends HTMLElement {
     }
   }
   handleTimeout() {
-    console.log("Timeout");
     clearTimeout(this.timeout);
     this.dialog.showModal();
     this.dialogTimeout = setTimeout(this.closeDialog, this.dialogDuration);

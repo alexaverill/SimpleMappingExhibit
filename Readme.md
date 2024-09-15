@@ -23,6 +23,22 @@ Running locally is a breeze, you can download this repo, and then open either th
 
 Once you have created a map with the create.html, simply replace the data.json file thats next to the index.html with the output you get from the create.html
 
+## Use with Exhibitera
+
+This application can also integrate with [Exhibitera](https://exhibitera.org/), to use with exhibitera start with the steps above, and then setup as a custome application in Exhibitera.
+
+To integrate with Exhibitera Hub, edit the exhibitera object in the data.json file.
+
+```
+  "exhibitera":{
+    "enabled":false,
+    "url":"",
+    "group":"",
+    "uuid":"",
+    "helperAddress":""
+  },
+```
+
 ## Troubleshooting
 
 1. I set up my map and zoom levels, but when I zoom in to far on one of my base layers it goes grey!
