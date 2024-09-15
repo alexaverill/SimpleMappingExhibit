@@ -116,6 +116,9 @@ const handleBackgroundClick = () => {
 };
 const closeDialog = () => {
   timeoutComponent.setAttribute("timeout-active", "false");
+  document
+    .querySelector("ping-exhibitera-wc")
+    .setAttribute("activeUser", false);
   selectedId = null;
   document
     .getElementById("dialogBackground")
@@ -124,6 +127,7 @@ const closeDialog = () => {
 };
 const poiClicked = (id) => {
   setDialogContent(id);
+  document.querySelector("ping-exhibitera-wc").setAttribute("activeUser", true);
   selectedId = id;
   document
     .getElementById("dialogBackground")
@@ -208,6 +212,9 @@ const load = async () => {
   initializePointsOfInterest(pointsOfInterest);
 };
 const handleTimeout = () => {
+  document
+    .querySelector("ping-exhibitera-wc")
+    .setAttribute("activeUser", false);
   timeoutComponent.setAttribute("timeout-active", "false");
   document.dispatchEvent(new CustomEvent("mapRecenter"));
   document.querySelector("map-credits").closeDialog();
