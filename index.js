@@ -181,6 +181,20 @@ const load = async () => {
   languages = json.languages;
   currentLanguage = 0;
   mapTitles = json.mapTitles;
+  let exhibiteraSettings = json.exhibitera;
+  console.log(exhibiteraSettings);
+  if (exhibiteraSettings.enabled) {
+    //setup exhibitera if settings are enabled
+    let exhibiteraComponent = document.querySelector("ping-exhibitera-wc");
+    exhibiteraComponent.setAttribute("url", exhibiteraSettings.url);
+    exhibiteraComponent.setAttribute("activeUser", false);
+    exhibiteraComponent.setAttribute("uuid", exhibiteraSettings.uuid);
+    exhibiteraComponent.setAttribute("group", exhibiteraSettings.group);
+    exhibiteraComponent.setAttribute(
+      "helperaddress",
+      exhibiteraSettings.helperAddress
+    );
+  }
   populateLanguageSelector();
   initializeMap(
     json.mapTitles,

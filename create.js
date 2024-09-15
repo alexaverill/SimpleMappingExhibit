@@ -32,6 +32,13 @@ let baseLayers = [
     },
   },
 ];
+let exhibiteraSettings = {
+  enabled: false,
+  url: "http://127.0.0.1:8082/system/ping",
+  group: "",
+  uuid: "",
+  helperAddress: "",
+};
 let currentStep = steps.Intro;
 let previousStep = null;
 let currentMapCenter = null;
@@ -108,8 +115,6 @@ const imagesSelected = () => {
   document
     .querySelector("image-viewer")
     .setImages(imageList.map((image) => image.image));
-  // dialogImage.src = imageList[currentImage].image;
-  // setImageNavigationButtons(imageList.length);
 };
 //Intro Functionality
 const showIntro = () => {
@@ -799,7 +804,6 @@ const closeComplete = () => {
 };
 const createDownloadData = () => {
   let cleanedPoints = points.map((point) => {
-    console.log(point);
     return {
       id: point.id,
       titles: point.titles,
@@ -816,6 +820,7 @@ const createDownloadData = () => {
   let mapObject = {
     mapTitles,
     languages,
+    exhibiteraSettings,
     mapCenter: currentMapCenter,
     baseLayers: baseLayers,
     minZoom: minZoomLevel,
